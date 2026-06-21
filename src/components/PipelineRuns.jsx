@@ -16,6 +16,18 @@ const PROJECTS = [
     ],
   },
   {
+    title: 'Asom Bazaar',
+    featured: true,
+    description: 'A localized e-commerce marketplace tailored for local sellers in Assam and Northeast India, featuring comprehensive multi-step seller onboarding, a seller dashboard with sales analytics, and automated testing.',
+    stack: ['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind CSS', 'Framer Motion'],
+    link: 'https://github.com/KISHOR403/Asom-Bazaar',
+    outcomes: [
+      'Built multi-step seller onboarding with business registration and verification',
+      'Designed responsive dashboard with real-time sales reporting and inventory controls',
+      'Implemented robust form validation, automated unit tests, and security regression checks',
+    ],
+  },
+  {
     title: 'Mobile App Testing — Weather App',
     period: 'April 2026 – May 2026',
     description: 'End-to-end scripted test execution of a Weather Forecast Android app.',
@@ -201,7 +213,7 @@ function PipelineCard({ project, index, progress }) {
                 onMouseLeave={e => e.currentTarget.style.opacity = '1'}
               >
                 <ExternalLink size={10} />
-                LIVE
+                {project.link.includes('github.com') ? 'REPOSITORY' : 'LIVE'}
               </a>
             )}
           </div>
