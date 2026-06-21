@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useEffect, useRef } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { Check, ExternalLink, Star } from 'lucide-react'
 
 const PROJECTS = [
@@ -50,7 +50,9 @@ const PROJECTS = [
   },
 ]
 
-function PipelineCard({ project, index }) {
+const TOTAL = PROJECTS.length
+
+function PipelineCard({ project, index, progress }) {
   const [phase, setPhase] = useState('idle') // 'idle' | 'running' | 'passed'
 
   useEffect(() => {
@@ -60,216 +62,245 @@ function PipelineCard({ project, index }) {
     }
   }, [phase])
 
+  // Scale: earlier cards shrink more as scroll progresses past them
+  const rangeStart = index / TOTAL
+  const targetScale = 1 - ((TOTAL - index) * 0.04)
+  const scale = useTransform(progress, [rangeStart, 1], [1, targetScale])
+
+  // Top offset for the sticky stacking — each card peeks 28px below the previous
+  const stickyTop = 100 + index * 28
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      onViewportEnter={() => { if (phase === 'idle') setPhase('running') }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+    <div
       style={{
-        background: 'var(--color-bg-base)',
-        border: '1px solid var(--color-border-hairline)',
-        borderRadius: '12px',
-        padding: '1.5rem',
-        display: 'grid',
-        gridTemplateColumns: 'auto 1fr',
-        gap: '1.5rem',
-        alignItems: 'start',
-        transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
-        position: 'relative',
-      }}
-      onMouseEnter={e => {
-        e.currentTarget.style.borderColor = 'rgba(74, 222, 154, 0.3)'
-        e.currentTarget.style.boxShadow = '0 4px 30px rgba(0,0,0,0.3)'
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.borderColor = 'var(--color-border-hairline)'
-        e.currentTarget.style.boxShadow = 'none'
+        height: '100%',
+        display: 'flex',
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        position: 'sticky',
+        top: `${stickyTop}px`,
+        zIndex: index,
       }}
     >
-      {/* Left — Status badge area */}
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: '0.5rem',
-        flexWrap: 'wrap',
-        minWidth: '140px',
-        paddingTop: '4px',
-      }}>
-        {/* Featured tag */}
-        {project.featured && (
-          <span className="status-badge status-badge--featured">
-            <Star size={10} fill="currentColor" />
-            Featured
-          </span>
-        )}
-
-        {/* Status badge — animated transition */}
-        {phase === 'running' && (
-          <motion.span
-            className="status-badge status-badge--running"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.25 }}
-          >
-            <span className="pulse-dot" />
-            Running...
-          </motion.span>
-        )}
-
-        {phase === 'passed' && (
-          <motion.span
-            className="status-badge status-badge--passed"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <Check size={10} strokeWidth={3} />
-            Passed
-          </motion.span>
-        )}
-
-        {phase === 'idle' && (
-          <span className="status-badge status-badge--passed" style={{ opacity: 0.3 }}>
-            <Check size={10} strokeWidth={3} />
-            Passed
-          </span>
-        )}
-      </div>
-
-      {/* Right — Content */}
-      <div>
+      <motion.div
+        style={{
+          scale,
+          transformOrigin: 'top center',
+          background: 'var(--color-bg-base)',
+          border: '1px solid var(--color-border-hairline)',
+          borderRadius: '16px',
+          padding: '1.75rem',
+          display: 'grid',
+          gridTemplateColumns: 'auto 1fr',
+          gap: '1.5rem',
+          alignItems: 'start',
+          transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+          width: '100%',
+          maxWidth: '1000px',
+          boxShadow: '0 -4px 30px rgba(0, 0, 0, 0.35)',
+        }}
+        whileInView={{ opacity: 1 }}
+        initial={{ opacity: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        onViewportEnter={() => { if (phase === 'idle') setPhase('running') }}
+        onMouseEnter={e => {
+          e.currentTarget.style.borderColor = 'rgba(74, 222, 154, 0.3)'
+          e.currentTarget.style.boxShadow = '0 4px 40px rgba(0,0,0,0.45)'
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.borderColor = 'var(--color-border-hairline)'
+          e.currentTarget.style.boxShadow = '0 -4px 30px rgba(0, 0, 0, 0.35)'
+        }}
+      >
+        {/* Left — Status badge area */}
         <div style={{
           display: 'flex',
+          flexDirection: 'row',
           alignItems: 'center',
-          gap: '0.75rem',
-          marginBottom: '0.5rem',
+          gap: '0.5rem',
           flexWrap: 'wrap',
+          minWidth: '140px',
+          paddingTop: '4px',
         }}>
-          <h3 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: '1.15rem',
-            fontWeight: 600,
-            color: 'var(--color-text-primary)',
-          }}>
-            {project.title}
-          </h3>
+          {/* Featured tag */}
+          {project.featured && (
+            <span className="status-badge status-badge--featured">
+              <Star size={10} fill="currentColor" />
+              Featured
+            </span>
+          )}
 
-          {project.link && (
-            <a
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              id={`project-link-${index}`}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.65rem',
-                color: 'var(--color-accent-pass)',
-                textDecoration: 'none',
-                transition: 'opacity 0.2s',
-              }}
-              onMouseEnter={e => e.currentTarget.style.opacity = '0.7'}
-              onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+          {/* Status badge — animated transition */}
+          {phase === 'running' && (
+            <motion.span
+              className="status-badge status-badge--running"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.25 }}
             >
-              <ExternalLink size={10} />
-              LIVE
-            </a>
+              <span className="pulse-dot" />
+              Running...
+            </motion.span>
+          )}
+
+          {phase === 'passed' && (
+            <motion.span
+              className="status-badge status-badge--passed"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <Check size={10} strokeWidth={3} />
+              Passed
+            </motion.span>
+          )}
+
+          {phase === 'idle' && (
+            <span className="status-badge status-badge--passed" style={{ opacity: 0.3 }}>
+              <Check size={10} strokeWidth={3} />
+              Passed
+            </span>
           )}
         </div>
 
-        {project.period && (
-          <p style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.7rem',
-            color: 'var(--color-text-muted)',
+        {/* Right — Content */}
+        <div>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem',
             marginBottom: '0.5rem',
-            letterSpacing: '0.04em',
+            flexWrap: 'wrap',
           }}>
-            {project.period}
-          </p>
-        )}
-
-        <p style={{
-          fontFamily: 'var(--font-sans)',
-          fontSize: '0.875rem',
-          lineHeight: 1.6,
-          color: 'var(--color-text-muted)',
-          marginBottom: '1rem',
-        }}>
-          {project.description}
-        </p>
-
-        {/* Stack tags */}
-        <div style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '0.375rem',
-          marginBottom: '1rem',
-        }}>
-          {project.stack.map((tech, j) => (
-            <span key={j} style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.65rem',
-              fontWeight: 500,
-              padding: '3px 10px',
-              borderRadius: '4px',
-              background: 'rgba(35, 44, 53, 0.8)',
-              border: '1px solid var(--color-border-hairline)',
-              color: 'var(--color-text-muted)',
-              letterSpacing: '0.03em',
-            }}>
-              {tech}
-            </span>
-          ))}
-        </div>
-
-        {/* Outcomes */}
-        <ul style={{
-          listStyle: 'none',
-          padding: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '0.375rem',
-        }}>
-          {project.outcomes.map((outcome, j) => (
-            <li key={j} style={{
-              display: 'flex',
-              alignItems: 'flex-start',
-              gap: '8px',
-              fontFamily: 'var(--font-sans)',
-              fontSize: '0.8rem',
-              lineHeight: 1.5,
+            <h3 style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '1.15rem',
+              fontWeight: 600,
               color: 'var(--color-text-primary)',
             }}>
-              <span style={{
-                color: 'var(--color-accent-pass)',
-                fontSize: '0.6rem',
-                marginTop: '4px',
-                flexShrink: 0,
-              }}>▸</span>
-              {outcome}
-            </li>
-          ))}
-        </ul>
-      </div>
+              {project.title}
+            </h3>
 
-      <style>{`
-        @media (max-width: 600px) {
-          [style*="grid-template-columns: auto 1fr"] {
-            grid-template-columns: 1fr !important;
+            {project.link && (
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                id={`project-link-${index}`}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.65rem',
+                  color: 'var(--color-accent-pass)',
+                  textDecoration: 'none',
+                  transition: 'opacity 0.2s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.opacity = '0.7'}
+                onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+              >
+                <ExternalLink size={10} />
+                LIVE
+              </a>
+            )}
+          </div>
+
+          {project.period && (
+            <p style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.7rem',
+              color: 'var(--color-text-muted)',
+              marginBottom: '0.5rem',
+              letterSpacing: '0.04em',
+            }}>
+              {project.period}
+            </p>
+          )}
+
+          <p style={{
+            fontFamily: 'var(--font-sans)',
+            fontSize: '0.875rem',
+            lineHeight: 1.6,
+            color: 'var(--color-text-muted)',
+            marginBottom: '1rem',
+          }}>
+            {project.description}
+          </p>
+
+          {/* Stack tags */}
+          <div style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '0.375rem',
+            marginBottom: '1rem',
+          }}>
+            {project.stack.map((tech, j) => (
+              <span key={j} style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.65rem',
+                fontWeight: 500,
+                padding: '3px 10px',
+                borderRadius: '4px',
+                background: 'rgba(35, 44, 53, 0.8)',
+                border: '1px solid var(--color-border-hairline)',
+                color: 'var(--color-text-muted)',
+                letterSpacing: '0.03em',
+              }}>
+                {tech}
+              </span>
+            ))}
+          </div>
+
+          {/* Outcomes */}
+          <ul style={{
+            listStyle: 'none',
+            padding: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.375rem',
+          }}>
+            {project.outcomes.map((outcome, j) => (
+              <li key={j} style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '8px',
+                fontFamily: 'var(--font-sans)',
+                fontSize: '0.8rem',
+                lineHeight: 1.5,
+                color: 'var(--color-text-primary)',
+              }}>
+                <span style={{
+                  color: 'var(--color-accent-pass)',
+                  fontSize: '0.6rem',
+                  marginTop: '4px',
+                  flexShrink: 0,
+                }}>▸</span>
+                {outcome}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <style>{`
+          @media (max-width: 600px) {
+            [style*="grid-template-columns: auto 1fr"] {
+              grid-template-columns: 1fr !important;
+            }
           }
-        }
-      `}</style>
-    </motion.div>
+        `}</style>
+      </motion.div>
+    </div>
   )
 }
 
 export default function PipelineRuns() {
+  const containerRef = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  })
+
   return (
     <section id="pipeline-runs" style={{ background: 'var(--color-bg-base)' }}>
       <div className="section-container">
@@ -280,6 +311,15 @@ export default function PipelineRuns() {
           transition={{ duration: 0.5 }}
         >
           <p className="section-eyebrow">Pipeline Runs</p>
+          <p style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.75rem',
+            color: 'var(--color-text-muted)',
+            marginBottom: '3rem',
+            letterSpacing: '0.03em',
+          }}>
+            Scroll to explore — stacking case-study format
+          </p>
           <h2 style={{
             fontFamily: 'var(--font-display)',
             fontSize: '2rem',
@@ -292,13 +332,22 @@ export default function PipelineRuns() {
           </h2>
         </motion.div>
 
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1.25rem',
-        }}>
+        <div
+          ref={containerRef}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1.5rem',
+            paddingBottom: '12rem',
+          }}
+        >
           {PROJECTS.map((project, i) => (
-            <PipelineCard key={i} project={project} index={i} />
+            <PipelineCard
+              key={i}
+              project={project}
+              index={i}
+              progress={scrollYProgress}
+            />
           ))}
         </div>
       </div>
