@@ -28,6 +28,30 @@ const PROJECTS = [
     ],
   },
   {
+    title: 'AI-Powered MERN E-Commerce',
+    featured: true,
+    description: 'Full-featured e-commerce platform integrated with AI-driven product recommendations, secure Stripe payment gateway, and an administrative dashboard.',
+    stack: ['MERN Stack', 'Redux Toolkit', 'Stripe API', 'Tailwind CSS', 'JWT Auth'],
+    link: 'https://github.com/KISHOR403/AI-Powered-E-Commerce-Website-built-using-MERN-Stack',
+    outcomes: [
+      'Built multi-tier user registration and admin management modules',
+      'Integrated Stripe API for seamless payment workflows and checkout logic',
+      'Configured responsive storefront design with dynamic Redux state synchronization',
+    ],
+  },
+  {
+    title: 'ASTROTALK',
+    featured: true,
+    description: 'Astrology consultation web platform facilitating real-time planetary position calculations, birth chart reports, and consultant scheduling.',
+    stack: ['React', 'Node.js', 'Express', 'MongoDB', 'Astro API', 'Tailwind CSS'],
+    link: 'https://github.com/KISHOR403/ASTROTALK',
+    outcomes: [
+      'Engineered interactive planetary position analysis tools using Astro APIs',
+      'Designed booking schedules and real-time chat interface for consults',
+      'Optimized page performance and implemented secure JWT-based security',
+    ],
+  },
+  {
     title: 'Mobile App Testing — Weather App',
     period: 'April 2026 – May 2026',
     description: 'End-to-end scripted test execution of a Weather Forecast Android app.',
