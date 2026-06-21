@@ -127,16 +127,10 @@
   font-weight: 500;
   padding: 0.375rem 0.75rem;
   border-radius: 999px;
-  background: rgba(35, 44, 53, 0.6);
+  background: rgba(35, 44, 53, 0.4);
   border: 1px solid var(--color-border-hairline);
   color: var(--color-text-primary);
-  transition: all 0.2s ease;
-}
-
-.skill-chip:hover {
-  border-color: var(--color-accent-pass);
-  background: rgba(74, 222, 154, 0.08);
-  box-shadow: 0 0 12px rgba(74, 222, 154, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 /* Status badge (for pipeline cards) */
