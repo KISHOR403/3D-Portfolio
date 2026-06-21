@@ -167,12 +167,12 @@ function MonitorModel() {
     groupRef.current.rotation.x = THREE.MathUtils.lerp(
       groupRef.current.rotation.x,
       -0.15 + targetRotX,
-      delta * 2
+      delta * 8
     )
     groupRef.current.rotation.y = THREE.MathUtils.lerp(
       groupRef.current.rotation.y,
       targetRotY,
-      delta * 2
+      delta * 8
     )
   })
 

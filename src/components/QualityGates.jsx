@@ -24,21 +24,7 @@ const CERTIFICATIONS = [
   },
 ]
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.08 },
-  },
-}
 
-const itemVariants = {
-  hidden: { opacity: 0, x: -20 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
-  },
-}
 
 export default function QualityGates() {
   return (
@@ -63,11 +49,7 @@ export default function QualityGates() {
           </h2>
         </motion.div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
+        <div
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -78,7 +60,10 @@ export default function QualityGates() {
           {CERTIFICATIONS.map((cert, i) => (
             <motion.div
               key={i}
-              variants={itemVariants}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.4, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -142,7 +127,7 @@ export default function QualityGates() {
               </span>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   )

@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import { Check, ExternalLink, Star } from 'lucide-react'
 
 const PROJECTS = [
@@ -51,23 +51,21 @@ const PROJECTS = [
 ]
 
 function PipelineCard({ project, index }) {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-100px' })
   const [phase, setPhase] = useState('idle') // 'idle' | 'running' | 'passed'
 
   useEffect(() => {
-    if (!isInView) return
-    setPhase('running')
-    const timer = setTimeout(() => setPhase('passed'), 1500)
-    return () => clearTimeout(timer)
-  }, [isInView])
+    if (phase === 'running') {
+      const timer = setTimeout(() => setPhase('passed'), 1500)
+      return () => clearTimeout(timer)
+    }
+  }, [phase])
 
   return (
     <motion.div
-      ref={ref}
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-80px' }}
+      viewport={{ once: true, amount: 0.3 }}
+      onViewportEnter={() => { if (phase === 'idle') setPhase('running') }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       style={{
         background: 'var(--color-bg-base)',
@@ -93,15 +91,16 @@ function PipelineCard({ project, index }) {
       {/* Left — Status badge area */}
       <div style={{
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'row',
         alignItems: 'center',
-        gap: '0.75rem',
-        minWidth: '100px',
+        gap: '0.5rem',
+        flexWrap: 'wrap',
+        minWidth: '140px',
         paddingTop: '4px',
       }}>
         {/* Featured tag */}
         {project.featured && (
-          <span className="status-badge status-badge--featured" style={{ marginBottom: '0.25rem' }}>
+          <span className="status-badge status-badge--featured">
             <Star size={10} fill="currentColor" />
             Featured
           </span>

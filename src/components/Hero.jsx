@@ -85,6 +85,10 @@ export default function Hero() {
             Open to opportunities
           </div>
 
+          <p className="section-eyebrow" style={{ marginBottom: '0.75rem', fontSize: '0.75rem' }}>
+            QA / Software Test Engineer
+          </p>
+
           <h1 style={{
             fontFamily: 'var(--font-display)',
             fontSize: isMobile ? '2.2rem' : '3.2rem',
