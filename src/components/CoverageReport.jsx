@@ -1,5 +1,32 @@
 import { useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import {
+  Coffee,
+  Database,
+  Globe,
+  Smartphone,
+  Beaker,
+  CheckSquare,
+  Send,
+  Terminal,
+  Eye,
+  RotateCcw,
+  Workflow,
+  RefreshCw,
+  Cpu,
+  FileText,
+  Bug,
+  Activity,
+  History,
+  GitBranch,
+  ClipboardCheck,
+  Server,
+  Play,
+  Box,
+  Table,
+  Infinity,
+  LayoutGrid
+} from 'lucide-react'
 
 const ACCENT_COLORS = ['var(--color-accent-pass)', 'var(--color-accent-pending)', 'var(--color-accent-fail)']
 const ACCENT_RGBS = ['74, 222, 154', '242, 169, 59', '232, 97, 92']
@@ -30,6 +57,45 @@ const SKILL_CATEGORIES = [
     skills: ['Page Object Model (POM)', 'Data-Driven Testing', 'CI/CD Integration'],
   },
 ]
+
+const SKILL_ICONS = {
+  // Languages
+  'Java': Coffee,
+  'SQL': Database,
+
+  // Automation Tools
+  'Selenium WebDriver': Globe,
+  'Appium': Smartphone,
+  'TestNG': Beaker,
+  'JUnit': CheckSquare,
+  'REST Assured': Send,
+  'Postman': Terminal,
+
+  // Testing Skills
+  'Manual Testing': Eye,
+  'Agile (Scrum)': RotateCcw,
+  'SDLC': Workflow,
+  'STLC': RefreshCw,
+  'API Testing & Automation': Cpu,
+  'Mobile Testing': Smartphone,
+  'Test Case Design': FileText,
+  'Bug Tracking & Debugging': Bug,
+  'Defect Life Cycle': Activity,
+  'Regression Testing': History,
+
+  // Developer Tools
+  'Git': GitBranch,
+  'GitHub': GitBranch,
+  'Jira': LayoutGrid,
+  'TestRail': ClipboardCheck,
+  'Jenkins': Server,
+  'GitHub Actions': Play,
+
+  // Design Patterns
+  'Page Object Model (POM)': Box,
+  'Data-Driven Testing': Table,
+  'CI/CD Integration': Infinity,
+}
 
 const containerVariants = {
   hidden: {},
@@ -237,39 +303,43 @@ function SkillCard({ category, index }) {
             gap: '0.5rem',
           }}
         >
-          {category.skills.map((skill, j) => (
-            <motion.span
-              key={j}
-              custom={j}
-              variants={chipVariants}
-              whileHover={{
-                y: -3,
-                scale: 1.03,
-                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 6px 12px rgba(0, 0, 0, 0.35)',
-                borderColor: accentColor,
-                backgroundColor: `color-mix(in srgb, ${accentColor} 6%, rgba(35, 44, 53, 0.4))`,
-              }}
-              whileTap={{ scale: 0.95 }}
-              className="skill-chip"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.375rem',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
-                fontWeight: 500,
-                padding: '0.375rem 0.75rem',
-                borderRadius: '999px',
-                background: 'rgba(35, 44, 53, 0.4)',
-                border: '1px solid var(--color-border-hairline)',
-                color: 'var(--color-text-primary)',
-                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 4px rgba(0, 0, 0, 0.15)',
-                cursor: 'pointer',
-              }}
-            >
-              {skill}
-            </motion.span>
-          ))}
+          {category.skills.map((skill, j) => {
+            const Icon = SKILL_ICONS[skill] || CheckSquare
+            return (
+              <motion.span
+                key={j}
+                custom={j}
+                variants={chipVariants}
+                whileHover={{
+                  y: -3,
+                  scale: 1.03,
+                  boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 6px 12px rgba(0, 0, 0, 0.35)',
+                  borderColor: accentColor,
+                  backgroundColor: `color-mix(in srgb, ${accentColor} 6%, rgba(35, 44, 53, 0.4))`,
+                }}
+                whileTap={{ scale: 0.95 }}
+                className="skill-chip"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.72rem',
+                  fontWeight: 500,
+                  padding: '0.375rem 0.75rem',
+                  borderRadius: '999px',
+                  background: 'rgba(35, 44, 53, 0.4)',
+                  border: '1px solid var(--color-border-hairline)',
+                  color: 'var(--color-text-primary)',
+                  boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 4px rgba(0, 0, 0, 0.15)',
+                  cursor: 'pointer',
+                }}
+              >
+                <Icon size={12} style={{ opacity: 0.8 }} />
+                {skill}
+              </motion.span>
+            )
+          })}
         </div>
       </motion.div>
     </div>
@@ -309,7 +379,7 @@ export default function CoverageReport() {
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))',
-            gap: '1.75rem', // slightly increased gap to comfortably space out the 3D ghost offset layers
+            gap: '1.75rem',
           }}
         >
           {SKILL_CATEGORIES.map((category, i) => (
