@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { Check, ExternalLink, Star } from 'lucide-react'
+import { Check, ExternalLink, Star, Lock, Box, Cpu } from 'lucide-react'
 
 const PROJECTS = [
   {
@@ -87,6 +87,116 @@ const PROJECTS = [
 ]
 
 const TOTAL = PROJECTS.length
+
+// Custom SVG for TestNG
+const TestNGIcon = ({ size = 10 }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 100 100"
+    style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0 }}
+  >
+    <rect width="100" height="100" rx="20" fill="#dc2626" />
+    <text
+      x="50"
+      y="65"
+      fontFamily="Arial, sans-serif"
+      fontWeight="bold"
+      fontSize="50"
+      fill="white"
+      textAnchor="middle"
+    >
+      Tn
+    </text>
+    <path d="M70 20 L90 20 L90 40" stroke="white" stroke-width="5" fill="none" />
+    <path d="M30 80 L10 80 L10 60" stroke="white" stroke-width="5" fill="none" />
+  </svg>
+)
+
+// Custom SVG for REST Assured
+const RestAssuredIcon = ({ size = 10 }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 100 100"
+    style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0 }}
+  >
+    <defs>
+      <linearGradient id="restAssuredGradProject" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style={{ stopColor: '#16a34a', stopOpacity: 1 }} />
+        <stop offset="100%" style={{ stopColor: '#059669', stopOpacity: 1 }} />
+      </linearGradient>
+    </defs>
+    <circle cx="50" cy="50" r="45" fill="url(#restAssuredGradProject)" />
+    <text
+      x="50"
+      y="65"
+      fontFamily="Arial, sans-serif"
+      fontWeight="bold"
+      fontSize="40"
+      fill="white"
+      textAnchor="middle"
+    >
+      RA
+    </text>
+    <path d="M20 50 A 30 30 0 0 1 80 50" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" />
+  </svg>
+)
+
+const renderProjectSkillIcon = (tech, size = 10) => {
+  if (tech === 'TestNG') {
+    return <TestNGIcon size={size} />
+  }
+  if (tech === 'REST Assured') {
+    return <RestAssuredIcon size={size} />
+  }
+
+  const brandMapping = {
+    'React': 'react/61DAFB',
+    'MERN Stack': 'react/61DAFB',
+    'Node.js': 'nodedotjs/339933',
+    'Express': 'express/E8EAED',
+    'MongoDB': 'mongodb/47A248',
+    'Google Gemini API': 'google/4285F4',
+    'Docker': 'docker/2496ED',
+    'GitHub Actions CI/CD': 'githubactions/2088FF',
+    'Tailwind CSS': 'tailwindcss/06B6D4',
+    'Framer Motion': 'framer/0055FF',
+    'Redux Toolkit': 'redux/764ABC',
+    'Stripe API': 'stripe/008CDE',
+    'Astro API': 'astro/FF5D01',
+    'Appium': 'appium/E42D42',
+    'Java': 'java/F89820',
+    'Selenium WebDriver': 'selenium/43B02A',
+    'Postman': 'postman/FF6C37',
+  }
+
+  if (brandMapping[tech]) {
+    return (
+      <img
+        src={`https://cdn.simpleicons.org/${brandMapping[tech]}`}
+        alt={tech}
+        style={{
+          width: `${size}px`,
+          height: `${size}px`,
+          objectFit: 'contain',
+          display: 'inline-block',
+          verticalAlign: 'middle',
+          flexShrink: 0,
+        }}
+      />
+    )
+  }
+
+  if (tech === 'JWT Auth') {
+    return <Lock size={size} style={{ opacity: 0.8 }} />
+  }
+  if (tech === 'POM') {
+    return <Box size={size} style={{ opacity: 0.8 }} />
+  }
+
+  return <Cpu size={size} style={{ opacity: 0.8 }} />
+}
 
 function PipelineCard({ project, index, progress }) {
   const [phase, setPhase] = useState('idle') // 'idle' | 'running' | 'passed'
@@ -276,14 +386,18 @@ function PipelineCard({ project, index, progress }) {
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.65rem',
                 fontWeight: 500,
-                padding: '3px 10px',
+                padding: '3px 8px',
                 borderRadius: '4px',
                 background: 'rgba(35, 44, 53, 0.8)',
                 border: '1px solid var(--color-border-hairline)',
                 color: 'var(--color-text-muted)',
                 letterSpacing: '0.03em',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
               }}>
-                {tech}
+                {renderProjectSkillIcon(tech, 10)}
+                <span>{tech}</span>
               </span>
             ))}
           </div>
