@@ -1,0 +1,220 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS — Tailwind v4 CSS-first theme
+   ═══════════════════════════════════════════ */
+@theme {
+  --color-bg-base: #0F1419;
+  --color-bg-surface: #161D24;
+  --color-border-hairline: #232C35;
+  --color-text-primary: #E8EAED;
+  --color-text-muted: #8B97A3;
+  --color-accent-pass: #4ADE9A;
+  --color-accent-pending: #F2A93B;
+  --color-accent-fail: #E8615C;
+
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* ═══════════════════════════════════════════
+   BASE LAYER
+   ═══════════════════════════════════════════ */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-bg-base);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  code, pre, .font-mono {
+    font-family: var(--font-mono);
+  }
+
+  ::selection {
+    background-color: rgba(74, 222, 154, 0.2);
+    color: var(--color-text-primary);
+  }
+
+  /* Focus ring */
+  :focus-visible {
+    outline: 2px solid var(--color-accent-pass);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   CUSTOM SCROLLBAR
+   ═══════════════════════════════════════════ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-base);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-hairline);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* ═══════════════════════════════════════════
+   UTILITY CLASSES
+   ═══════════════════════════════════════════ */
+
+/* Section eyebrow — mono caps label */
+.section-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-accent-pass);
+  margin-bottom: 0.5rem;
+}
+
+/* Section container */
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 6rem 1.5rem;
+}
+
+/* Glass card */
+.glass-card {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-hairline);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+/* Skill chip */
+.skill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.375rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(35, 44, 53, 0.6);
+  border: 1px solid var(--color-border-hairline);
+  color: var(--color-text-primary);
+  transition: all 0.2s ease;
+}
+
+.skill-chip:hover {
+  border-color: var(--color-accent-pass);
+  background: rgba(74, 222, 154, 0.08);
+  box-shadow: 0 0 12px rgba(74, 222, 154, 0.1);
+}
+
+/* Status badge (for pipeline cards) */
+.status-badge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.375rem 0.875rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  white-space: nowrap;
+}
+
+.status-badge--passed {
+  background: rgba(74, 222, 154, 0.12);
+  color: var(--color-accent-pass);
+  border: 1px solid rgba(74, 222, 154, 0.25);
+}
+
+.status-badge--running {
+  background: rgba(242, 169, 59, 0.12);
+  color: var(--color-accent-pending);
+  border: 1px solid rgba(242, 169, 59, 0.25);
+}
+
+.status-badge--featured {
+  background: rgba(232, 97, 92, 0.12);
+  color: var(--color-accent-fail);
+  border: 1px solid rgba(232, 97, 92, 0.25);
+}
+
+/* Terminal typing cursor blink */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.terminal-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 16px;
+  background: var(--color-accent-pass);
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+}
+
+/* Pulsing dot for RUNNING status */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.pulse-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent-pending);
+  animation: pulse-dot 1.2s ease-in-out infinite;
+}
+
+/* Gentle idle bob for 3D console container */
+@keyframes idle-bob {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .terminal-cursor,
+  .pulse-dot {
+    animation: none;
+  }
+}
