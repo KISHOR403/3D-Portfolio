@@ -122,32 +122,30 @@ export default function ConsoleFallback() {
           ))}
         </div>
 
-        {/* Bottom bezel accent */}
+      </div>
+ 
+      {/* Laptop Base (instead of stand) */}
+      <div style={{
+        width: '104%',
+        marginLeft: '-2%',
+        height: '14px',
+        background: 'linear-gradient(180deg, #282e3d, #1a202d)',
+        borderBottom: '4px solid #10141e',
+        borderRadius: '2px 2px 10px 10px',
+        boxShadow: '0 12px 30px rgba(0,0,0,0.4)',
+        position: 'relative',
+        transform: 'rotateX(15deg)',
+        transformOrigin: 'top center',
+      }}>
+        {/* Notch helper */}
         <div style={{
-          height: '2px',
-          background: 'linear-gradient(90deg, transparent, #4ADE9A, transparent)',
-          margin: '0 30%',
-          borderRadius: '1px',
-          marginTop: '2px',
-          marginBottom: '8px',
+          width: '60px',
+          height: '4px',
+          background: '#0c0e15',
+          margin: '0 auto',
+          borderRadius: '0 0 4px 4px',
         }} />
       </div>
-
-      {/* Stand */}
-      <div style={{
-        width: '6px',
-        height: '36px',
-        background: 'linear-gradient(180deg, #1a2030, #141c28)',
-        margin: '0 auto',
-        borderRadius: '0 0 3px 3px',
-      }} />
-      <div style={{
-        width: '80px',
-        height: '6px',
-        background: 'linear-gradient(90deg, transparent, #1a2030, transparent)',
-        margin: '0 auto',
-        borderRadius: '3px',
-      }} />
     </div>
   )
 }

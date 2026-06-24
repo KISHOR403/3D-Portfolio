@@ -78,7 +78,7 @@ function TerminalScreen() {
   return (
     <Html
       transform
-      position={[0, 0.02, 0.52]}
+      position={[0, 0.02, 0.49]}
       scale={0.18}
       style={{
         width: '380px',
@@ -138,8 +138,8 @@ function TerminalScreen() {
   )
 }
 
-/* ─── Monitor Model (procedural geometry) ─── */
-function MonitorModel() {
+/* ─── Laptop Model (procedural geometry) ─── */
+function LaptopModel() {
   const groupRef = useRef()
   const mouseRef = useRef({ x: 0, y: 0 })
   const { viewport } = useThree()
@@ -177,11 +177,11 @@ function MonitorModel() {
     )
   })
 
-  // Metallic material
+  // Metallic Space Grey material
   const metalMaterial = useMemo(() => new THREE.MeshStandardMaterial({
-    color: '#1a2030',
+    color: '#282e3d',
     metalness: 0.85,
-    roughness: 0.2,
+    roughness: 0.25,
   }), [])
 
   // Glass material
@@ -213,42 +213,73 @@ function MonitorModel() {
 
   return (
     <group ref={groupRef} rotation={[-0.15, 0, 0]}>
-      {/* Monitor body — outer shell */}
-      <RoundedBox args={[2.6, 1.7, 0.12]} radius={0.06} smoothness={4} position={[0, 0, 0]}>
-        <primitive object={metalMaterial} attach="material" />
-      </RoundedBox>
+      {/* ─── LAPTOP SCREEN/LID ─── */}
+      <group position={[0, 0.1, 0]}>
+        {/* Screen lid — outer shell */}
+        <RoundedBox args={[2.6, 1.7, 0.06]} radius={0.04} smoothness={4} position={[0, 0, 0]}>
+          <primitive object={metalMaterial} attach="material" />
+        </RoundedBox>
 
-      {/* Screen face */}
-      <mesh position={[0, 0.02, 0.05]}>
-        <planeGeometry args={[2.3, 1.4]} />
-        <primitive object={screenMaterial} attach="material" />
+        {/* Screen face */}
+        <mesh position={[0, 0.02, 0.026]}>
+          <planeGeometry args={[2.3, 1.4]} />
+          <primitive object={screenMaterial} attach="material" />
+        </mesh>
+
+        {/* Glass overlay */}
+        <mesh position={[0, 0.02, 0.031]}>
+          <planeGeometry args={[2.35, 1.45]} />
+          <primitive object={glassMaterial} attach="material" />
+        </mesh>
+
+        {/* Bezel accent glow line */}
+        <mesh position={[0, -0.72, 0.033]}>
+          <boxGeometry args={[1.4, 0.015, 0.005]} />
+          <primitive object={glowMaterial} attach="material" />
+        </mesh>
+
+        {/* Terminal text overlay */}
+        <TerminalScreen />
+      </group>
+
+      {/* ─── HINGE ─── */}
+      <mesh position={[0, -0.8, 0.02]} rotation={[0, 0, Math.PI / 2]}>
+        <cylinderGeometry args={[0.04, 0.04, 2.3, 16]} />
+        <meshStandardMaterial color="#121622" roughness={0.85} metalness={0.7} />
       </mesh>
 
-      {/* Glass overlay */}
-      <mesh position={[0, 0.02, 0.06]}>
-        <planeGeometry args={[2.35, 1.45]} />
-        <primitive object={glassMaterial} attach="material" />
-      </mesh>
+      {/* ─── LAPTOP BASE ─── */}
+      <group position={[0, -0.88, 0.78]} rotation={[1.43, 0, 0]}>
+        {/* Main Base Body */}
+        <RoundedBox args={[2.7, 0.06, 1.75]} radius={0.04} smoothness={4} position={[0, 0, 0]}>
+          <primitive object={metalMaterial} attach="material" />
+        </RoundedBox>
 
-      {/* Bottom bezel accent line */}
-      <mesh position={[0, -0.72, 0.07]}>
-        <boxGeometry args={[1.4, 0.015, 0.01]} />
-        <primitive object={glowMaterial} attach="material" />
-      </mesh>
+        {/* Keyboard recess area */}
+        <mesh position={[0, 0.031, -0.15]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[2.42, 0.92]} />
+          <meshStandardMaterial color="#161c28" roughness={0.9} />
+        </mesh>
 
-      {/* Stand neck */}
-      <mesh position={[0, -1.05, -0.05]}>
-        <boxGeometry args={[0.12, 0.5, 0.08]} />
-        <primitive object={metalMaterial} attach="material" />
-      </mesh>
+        {/* Simulated keyboard key rows */}
+        {[-0.32, -0.16, 0, 0.16, 0.32].map((zOffset, i) => (
+          <mesh key={i} position={[0, 0.036, -0.15 + zOffset]} rotation={[-Math.PI / 2, 0, 0]}>
+            <planeGeometry args={[2.36, 0.09]} />
+            <meshStandardMaterial color="#0c0e15" roughness={0.7} />
+          </mesh>
+        ))}
 
-      {/* Stand base */}
-      <RoundedBox args={[0.9, 0.04, 0.5]} radius={0.02} smoothness={4} position={[0, -1.28, 0.02]}>
-        <primitive object={metalMaterial} attach="material" />
-      </RoundedBox>
+        {/* Trackpad */}
+        <RoundedBox args={[0.7, 0.005, 0.42]} radius={0.015} smoothness={4} position={[0, 0.032, 0.48]}>
+          <meshStandardMaterial color="#1a202d" roughness={0.4} metalness={0.8} />
+        </RoundedBox>
 
-      {/* Terminal text overlay */}
-      <TerminalScreen />
+        {/* Front edge lip notch */}
+        <mesh position={[0, -0.01, 0.88]}>
+          <boxGeometry args={[0.3, 0.02, 0.02]} />
+          <meshStandardMaterial color="#0c0e15" roughness={0.9} />
+        </mesh>
+      </group>
     </group>
   )
 }
@@ -261,7 +292,7 @@ function ConsoleScene() {
       <directionalLight position={[5, 5, 5]} intensity={0.8} />
       <directionalLight position={[-3, 2, 4]} intensity={0.3} color="#4ADE9A" />
       <pointLight position={[0, -1, 3]} intensity={0.4} color="#F2A93B" />
-      <MonitorModel />
+      <LaptopModel />
       <Environment preset="city" environmentIntensity={0.15} />
     </>
   )
