@@ -452,7 +452,7 @@ export default function PipelineRuns() {
   })
 
   return (
-    <section id="pipeline-runs" style={{ background: 'var(--color-bg-base)' }}>
+    <section id="pipeline-runs" style={{ background: 'transparent' }}>
       <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

@@ -17,7 +17,8 @@ export default function StatusStrip() {
       style={{
         borderTop: '1px solid var(--color-border-hairline)',
         borderBottom: '1px solid var(--color-border-hairline)',
-        background: 'var(--color-bg-surface)',
+        background: 'rgba(22, 29, 36, 0.75)',
+        backdropFilter: 'blur(10px)',
         padding: '1rem 1.5rem',
         overflow: 'hidden',
       }}

@@ -44,7 +44,7 @@ const CONTACT_LINKS = [
 
 export default function Deploy() {
   return (
-    <section id="deploy" style={{ background: 'var(--color-bg-base)' }}>
+    <section id="deploy" style={{ background: 'transparent' }}>
       <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

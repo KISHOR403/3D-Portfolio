@@ -419,7 +419,7 @@ function SkillCard({ category, index }) {
 
 export default function CoverageReport() {
   return (
-    <section id="coverage-report" style={{ background: 'var(--color-bg-surface)' }}>
+    <section id="coverage-report" style={{ background: 'rgba(22, 29, 36, 0.75)', backdropFilter: 'blur(10px)' }}>
       <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

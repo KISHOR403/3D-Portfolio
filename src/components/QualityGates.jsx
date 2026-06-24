@@ -28,7 +28,7 @@ const CERTIFICATIONS = [
 
 export default function QualityGates() {
   return (
-    <section id="quality-gates" style={{ background: 'var(--color-bg-surface)' }}>
+    <section id="quality-gates" style={{ background: 'rgba(22, 29, 36, 0.75)', backdropFilter: 'blur(10px)' }}>
       <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -48,7 +48,9 @@ export default function QualityGates() {
             Certifications
           </h2>
         </motion.div>
+      </div>
 
+      <div className="section-container" style={{ paddingTop: 0 }}>
         <div
           style={{
             display: 'flex',
@@ -62,7 +64,7 @@ export default function QualityGates() {
               key={i}
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
+              viewport={{ once: true, amount: 0.1 }}
               transition={{ duration: 0.4, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
               style={{
                 display: 'flex',

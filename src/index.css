@@ -34,11 +34,12 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: var(--color-bg-base);
   }
 
   body {
     font-family: var(--font-sans);
-    background-color: var(--color-bg-base);
+    background-color: transparent;
     color: var(--color-text-primary);
     line-height: 1.6;
     overflow-x: hidden;
@@ -212,3 +213,23 @@
     animation: none;
   }
 }
+
+/* 3D perspective grid CSS fallback for mobile / reduced motion */
+.perspective-grid-fallback {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  margin-left: -50%;
+  margin-top: -15%;
+  background-size: 55px 55px;
+  background-image: 
+    linear-gradient(to right, rgba(35, 44, 53, 0.22) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(35, 44, 53, 0.22) 1px, transparent 1px);
+  transform: perspective(400px) rotateX(60deg);
+  transform-origin: center top;
+  opacity: 0.65;
+  pointer-events: none;
+}
+

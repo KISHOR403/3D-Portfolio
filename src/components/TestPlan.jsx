@@ -27,7 +27,7 @@ const itemVariants = {
 
 export default function TestPlan() {
   return (
-    <section id="test-plan" style={{ background: 'var(--color-bg-base)' }}>
+    <section id="test-plan" style={{ background: 'transparent' }}>
       <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
