@@ -1,16 +1,26 @@
-import { Suspense, lazy, useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowDown, Download } from 'lucide-react'
 import ConsoleFallback from './ConsoleFallback'
-
-const Console3D = lazy(() => import('./Console3D'))
+import Console3D from './Console3D'
 
 // Synchronous mobile check to avoid layout flash on refresh
 const getIsMobile = () => typeof window !== 'undefined' && window.innerWidth < 768
 
+// Synchronous WebGL check to avoid layout flash on refresh
+const getWebGLSupport = () => {
+  if (typeof window === 'undefined') return false
+  try {
+    const canvas = document.createElement('canvas')
+    return !!(window.WebGL2RenderingContext && (canvas.getContext('webgl2') || canvas.getContext('webgl')))
+  } catch (e) {
+    return false
+  }
+}
+
 export default function Hero() {
   const [isMobile, setIsMobile] = useState(getIsMobile)
-  const [webglFailed, setWebglFailed] = useState(false)
+  const [webglSupported, setWebglSupported] = useState(() => getWebGLSupport())
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768)
@@ -19,10 +29,10 @@ export default function Hero() {
   }, [])
 
   const handleWebGLError = useCallback(() => {
-    setWebglFailed(true)
+    setWebglSupported(false)
   }, [])
 
-  const showFallback = isMobile || webglFailed
+  const showFallback = isMobile || !webglSupported
 
   return (
     <section
@@ -218,9 +228,7 @@ export default function Hero() {
           {showFallback ? (
             <ConsoleFallback />
           ) : (
-            <Suspense fallback={<ConsoleFallback />}>
-              <Console3D onError={handleWebGLError} />
-            </Suspense>
+            <Console3D onError={handleWebGLError} />
           )}
         </motion.div>
       </div>
