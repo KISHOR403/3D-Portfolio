@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect, useMemo } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { RoundedBox, Html, Environment, Float } from '@react-three/drei'
 import * as THREE from 'three'
+import ConsoleFallback from './ConsoleFallback'
 
 const TERMINAL_LINES = [
   '$ npm run test:prod',
@@ -279,7 +280,7 @@ class Console3DErrorBoundary extends React.Component {
     if (this.props.onError) this.props.onError()
   }
   render() {
-    if (this.state.hasError) return null
+    if (this.state.hasError) return <ConsoleFallback />
     return this.props.children
   }
 }
@@ -310,11 +311,11 @@ export default function Console3D({ onError }) {
     }
   }, [onError])
 
-  if (!shouldRender3D) return null
+  if (!shouldRender3D) return <ConsoleFallback />
 
   return (
     <Console3DErrorBoundary onError={onError}>
-      <div style={{ width: '100%', height: '100%', minHeight: '400px' }}>
+      <div style={{ width: '100%', height: '100%', minHeight: '100%' }}>
         <Canvas
           camera={{ position: [0, 0, 4], fov: 35 }}
           dpr={[1, 1.5]}

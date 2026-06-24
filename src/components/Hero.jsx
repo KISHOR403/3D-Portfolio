@@ -5,12 +5,14 @@ import ConsoleFallback from './ConsoleFallback'
 
 const Console3D = lazy(() => import('./Console3D'))
 
+// Synchronous mobile check to avoid layout flash on refresh
+const getIsMobile = () => typeof window !== 'undefined' && window.innerWidth < 768
+
 export default function Hero() {
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(getIsMobile)
   const [webglFailed, setWebglFailed] = useState(false)
 
   useEffect(() => {
-    setIsMobile(window.innerWidth < 768)
     const handleResize = () => setIsMobile(window.innerWidth < 768)
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
@@ -30,9 +32,9 @@ export default function Hero() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '100px 1.5rem 2rem',
+        padding: '100px 1.5rem 3rem',
         position: 'relative',
-        overflow: 'hidden',
+        overflow: 'visible',
       }}
     >
       {/* Subtle background gradient */}
@@ -201,15 +203,16 @@ export default function Hero() {
 
         {/* Right — 3D Console */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           style={{
-            height: isMobile ? '350px' : '500px',
+            height: isMobile ? '400px' : '560px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             order: isMobile ? 2 : 1,
+            overflow: 'visible',
           }}
         >
           {showFallback ? (

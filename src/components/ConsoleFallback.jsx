@@ -62,9 +62,10 @@ export default function ConsoleFallback() {
   return (
     <div className="console-fallback" style={{
       width: '100%',
-      maxWidth: '440px',
+      maxWidth: '500px',
       margin: '0 auto',
-      perspective: '800px',
+      perspective: '1000px',
+      paddingBottom: '20px',
     }}>
       {/* Monitor frame */}
       <div style={{
@@ -72,18 +73,21 @@ export default function ConsoleFallback() {
         borderRadius: '14px',
         padding: '3px',
         boxShadow: '0 25px 60px rgba(0,0,0,0.5), 0 0 40px rgba(74, 222, 154, 0.05)',
-        transform: 'rotateX(-4deg) rotateY(2deg)',
+        transform: 'rotateX(4deg) rotateY(-3deg)',
+        transformStyle: 'preserve-3d',
         transition: 'transform 0.5s ease',
       }}>
         {/* Screen area */}
         <div style={{
           background: '#0a0f14',
           borderRadius: '11px',
-          padding: '16px 20px',
+          padding: '20px 24px',
           fontFamily: "'JetBrains Mono', monospace",
-          fontSize: '11px',
-          lineHeight: '1.7',
-          minHeight: '260px',
+          fontSize: '12px',
+          lineHeight: '1.8',
+          minHeight: '280px',
+          overflow: 'visible',
+          whiteSpace: 'nowrap',
         }}>
           {/* Terminal header */}
           <div style={{
@@ -131,17 +135,18 @@ export default function ConsoleFallback() {
 
       {/* Stand */}
       <div style={{
-        width: '4px',
-        height: '32px',
-        background: '#1a2030',
+        width: '6px',
+        height: '36px',
+        background: 'linear-gradient(180deg, #1a2030, #141c28)',
         margin: '0 auto',
+        borderRadius: '0 0 3px 3px',
       }} />
       <div style={{
-        width: '60px',
-        height: '4px',
+        width: '80px',
+        height: '6px',
         background: 'linear-gradient(90deg, transparent, #1a2030, transparent)',
         margin: '0 auto',
-        borderRadius: '2px',
+        borderRadius: '3px',
       }} />
     </div>
   )
