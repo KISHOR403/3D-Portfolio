@@ -365,10 +365,11 @@ export default function Education() {
             {/* Right Card */}
             <div>
               <EducationCard
-                title="Class 10 (Secondary)"
-                institution="Jatiya Vidyalaya — Gogamukh, Assam"
-                period="2019 – 2020"
-                status="COMPLETED"
+                title="B.Tech, Computer Science & Engineering"
+                institution="Lovely Professional University — Jalandhar, Punjab"
+                period="2022 – 2026"
+                status="GRADUATED"
+                details="Recently graduated — actively seeking QA/Software Testing roles"
                 isMobile={isMobile}
               />
             </div>
@@ -453,11 +454,10 @@ export default function Education() {
             {/* Right Card */}
             <div>
               <EducationCard
-                title="B.Tech, Computer Science & Engineering"
-                institution="Lovely Professional University — Jalandhar, Punjab"
-                period="2022 – 2026"
-                status="GRADUATED"
-                details="Recently graduated — actively seeking QA/Software Testing roles"
+                title="Class 10 (Secondary)"
+                institution="Jatiya Vidyalaya — Gogamukh, Assam"
+                period="2019 – 2020"
+                status="COMPLETED"
                 isMobile={isMobile}
               />
             </div>
