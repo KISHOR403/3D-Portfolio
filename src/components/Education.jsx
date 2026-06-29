@@ -243,32 +243,43 @@ export default function Education() {
 
   const activeProgress = prefersReducedMotion ? 1 : smoothProgress
 
-  // Scroll animations for nodes
+  // Scroll animations for nodes (3 nodes)
   const node1Bg = useTransform(
     activeProgress,
-    [0.0, 0.15],
+    [0.0, 0.12],
     ['rgba(35, 44, 53, 0.6)', 'var(--color-accent-pass)']
   )
   const node1Shadow = useTransform(
     activeProgress,
-    [0.0, 0.15],
+    [0.0, 0.12],
     ['0 0 0px rgba(74, 222, 154, 0)', '0 0 10px rgba(74, 222, 154, 0.5)']
   )
 
   const node2Bg = useTransform(
     activeProgress,
-    [0.45, 0.6],
+    [0.35, 0.47],
     ['rgba(35, 44, 53, 0.6)', 'var(--color-accent-pass)']
   )
   const node2Shadow = useTransform(
     activeProgress,
-    [0.45, 0.6],
+    [0.35, 0.47],
     ['0 0 0px rgba(74, 222, 154, 0)', '0 0 10px rgba(74, 222, 154, 0.5)']
   )
 
-  const badgeOpacity = useTransform(activeProgress, [0.85, 0.95], [0, 1])
-  const badgeScale = useTransform(activeProgress, [0.85, 0.95], [0.85, 1])
-  const badgeY = useTransform(activeProgress, [0.85, 0.95], [10, 0])
+  const node3Bg = useTransform(
+    activeProgress,
+    [0.7, 0.82],
+    ['rgba(35, 44, 53, 0.6)', 'var(--color-accent-pass)']
+  )
+  const node3Shadow = useTransform(
+    activeProgress,
+    [0.7, 0.82],
+    ['0 0 0px rgba(74, 222, 154, 0)', '0 0 10px rgba(74, 222, 154, 0.5)']
+  )
+
+  const badgeOpacity = useTransform(activeProgress, [0.88, 0.98], [0, 1])
+  const badgeScale = useTransform(activeProgress, [0.88, 0.98], [0.85, 1])
+  const badgeY = useTransform(activeProgress, [0.88, 0.98], [10, 0])
 
   return (
     <section id="environment-setup" style={{ background: 'transparent' }}>
@@ -354,9 +365,9 @@ export default function Education() {
             {/* Right Card */}
             <div>
               <EducationCard
-                title="Senior Secondary (Science)"
-                institution="Resolution Academy — Dhemaji, Assam"
-                period="2021 – 2022"
+                title="Class 10 (Secondary)"
+                institution="Jatiya Vidyalaya — Gogamukh, Assam"
+                period="2019 – 2020"
                 status="COMPLETED"
                 isMobile={isMobile}
               />
@@ -381,6 +392,50 @@ export default function Education() {
                   background: node2Bg,
                   border: '3px solid var(--color-bg-base)',
                   boxShadow: node2Shadow,
+                }}
+              />
+              {!isMobile && (
+                <div style={{
+                  position: 'absolute',
+                  left: '48px',
+                  right: 0,
+                  top: '43px',
+                  height: '2px',
+                  background: 'var(--color-border-hairline)',
+                  zIndex: 1,
+                }} />
+              )}
+            </div>
+            {/* Right Card */}
+            <div>
+              <EducationCard
+                title="Senior Secondary (Science)"
+                institution="Resolution Academy — Dhemaji, Assam"
+                period="2021 – 2022"
+                status="COMPLETED"
+                isMobile={isMobile}
+              />
+            </div>
+          </div>
+
+          {/* Milestone 3 */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: isMobile ? '40px 1fr' : '80px 1fr',
+            gap: isMobile ? '1rem' : '1.5rem',
+            marginBottom: '3.5rem',
+            position: 'relative'
+          }}>
+            {/* Left Node */}
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', paddingTop: '36px', position: 'relative', zIndex: 3 }}>
+              <motion.div
+                style={{
+                  width: '16px',
+                  height: '16px',
+                  borderRadius: '50%',
+                  background: node3Bg,
+                  border: '3px solid var(--color-bg-base)',
+                  boxShadow: node3Shadow,
                 }}
               />
               {!isMobile && (
