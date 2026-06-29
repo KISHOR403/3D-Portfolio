@@ -16,6 +16,18 @@ const PROJECTS = [
     ],
   },
   {
+    title: 'Doorkit',
+    featured: true,
+    description: 'A smart home security device marketplace web & mobile ecosystem, featuring a Node.js backend API and a React Native mobile application with state management, product catalogs, and cart checkout.',
+    stack: ['React Native', 'Redux', 'Node.js', 'Express', 'MongoDB'],
+    link: 'https://github.com/KISHOR403/Doorkit',
+    outcomes: [
+      'Built Node.js & Express REST API for product seeding, dynamic searching, and category filtering',
+      'Designed React Native mobile UI with custom navigation, search bar, animated product cards, and details screen',
+      'Integrated Redux state management for shopping cart controls and secure API integration',
+    ],
+  },
+  {
     title: 'Asom Bazaar',
     featured: true,
     description: 'A localized e-commerce marketplace tailored for local sellers in Assam and Northeast India, featuring comprehensive multi-step seller onboarding, a seller dashboard with sales analytics, and automated testing.',
@@ -153,6 +165,8 @@ const renderProjectSkillIcon = (tech, size = 10) => {
 
   const brandMapping = {
     'React': 'react/61DAFB',
+    'React Native': 'react/61DAFB',
+    'Redux': 'redux/764ABC',
     'MERN Stack': 'react/61DAFB',
     'Node.js': 'nodedotjs/339933',
     'Express': 'express/E8EAED',
