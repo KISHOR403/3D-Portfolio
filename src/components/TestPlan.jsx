@@ -1,12 +1,10 @@
 import { motion } from 'framer-motion'
 import { Check } from 'lucide-react'
 
-const CHECKLIST = [
-  'B.Tech in Computer Science & Engineering — Lovely Professional University (2022–2026)',
-  'Senior Secondary (Science) — Resolution Academy, Assam',
-  'Automation-first testing with Selenium, Appium & REST Assured',
-  'CI/CD pipeline integration — GitHub Actions & Jenkins',
-  'Open to relocation across major Indian tech hubs',
+const QUICK_FACTS = [
+  { icon: '📍', text: 'Based in Bengaluru' },
+  { icon: '🎯', text: 'Open to relocation: Pune, Hyderabad, NCR, Mumbai' },
+  { icon: '✓', text: 'Automation-first testing with Selenium, Appium & REST Assured' },
 ]
 
 const containerVariants = {
@@ -84,7 +82,7 @@ export default function TestPlan() {
             </p>
           </motion.div>
 
-          {/* Right — Checklist */}
+          {/* Right — Quick Facts */}
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -92,36 +90,44 @@ export default function TestPlan() {
             viewport={{ once: true, margin: '-80px' }}
             style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}
           >
-            {CHECKLIST.map((item, i) => (
+            {QUICK_FACTS.map((fact, i) => (
               <motion.div
                 key={i}
                 variants={itemVariants}
                 style={{
                   display: 'flex',
-                  alignItems: 'flex-start',
+                  alignItems: 'center',
                   gap: '12px',
-                  padding: '10px 14px',
+                  padding: '12px 16px',
                   borderRadius: '8px',
                   background: 'rgba(22, 29, 36, 0.5)',
                   border: '1px solid var(--color-border-hairline)',
-                  transition: 'border-color 0.2s ease',
+                  transition: 'border-color 0.2s ease, transform 0.2s ease',
                 }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(74, 222, 154, 0.3)'}
-                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--color-border-hairline)'}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = 'rgba(74, 222, 154, 0.3)'
+                  e.currentTarget.style.transform = 'translateX(4px)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = 'var(--color-border-hairline)'
+                  e.currentTarget.style.transform = 'translateX(0)'
+                }}
               >
                 <span style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: '20px',
-                  height: '20px',
-                  borderRadius: '50%',
-                  background: 'rgba(74, 222, 154, 0.12)',
-                  color: 'var(--color-accent-pass)',
+                  width: '24px',
+                  height: '24px',
+                  borderRadius: '6px',
+                  background: fact.icon === '✓' ? 'rgba(74, 222, 154, 0.12)' : 'rgba(35, 44, 53, 0.6)',
+                  color: fact.icon === '✓' ? 'var(--color-accent-pass)' : 'inherit',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: fact.icon === '✓' ? '0.9rem' : '1.1rem',
+                  fontWeight: 'bold',
                   flexShrink: 0,
-                  marginTop: '2px',
                 }}>
-                  <Check size={12} strokeWidth={3} />
+                  {fact.icon}
                 </span>
                 <span style={{
                   fontFamily: 'var(--font-sans)',
@@ -129,7 +135,7 @@ export default function TestPlan() {
                   lineHeight: 1.5,
                   color: 'var(--color-text-primary)',
                 }}>
-                  {item}
+                  {fact.text}
                 </span>
               </motion.div>
             ))}

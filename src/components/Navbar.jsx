@@ -4,6 +4,7 @@ import { Download, Menu, X } from 'lucide-react'
 
 const NAV_LINKS = [
   { label: 'TEST PLAN', href: '#test-plan' },
+  { label: 'ENVIRONMENT SETUP', href: '#environment-setup' },
   { label: 'COVERAGE REPORT', href: '#coverage-report' },
   { label: 'PIPELINE RUNS', href: '#pipeline-runs' },
   { label: 'QUALITY GATES', href: '#quality-gates' },
