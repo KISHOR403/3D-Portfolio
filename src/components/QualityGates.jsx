@@ -82,7 +82,17 @@ const LOG_DATA = [
   }
 ]
 
-function CertificateModal({ isOpen, onClose, pdfUrl, certName }) {
+function CertificateModal({ isOpen, onClose, pdfUrl, certName, certIssuer, certYear }) {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 768px)')
+    const listener = (e) => setIsMobile(e.matches)
+    setIsMobile(media.matches)
+    media.addEventListener('change', listener)
+    return () => media.removeEventListener('change', listener)
+  }, [])
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
@@ -96,6 +106,181 @@ function CertificateModal({ isOpen, onClose, pdfUrl, certName }) {
 
   if (!isOpen) return null
 
+  // MOBILE DEVICE OPTIMIZED LAYOUT
+  if (isMobile) {
+    return createPortal(
+      <div
+        style={{
+          position: 'fixed',
+          inset: 0,
+          backgroundColor: 'rgba(13, 17, 23, 0.9)',
+          backdropFilter: 'blur(10px)',
+          zIndex: 9999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '1.25rem',
+        }}
+        onClick={onClose}
+      >
+        <div
+          style={{
+            width: '100%',
+            maxWidth: '380px',
+            backgroundColor: '#0D1117',
+            border: '1px solid #232C35',
+            borderRadius: '16px',
+            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.6)',
+            padding: '1.75rem',
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem',
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Top Close Icon Button */}
+          <button
+            onClick={onClose}
+            aria-label="Close modal"
+            style={{
+              position: 'absolute',
+              top: '12px',
+              right: '12px',
+              width: '36px',
+              height: '36px',
+              borderRadius: '50%',
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              color: 'var(--color-text-muted)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '1.25rem',
+              transition: 'all 0.2s',
+            }}
+          >
+            &times;
+          </button>
+
+          {/* Issuer Tag */}
+          <div style={{ display: 'flex', marginTop: '0.5rem' }}>
+            <span
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.7rem',
+                fontWeight: 'bold',
+                textTransform: 'uppercase',
+                color: 'var(--color-accent-pass)',
+                backgroundColor: 'rgba(74, 222, 154, 0.1)',
+                padding: '4px 10px',
+                borderRadius: '4px',
+                letterSpacing: '0.05em',
+              }}
+            >
+              {certIssuer}
+            </span>
+          </div>
+
+          {/* Certificate Name */}
+          <h3
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '1.2rem',
+              fontWeight: 600,
+              color: 'var(--color-text-primary)',
+              lineHeight: 1.4,
+              margin: 0,
+              wordWrap: 'break-word',
+            }}
+          >
+            {certName}
+          </h3>
+
+          {/* Details list */}
+          <div
+            style={{
+              borderTop: '1px solid rgba(35, 44, 53, 0.5)',
+              borderBottom: '1px solid rgba(35, 44, 53, 0.5)',
+              padding: '0.75rem 0',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.5rem',
+              fontSize: '0.85rem',
+              fontFamily: 'var(--font-mono)',
+              color: 'var(--color-text-muted)',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span>ISSUER</span>
+              <span style={{ color: 'var(--color-text-primary)' }}>{certIssuer}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span>YEAR</span>
+              <span style={{ color: 'var(--color-accent-pending)' }}>{certYear}</span>
+            </div>
+          </div>
+
+          {/* Primary View PDF Button */}
+          <a
+            href={pdfUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onClose}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%',
+              padding: '12px 20px',
+              backgroundColor: 'var(--color-accent-pass)',
+              color: '#0D1117',
+              fontWeight: 'bold',
+              fontFamily: 'var(--font-display)',
+              fontSize: '0.9rem',
+              textDecoration: 'none',
+              borderRadius: '8px',
+              boxShadow: '0 4px 15px rgba(74, 222, 154, 0.3)',
+              textAlign: 'center',
+              transition: 'transform 0.2s',
+            }}
+          >
+            Open Document (PDF)
+          </a>
+
+          {/* Secondary Close Button */}
+          <button
+            onClick={onClose}
+            style={{
+              width: '100%',
+              padding: '10px 20px',
+              backgroundColor: 'transparent',
+              border: '1px solid #232C35',
+              color: 'var(--color-text-muted)',
+              fontSize: '0.85rem',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.borderColor = 'rgba(255,255,255,0.2)'
+              e.target.style.color = '#FFFFFF'
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.borderColor = '#232C35'
+              e.target.style.color = 'var(--color-text-muted)'
+            }}
+          >
+            Close
+          </button>
+        </div>
+      </div>,
+      document.body
+    )
+  }
+
+  // DESKTOP LAYOUT (WITH EMBEDDED IFRAME VIEWER)
   return createPortal(
     <div
       style={{
@@ -195,6 +380,8 @@ export default function QualityGates() {
 
   const [activePdf, setActivePdf] = useState(null)
   const [activeName, setActiveName] = useState(null)
+  const [activeIssuer, setActiveIssuer] = useState(null)
+  const [activeYear, setActiveYear] = useState(null)
 
   const [linesState, setLinesState] = useState(() => {
     const initialCompleted = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -337,10 +524,12 @@ export default function QualityGates() {
     }
   }, [linesState.isStarted, linesState.isCompleted, linesState.phase, linesState.currentLineIndex])
 
-  const handleOpenCertificate = (pdf, name) => {
+  const handleOpenCertificate = (pdf, name, issuer, year) => {
     if (pdf) {
       setActivePdf(pdf)
       setActiveName(name)
+      setActiveIssuer(issuer.trim())
+      setActiveYear(year.trim())
     }
   }
 
@@ -423,7 +612,7 @@ export default function QualityGates() {
           cursor: line.pdf ? 'pointer' : 'default',
           whiteSpace: 'pre',
         }}
-        onClick={() => handleOpenCertificate(line.pdf, cleanCertName)}
+        onClick={() => handleOpenCertificate(line.pdf, cleanCertName, line.parts.issuer, line.parts.year)}
       >
         <span
           className="pass-tag"
@@ -454,7 +643,7 @@ export default function QualityGates() {
           <button
             onClick={(e) => {
               e.stopPropagation()
-              handleOpenCertificate(line.pdf, cleanCertName)
+              handleOpenCertificate(line.pdf, cleanCertName, line.parts.issuer, line.parts.year)
             }}
             style={{
               color: 'var(--color-accent-pass)',
@@ -682,9 +871,13 @@ export default function QualityGates() {
         onClose={() => {
           setActivePdf(null)
           setActiveName(null)
+          setActiveIssuer(null)
+          setActiveYear(null)
         }}
         pdfUrl={activePdf}
         certName={activeName}
+        certIssuer={activeIssuer}
+        certYear={activeYear}
       />
     </section>
   )
