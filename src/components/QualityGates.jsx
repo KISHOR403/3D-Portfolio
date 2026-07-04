@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 const LOG_DATA = [
   {
@@ -81,8 +82,119 @@ const LOG_DATA = [
   }
 ]
 
+function CertificateModal({ isOpen, onClose, pdfUrl, certName }) {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [isOpen])
+
+  if (!isOpen) return null
+
+  return createPortal(
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        backgroundColor: 'rgba(13, 17, 23, 0.85)',
+        backdropFilter: 'blur(8px)',
+        zIndex: 9999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '1.5rem',
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          width: 'min(95vw, 900px)',
+          height: 'min(90vh, 700px)',
+          backgroundColor: '#0D1117',
+          border: '1px solid #232C35',
+          borderRadius: '12px',
+          display: 'flex',
+          flexDirection: 'column',
+          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.5)',
+          overflow: 'hidden',
+          position: 'relative',
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '1rem 1.5rem',
+            borderBottom: '1px solid #232C35',
+            backgroundColor: 'rgba(35, 44, 53, 0.2)',
+          }}
+        >
+          <h3
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '1rem',
+              fontWeight: 500,
+              color: 'var(--color-text-primary)',
+              margin: 0,
+              maxWidth: '85%',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {certName}
+          </h3>
+          <button
+            onClick={onClose}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--color-text-muted)',
+              cursor: 'pointer',
+              fontSize: '1.75rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '4px',
+              transition: 'color 0.2s',
+              lineHeight: 1,
+            }}
+            onMouseEnter={(e) => (e.target.style.color = '#FFFFFF')}
+            onMouseLeave={(e) => (e.target.style.color = 'var(--color-text-muted)')}
+          >
+            &times;
+          </button>
+        </div>
+
+        {/* Content - Embed PDF */}
+        <div style={{ flex: 1, minHeight: 0, backgroundColor: '#161D24', position: 'relative' }}>
+          <iframe
+            src={`${pdfUrl}#toolbar=0&navpanes=0`}
+            width="100%"
+            height="100%"
+            style={{ border: 'none', display: 'block' }}
+            title={certName}
+          />
+        </div>
+      </div>
+    </div>,
+    document.body
+  )
+}
+
 export default function QualityGates() {
   const sectionRef = useRef(null)
+
+  const [activePdf, setActivePdf] = useState(null)
+  const [activeName, setActiveName] = useState(null)
 
   const [linesState, setLinesState] = useState(() => {
     const initialCompleted = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -100,7 +212,6 @@ export default function QualityGates() {
     const element = sectionRef.current
     if (!element) return
 
-    // If already started (e.g. reduced motion), don't observe
     if (linesState.isStarted) return
 
     const observer = new IntersectionObserver(
@@ -129,7 +240,6 @@ export default function QualityGates() {
 
     const tick = () => {
       setLinesState(prev => {
-        // 1. If currently typing the PASS tag of the current line
         if (prev.phase === 'typing_pass') {
           const line = LOG_DATA[prev.currentLineIndex]
           const currentPassLength = prev.charCount
@@ -139,7 +249,6 @@ export default function QualityGates() {
               charCount: currentPassLength + 1
             }
           } else {
-            // PASS tag completed. Transition to pulse phase.
             return {
               ...prev,
               phase: 'pulse_pass'
@@ -147,12 +256,10 @@ export default function QualityGates() {
           }
         }
 
-        // 2. If in pulse phase (handled by timeout, but keep as fallback)
         if (prev.phase === 'pulse_pass') {
           return prev
         }
 
-        // 3. If typing the rest of the line
         if (prev.phase === 'typing_rest') {
           const line = LOG_DATA[prev.currentLineIndex]
           const fullRestLength =
@@ -168,7 +275,6 @@ export default function QualityGates() {
               charCount: currentRestLength + 1
             }
           } else {
-            // Rest of line completed. Transition to pause/next line.
             if (prev.currentLineIndex < LOG_DATA.length - 1) {
               return {
                 ...prev,
@@ -176,7 +282,6 @@ export default function QualityGates() {
                 charCount: 0
               }
             } else {
-              // All lines completed. Transition to typing summary.
               return {
                 ...prev,
                 phase: 'typing_summary',
@@ -186,7 +291,6 @@ export default function QualityGates() {
           }
         }
 
-        // 4. If typing the summary line
         if (prev.phase === 'typing_summary') {
           const summaryText = '  > 8 tests passed, 0 failed — Build Successful ✓'
           if (prev.summaryTypedLength < summaryText.length) {
@@ -207,15 +311,14 @@ export default function QualityGates() {
       })
     }
 
-    // Set the timer interval based on phase
-    let intervalMs = 20 // default character typing speed (18-22ms)
+    let intervalMs = 20
     if (linesState.phase === 'pulse_pass') {
-      intervalMs = 200 // pulse duration
+      intervalMs = 200
       timer = setTimeout(() => {
         setLinesState(prev => ({ ...prev, phase: 'typing_rest', charCount: 0 }))
       }, intervalMs)
     } else if (linesState.phase === 'pause_between_lines') {
-      intervalMs = 150 // pause between lines
+      intervalMs = 150
       timer = setTimeout(() => {
         setLinesState(prev => ({
           ...prev,
@@ -233,6 +336,13 @@ export default function QualityGates() {
       clearTimeout(timer)
     }
   }, [linesState.isStarted, linesState.isCompleted, linesState.phase, linesState.currentLineIndex])
+
+  const handleOpenCertificate = (pdf, name) => {
+    if (pdf) {
+      setActivePdf(pdf)
+      setActiveName(name)
+    }
+  }
 
   const renderLineContent = (index) => {
     const line = LOG_DATA[index]
@@ -277,7 +387,6 @@ export default function QualityGates() {
       return null
     }
 
-    // Split and highlight restText segments based on the current length typed
     let remaining = restLength
     const getSegmentText = (text) => {
       if (remaining <= 0) return ''
@@ -298,6 +407,8 @@ export default function QualityGates() {
         line.parts.issuer.length +
         line.parts.year.length
 
+    const cleanCertName = line.parts.name.trim()
+
     return (
       <div
         className="terminal-line"
@@ -312,11 +423,7 @@ export default function QualityGates() {
           cursor: line.pdf ? 'pointer' : 'default',
           whiteSpace: 'pre',
         }}
-        onClick={() => {
-          if (line.pdf) {
-            window.open(line.pdf, '_blank', 'noopener,noreferrer')
-          }
-        }}
+        onClick={() => handleOpenCertificate(line.pdf, cleanCertName)}
       >
         <span
           className="pass-tag"
@@ -344,11 +451,11 @@ export default function QualityGates() {
         <span style={{ color: 'var(--color-accent-pending)' }}>{yearTyped}</span>
 
         {line.pdf && isFullyTyped && (
-          <a
-            href={line.pdf}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              handleOpenCertificate(line.pdf, cleanCertName)
+            }}
             style={{
               color: 'var(--color-accent-pass)',
               marginLeft: '12px',
@@ -356,11 +463,16 @@ export default function QualityGates() {
               fontSize: '0.7rem',
               opacity: 0.5,
               transition: 'opacity 0.2s',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: 0,
+              fontFamily: 'var(--font-mono)',
             }}
             className="view-link"
           >
             [VIEW]
-          </a>
+          </button>
         )}
 
         {showCursor && (
@@ -563,6 +675,17 @@ export default function QualityGates() {
           </div>
         </div>
       </div>
+
+      {/* Certificate Modal Popup */}
+      <CertificateModal
+        isOpen={activePdf !== null}
+        onClose={() => {
+          setActivePdf(null)
+          setActiveName(null)
+        }}
+        pdfUrl={activePdf}
+        certName={activeName}
+      />
     </section>
   )
 }
