@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Check, Award } from 'lucide-react'
+import { Check } from 'lucide-react'
 
 const CERTIFICATIONS = [
   {

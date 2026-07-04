@@ -211,16 +211,20 @@ function EducationCard({ title, institution, period, status, details, isMobile }
 
 export default function Education() {
   const containerRef = useRef(null)
-  const [isMobile, setIsMobile] = useState(false)
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return window.innerWidth < 768
+  })
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  })
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768)
-    handleResize()
     window.addEventListener('resize', handleResize)
 
     const media = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(media.matches)
     const listener = (e) => setPrefersReducedMotion(e.matches)
     media.addEventListener('change', listener)
 

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useMemo } from 'react'
+import { useRef, useState, useEffect, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
@@ -41,11 +41,17 @@ function AmbientParticles({ reducedMotion }) {
     const cols = new Float32Array(PARTICLE_COUNT * 3)
     const spds = new Float32Array(PARTICLE_COUNT)
 
+    // Pure deterministic pseudo-random generator to satisfy React Compiler purity rules
+    const getPseudoRandom = (seed) => {
+      const x = Math.sin(seed) * 10000
+      return x - Math.floor(x)
+    }
+
     for (let i = 0; i < PARTICLE_COUNT; i++) {
       // Position: spread widely along width (X), height (Y), and depth (Z)
-      pos[i * 3] = (Math.random() - 0.5) * 35      // X
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 25  // Y
-      pos[i * 3 + 2] = -15 + Math.random() * 20     // Z
+      pos[i * 3] = (getPseudoRandom(i * 3 + 0.1) - 0.5) * 35      // X
+      pos[i * 3 + 1] = (getPseudoRandom(i * 3 + 0.2) - 0.5) * 25  // Y
+      pos[i * 3 + 2] = -15 + getPseudoRandom(i * 3 + 0.3) * 20     // Z
 
       // Color: cycle through the three signal colors
       const chosenColor = COLORS[i % COLORS.length]
@@ -54,7 +60,7 @@ function AmbientParticles({ reducedMotion }) {
       cols[i * 3 + 2] = chosenColor.b
 
       // Speed: slow drift speed
-      spds[i] = 0.4 + Math.random() * 0.8
+      spds[i] = 0.4 + getPseudoRandom(i * 3 + 0.4) * 0.8
     }
 
     return { positions: pos, colors: cols, speeds: spds }
@@ -169,7 +175,7 @@ function SignalStreak({ reducedMotion }) {
   const currentZ = streak.zStart + (streak.zEnd - streak.zStart) * streak.progress
 
   // Calculate fade opacity based on progression (fade in, hold, fade out)
-  let opacity = 0
+  let opacity
   if (streak.progress < 0.2) {
     opacity = (streak.progress / 0.2) * 0.45
   } else if (streak.progress > 0.8) {
@@ -216,7 +222,7 @@ function PipelineGridScene({ reducedMotion }) {
     }
   }, [])
 
-  useFrame((state, delta) => {
+  useFrame((state) => {
     // 1. Parallax camera vertical offset
     // Camera is initially at [0, 6, 25] looking down.
     // Move camera down by 65% of screen scroll distance (scaled to WebGL coordinates)
@@ -247,20 +253,24 @@ function PipelineGridScene({ reducedMotion }) {
 
 /* ─── Exported PipelineGridBg with Fallback and Optimizations ─── */
 export default function PipelineGridBg() {
-  const [isMobile, setIsMobile] = useState(false)
-  const [reducedMotion, setReducedMotion] = useState(false)
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return window.innerWidth < 768
+  })
+  const [reducedMotion, setReducedMotion] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  })
   const [isTabVisible, setIsTabVisible] = useState(true)
 
   // Responsive & Performance checks
   useEffect(() => {
     // 1. Mobile screen check (disable WebGL canvas to avoid running two contexts)
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
-    checkMobile()
     window.addEventListener('resize', checkMobile)
 
     // 2. Prefers reduced motion check
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setReducedMotion(mediaQuery.matches)
     const handleMediaChange = (e) => setReducedMotion(e.matches)
     mediaQuery.addEventListener('change', handleMediaChange)
 

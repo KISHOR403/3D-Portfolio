@@ -12,18 +12,17 @@ const TERMINAL_LINES = [
 ]
 
 export default function ConsoleFallback() {
-  const [lines, setLines] = useState([])
-  const [currentLine, setCurrentLine] = useState(0)
-  const [currentChar, setCurrentChar] = useState(0)
-
   const prefersReducedMotion = useMemo(() => {
     if (typeof window === 'undefined') return false
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches
   }, [])
 
+  const [lines, setLines] = useState(() => prefersReducedMotion ? TERMINAL_LINES : [])
+  const [currentLine, setCurrentLine] = useState(0)
+  const [currentChar, setCurrentChar] = useState(0)
+
   useEffect(() => {
     if (prefersReducedMotion) {
-      setLines(TERMINAL_LINES)
       return
     }
 

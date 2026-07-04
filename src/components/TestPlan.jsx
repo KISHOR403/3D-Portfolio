@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion'
-import { Check } from 'lucide-react'
 
 const QUICK_FACTS = [
   { icon: '📍', text: 'Based in Bengaluru' },

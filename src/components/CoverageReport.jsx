@@ -16,7 +16,7 @@ import {
   Server,
   Box,
   Table,
-  Infinity
+  Infinity as InfinityIcon
 } from 'lucide-react'
 
 const ACCENT_COLORS = ['var(--color-accent-pass)', 'var(--color-accent-pending)', 'var(--color-accent-fail)']
@@ -66,7 +66,7 @@ const SKILL_ICONS = {
   'Jenkins': Server,
   'Page Object Model (POM)': Box,
   'Data-Driven Testing': Table,
-  'CI/CD Integration': Infinity,
+  'CI/CD Integration': InfinityIcon,
 }
 
 // Custom SVG for TestNG from the original site
