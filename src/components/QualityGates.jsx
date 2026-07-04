@@ -1,11 +1,30 @@
 import { motion } from 'framer-motion'
-import { Check } from 'lucide-react'
+import { Check, ExternalLink } from 'lucide-react'
 
 const CERTIFICATIONS = [
   {
     name: 'SAP Certified Project Manager — SAP Activate & Agile Implementation',
     issuer: 'SAP',
     year: '2026',
+    pdf: '/certificates/sap-project-manager.pdf',
+  },
+  {
+    name: 'Oracle Cloud Infrastructure 2025 Certified AI Foundations Associate',
+    issuer: 'Oracle',
+    year: '2026',
+    pdf: '/certificates/oracle-ai-foundations.pdf',
+  },
+  {
+    name: 'Oracle Data Platform 2025 Certified Foundations Associate',
+    issuer: 'Oracle',
+    year: '2026',
+    pdf: '/certificates/oracle-data-platform.pdf',
+  },
+  {
+    name: 'Oracle Cloud Infrastructure 2025 Certified DevOps Professional',
+    issuer: 'Oracle',
+    year: '2025',
+    pdf: '/certificates/oracle-devops-professional.pdf',
   },
   {
     name: 'Software Testing and Automation Specialization',
@@ -13,14 +32,21 @@ const CERTIFICATIONS = [
     year: '2025',
   },
   {
-    name: 'Oracle Cloud Infrastructure 2025 Certified DevOps Professional',
-    issuer: 'Oracle',
-    year: '2025',
-  },
-  {
     name: 'Web and Mobile Testing with Selenium',
     issuer: 'Coursera',
     year: '2025',
+  },
+  {
+    name: 'IBM DevOps and Software Engineering',
+    issuer: 'Coursera · IBM',
+    year: '2024',
+    pdf: '/certificates/ibm-devops-engineering.pdf',
+  },
+  {
+    name: 'Claude 101 — Certificate of Completion',
+    issuer: 'Anthropic',
+    year: '2025',
+    pdf: '/certificates/anthropic-claude-101.pdf',
   },
 ]
 
@@ -105,15 +131,47 @@ export default function QualityGates() {
                 }}>
                   {cert.name}
                 </h3>
-                <p style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.7rem',
-                  color: 'var(--color-text-muted)',
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem',
                   marginTop: '2px',
-                  letterSpacing: '0.04em',
                 }}>
-                  {cert.issuer}
-                </p>
+                  <p style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.7rem',
+                    color: 'var(--color-text-muted)',
+                    letterSpacing: '0.04em',
+                  }}>
+                    {cert.issuer}
+                  </p>
+                  {cert.pdf && (
+                    <a
+                      href={cert.pdf}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      id={`cert-link-${i}`}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '3px',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.6rem',
+                        fontWeight: 500,
+                        color: 'var(--color-accent-pass)',
+                        textDecoration: 'none',
+                        letterSpacing: '0.04em',
+                        transition: 'opacity 0.2s',
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.opacity = '0.7'}
+                      onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+                      onClick={e => e.stopPropagation()}
+                    >
+                      <ExternalLink size={9} />
+                      VIEW
+                    </a>
+                  )}
+                </div>
               </div>
 
               {/* Year */}
@@ -134,3 +192,4 @@ export default function QualityGates() {
     </section>
   )
 }
+
