@@ -79,7 +79,7 @@ export default function Hero() {
           </div>
 
           <p className="section-eyebrow" style={{ marginBottom: '0.75rem', fontSize: '0.75rem' }}>
-            QA / Software Test Engineer
+            Full Stack Developer · Content Developer · QA Engineer
           </p>
 
           <h1 style={{
@@ -102,7 +102,7 @@ export default function Hero() {
             color: 'var(--color-text-muted)',
             marginBottom: '1.25rem',
           }}>
-            QA Engineer — Manual & Automation Testing
+            MERN Stack Developer · Content Creator · QA Automation
           </p>
 
           <p style={{
@@ -113,7 +113,7 @@ export default function Hero() {
             marginBottom: '2rem',
             maxWidth: '480px',
           }}>
-            Building reliable software through systematic testing, automation frameworks, and CI/CD pipeline integration. Based in Bengaluru.
+            Building full-stack web applications, crafting engaging digital content, and ensuring software quality through automation frameworks and CI/CD pipelines. Based in Bengaluru.
           </p>
 
           {/* CTAs */}

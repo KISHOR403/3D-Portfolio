@@ -72,7 +72,7 @@ export default function Deploy() {
             lineHeight: 1.7,
             letterSpacing: '0.02em',
           }}>
-            Initiating deployment pipeline... Ready to discuss opportunities, collaborate on QA projects, or talk testing strategy.
+            Initiating deployment pipeline... Ready to discuss opportunities, collaborate on full-stack web apps, content projects, or QA automation strategy.
           </p>
         </motion.div>
 

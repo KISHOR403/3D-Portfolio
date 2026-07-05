@@ -5,8 +5,8 @@ const TERMINAL_LINES = [
   '> Running suite...',
   '✓ 95% functional coverage',
   '✓ CI/CD: GitHub Actions',
-  '✓ 4 projects passed',
-  '✓ 3 quality gates verified',
+  '✓ 8 projects passed',
+  '✓ 8 quality gates verified',
   '0 failed tests.',
   'Deployment ready.',
 ]

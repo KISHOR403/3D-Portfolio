@@ -16,7 +16,11 @@ import {
   Server,
   Box,
   Table,
-  Infinity as InfinityIcon
+  Infinity as InfinityIcon,
+  Palette,
+  Video,
+  PenTool,
+  Sparkles
 } from 'lucide-react'
 
 const ACCENT_COLORS = ['var(--color-accent-pass)', 'var(--color-accent-pending)', 'var(--color-accent-fail)']
@@ -25,7 +29,11 @@ const ACCENT_RGBS = ['74, 222, 154', '242, 169, 59', '232, 97, 92']
 const SKILL_CATEGORIES = [
   {
     title: 'Languages & Querying',
-    skills: ['Java', 'SQL'],
+    skills: ['Java', 'JavaScript', 'HTML', 'CSS', 'SQL'],
+  },
+  {
+    title: 'Full Stack Development',
+    skills: ['React', 'Node.js', 'Express.js', 'MongoDB', 'Redux', 'Tailwind CSS', 'REST APIs'],
   },
   {
     title: 'Automation Tools & Frameworks',
@@ -38,6 +46,10 @@ const SKILL_CATEGORIES = [
       'API Testing & Automation', 'Mobile Testing', 'Test Case Design',
       'Bug Tracking & Debugging', 'Defect Life Cycle', 'Regression Testing',
     ],
+  },
+  {
+    title: 'Content Creation & Design',
+    skills: ['Technical Writing', 'Video Editing', 'Canva', 'Figma', 'Social Media Content'],
   },
   {
     title: 'Developer Tools',
@@ -67,6 +79,10 @@ const SKILL_ICONS = {
   'Page Object Model (POM)': Box,
   'Data-Driven Testing': Table,
   'CI/CD Integration': InfinityIcon,
+  'Technical Writing': PenTool,
+  'Video Editing': Video,
+  'Social Media Content': Sparkles,
+  'REST APIs': Cpu,
 }
 
 // Custom SVG for TestNG from the original site
@@ -136,7 +152,16 @@ const renderSkillIcon = (skill, size = 13) => {
   // Brand slug mappings for Simple Icons (loads official logo and color)
   const brandMapping = {
     'Java': 'java/F89820',
+    'JavaScript': 'javascript/F7DF1E',
+    'HTML': 'html5/E34F26',
+    'CSS': 'css3/1572B6',
     'SQL': 'sqlite/003B57',
+    'React': 'react/61DAFB',
+    'Node.js': 'nodedotjs/339933',
+    'Express.js': 'express/E8EAED',
+    'MongoDB': 'mongodb/47A248',
+    'Redux': 'redux/764ABC',
+    'Tailwind CSS': 'tailwindcss/06B6D4',
     'Selenium WebDriver': 'selenium/43B02A',
     'Appium': 'appium/E42D42',
     'Postman': 'postman/FF6C37',
@@ -146,6 +171,8 @@ const renderSkillIcon = (skill, size = 13) => {
     'TestRail': 'testrail/0052CC',
     'Jenkins': 'jenkins/D24939',
     'GitHub Actions': 'githubactions/2088FF',
+    'Canva': 'canva/00C4CC',
+    'Figma': 'figma/F24E1E',
   }
 
   if (brandMapping[skill]) {

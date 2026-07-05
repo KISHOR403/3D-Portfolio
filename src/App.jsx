@@ -2,6 +2,7 @@ import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import StatusStrip from './components/StatusStrip'
 import TestPlan from './components/TestPlan'
+import BeyondTheConsole from './components/BeyondTheConsole'
 import Education from './components/Education'
 import CoverageReport from './components/CoverageReport'
 import PipelineRuns from './components/PipelineRuns'
@@ -18,6 +19,7 @@ export default function App() {
         <Hero />
         <StatusStrip />
         <TestPlan />
+        <BeyondTheConsole />
         <Education />
         <CoverageReport />
         <PipelineRuns />
