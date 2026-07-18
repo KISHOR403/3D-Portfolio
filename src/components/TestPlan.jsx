@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Download } from 'lucide-react'
+import profileImg from '../assets/profile.jpg'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Sphere, MeshDistortMaterial } from '@react-three/drei'
 
@@ -84,7 +85,7 @@ const QUICK_FACTS = [
 ]
 
 export default function TestPlan() {
-  const [imgError, setImgError] = useState(true) // Force placeholder to show 3D WebGL render
+  const [imgError, setImgError] = useState(false)
   const frameRef = useRef(null)
   const highlightRef = useRef(null)
   const rAFRef = useRef(null)
@@ -193,7 +194,7 @@ export default function TestPlan() {
 
               {!imgError ? (
                 <img
-                  src="./assets/profile.jpg"
+                  src={profileImg}
                   alt="Kishor Gogoi"
                   onError={() => setImgError(true)}
                   style={{
