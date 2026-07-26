@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
   Database,
@@ -17,11 +17,15 @@ import {
   Box,
   Table,
   Infinity as InfinityIcon,
-  Palette,
   Video,
   PenTool,
-  Sparkles
+  Sparkles,
+  Globe,
+  Grid,
+  Sparkle,
+  SlidersHorizontal
 } from 'lucide-react'
+import EarthSkillsCanvas from './EarthSkillsCanvas'
 
 const ACCENT_COLORS = ['var(--color-accent-pass)', 'var(--color-accent-pending)', 'var(--color-accent-fail)']
 const ACCENT_RGBS = ['74, 222, 154', '242, 169, 59', '232, 97, 92']
@@ -105,8 +109,8 @@ const TestNGIcon = ({ size = 12 }) => (
     >
       Tn
     </text>
-    <path d="M70 20 L90 20 L90 40" stroke="white" stroke-width="5" fill="none" />
-    <path d="M30 80 L10 80 L10 60" stroke="white" stroke-width="5" fill="none" />
+    <path d="M70 20 L90 20 L90 40" stroke="white" strokeWidth="5" fill="none" />
+    <path d="M30 80 L10 80 L10 60" stroke="white" strokeWidth="5" fill="none" />
   </svg>
 )
 
@@ -136,11 +140,11 @@ const RestAssuredIcon = ({ size = 12 }) => (
     >
       RA
     </text>
-    <path d="M20 50 A 30 30 0 0 1 80 50" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" />
+    <path d="M20 50 A 30 30 0 0 1 80 50" stroke="white" strokeWidth="3" fill="none" strokeLinecap="round" />
   </svg>
 )
 
-// Helper function to render the exact/original brand icon or fallback
+// Helper function to render brand icon or fallback
 const renderSkillIcon = (skill, size = 13) => {
   if (skill === 'TestNG') {
     return <TestNGIcon size={size} />
@@ -149,7 +153,7 @@ const renderSkillIcon = (skill, size = 13) => {
     return <RestAssuredIcon size={size} />
   }
 
-  // Brand slug mappings for Simple Icons (loads official logo and color)
+  // Brand slug mappings for Simple Icons
   const brandMapping = {
     'Java': 'java/F89820',
     'JavaScript': 'javascript/F7DF1E',
@@ -193,7 +197,6 @@ const renderSkillIcon = (skill, size = 13) => {
     )
   }
 
-  // Fallback to Lucide React icons for conceptual skills
   const Icon = SKILL_ICONS[skill] || CheckSquare
   return <Icon size={size} style={{ opacity: 0.8, flexShrink: 0 }} />
 }
@@ -201,7 +204,7 @@ const renderSkillIcon = (skill, size = 13) => {
 const containerVariants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.1 },
+    transition: { staggerChildren: 0.08 },
   },
 }
 
@@ -227,7 +230,7 @@ const chipVariants = {
   }),
 }
 
-function SkillCard({ category, index }) {
+function SkillCard({ category, index, activeCategory, hoveredSkillId, setHoveredSkillId }) {
   const cardRef = useRef(null)
   const highlightRef = useRef(null)
   const rAFRef = useRef(null)
@@ -235,12 +238,13 @@ function SkillCard({ category, index }) {
   const accentColor = ACCENT_COLORS[index % ACCENT_COLORS.length]
   const accentRGB = ACCENT_RGBS[index % ACCENT_RGBS.length]
 
+  const isCategoryMatch = !activeCategory || activeCategory === 'All' || category.title.toLowerCase().includes(activeCategory.toLowerCase()) || (activeCategory === 'Automation' && category.title.includes('Automation')) || (activeCategory === 'Full Stack' && category.title.includes('Full Stack'))
+
   useEffect(() => {
     const card = cardRef.current
     const highlight = highlightRef.current
     if (!card) return
 
-    // Check prefers-reduced-motion
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
     let prefersReducedMotion = mediaQuery.matches
     const handleMediaChange = (e) => {
@@ -248,13 +252,9 @@ function SkillCard({ category, index }) {
     }
     mediaQuery.addEventListener('change', handleMediaChange)
 
-    // Check touch device
     const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0
-
     if (prefersReducedMotion || isTouch) {
-      return () => {
-        mediaQuery.removeEventListener('change', handleMediaChange)
-      }
+      return () => mediaQuery.removeEventListener('change', handleMediaChange)
     }
 
     const handleMouseMove = (e) => {
@@ -268,7 +268,6 @@ function SkillCard({ category, index }) {
         const centerX = rect.width / 2
         const centerY = rect.height / 2
 
-        // Cursor-reactive tilt: clamped to max of ~5.5 degrees
         const tiltX = ((centerY - y) / centerY) * 5.5
         const tiltY = ((x - centerX) / centerX) * 5.5
 
@@ -277,7 +276,6 @@ function SkillCard({ category, index }) {
         if (highlight) {
           const pctX = (x / rect.width) * 100
           const pctY = (y / rect.height) * 100
-          // Light-catch surface highlight: white at ~6% opacity, transparent past ~40% radius
           highlight.style.background = `radial-gradient(circle at ${pctX}% ${pctY}%, rgba(255, 255, 255, 0.06) 0%, transparent 40%)`
         }
       })
@@ -312,9 +310,11 @@ function SkillCard({ category, index }) {
         perspective: '1000px',
         paddingBottom: '12px',
         paddingRight: '12px',
+        opacity: isCategoryMatch ? 1 : 0.4,
+        transition: 'opacity 0.3s ease',
       }}
     >
-      {/* Ghost Layer 2 (12px offset) */}
+      {/* Ghost Layer 2 */}
       <div
         style={{
           position: 'absolute',
@@ -329,7 +329,7 @@ function SkillCard({ category, index }) {
         }}
       />
 
-      {/* Ghost Layer 1 (6px offset) */}
+      {/* Ghost Layer 1 */}
       <div
         style={{
           position: 'absolute',
@@ -344,7 +344,7 @@ function SkillCard({ category, index }) {
         }}
       />
 
-      {/* Front-facing card */}
+      {/* Front card */}
       <motion.div
         ref={cardRef}
         variants={cardVariants}
@@ -370,7 +370,6 @@ function SkillCard({ category, index }) {
           e.currentTarget.style.boxShadow = `0 -8px 24px rgba(${accentRGB}, 0.12), 0 4px 20px rgba(0, 0, 0, 0.3)`
         }}
       >
-        {/* Light-catch surface highlight */}
         <div
           ref={highlightRef}
           style={{
@@ -404,86 +403,265 @@ function SkillCard({ category, index }) {
             gap: '0.5rem',
           }}
         >
-          {category.skills.map((skill, j) => (
-            <motion.span
-              key={j}
-              custom={j}
-              variants={chipVariants}
-              whileHover={{
-                y: -3,
-                scale: 1.03,
-                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 6px 12px rgba(0, 0, 0, 0.35)',
-                borderColor: accentColor,
-                backgroundColor: `color-mix(in srgb, ${accentColor} 6%, rgba(35, 44, 53, 0.4))`,
-              }}
-              whileTap={{ scale: 0.95 }}
-              className="skill-chip"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.45rem',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.72rem',
-                fontWeight: 500,
-                padding: '0.375rem 0.75rem',
-                borderRadius: '999px',
-                background: 'rgba(35, 44, 53, 0.4)',
-                border: '1px solid var(--color-border-hairline)',
-                color: 'var(--color-text-primary)',
-                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 4px rgba(0, 0, 0, 0.15)',
-                cursor: 'pointer',
-              }}
-            >
-              {renderSkillIcon(skill, 13)}
-              <span>{skill}</span>
-            </motion.span>
-          ))}
+          {category.skills.map((skill, j) => {
+            const isChipHovered = hoveredSkillId && skill.toLowerCase().includes(hoveredSkillId.toLowerCase())
+            return (
+              <motion.span
+                key={j}
+                custom={j}
+                variants={chipVariants}
+                onMouseEnter={() => setHoveredSkillId(skill)}
+                onMouseLeave={() => setHoveredSkillId(null)}
+                whileHover={{
+                  y: -3,
+                  scale: 1.03,
+                  boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 6px 12px rgba(0, 0, 0, 0.35)',
+                  borderColor: accentColor,
+                  backgroundColor: `color-mix(in srgb, ${accentColor} 12%, rgba(35, 44, 53, 0.4))`,
+                }}
+                whileTap={{ scale: 0.95 }}
+                className="skill-chip"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.72rem',
+                  fontWeight: 500,
+                  padding: '0.375rem 0.75rem',
+                  borderRadius: '999px',
+                  background: isChipHovered ? `color-mix(in srgb, ${accentColor} 16%, rgba(35, 44, 53, 0.6))` : 'rgba(35, 44, 53, 0.4)',
+                  border: isChipHovered ? `1px solid ${accentColor}` : '1px solid var(--color-border-hairline)',
+                  color: 'var(--color-text-primary)',
+                  boxShadow: isChipHovered ? `0 0 12px rgba(${accentRGB}, 0.3)` : 'inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 4px rgba(0, 0, 0, 0.15)',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                {renderSkillIcon(skill, 13)}
+                <span>{skill}</span>
+              </motion.span>
+            )
+          })}
         </div>
       </motion.div>
     </div>
   )
 }
 
+const CATEGORY_FILTERS = [
+  'All',
+  'Languages & Querying',
+  'Full Stack Development',
+  'Automation Tools & Frameworks',
+  'Testing Skills & Methodologies',
+  'Developer Tools',
+  'Content Creation & Design'
+]
+
 export default function CoverageReport() {
+  const [activeCategory, setActiveCategory] = useState('All')
+  const [viewMode, setViewMode] = useState('earth') // 'earth' | 'both' | 'grid'
+  const [hoveredSkillId, setHoveredSkillId] = useState(null)
+
   return (
-    <section id="coverage-report" style={{ background: 'rgba(22, 29, 36, 0.75)', backdropFilter: 'blur(10px)' }}>
+    <section id="coverage-report" style={{ background: 'rgba(22, 29, 36, 0.75)', backdropFilter: 'blur(10px)', padding: '5rem 0' }}>
       <div className="section-container">
+        {/* Header Title Block */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.5 }}
-        >
-          <p className="section-eyebrow">Coverage Report</p>
-          <h2
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '2rem',
-              fontWeight: 600,
-              letterSpacing: '-0.02em',
-              color: 'var(--color-text-primary)',
-              marginBottom: '3rem',
-            }}
-          >
-            Skills & technologies
-          </h2>
-        </motion.div>
-
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))',
-            gap: '1.75rem',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem',
+            marginBottom: '2rem',
           }}
         >
-          {SKILL_CATEGORIES.map((category, i) => (
-            <SkillCard key={i} category={category} index={i} />
-          ))}
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: '1rem' }}>
+            <div>
+              <p className="section-eyebrow">Coverage Report</p>
+              <h2
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: '2.2rem',
+                  fontWeight: 700,
+                  letterSpacing: '-0.02em',
+                  color: 'var(--color-text-primary)',
+                  marginTop: '0.25rem',
+                }}
+              >
+                Skills & Technologies
+              </h2>
+            </div>
+
+            {/* View Mode Toggle Buttons */}
+            <div
+              style={{
+                display: 'inline-flex',
+                background: 'rgba(13, 20, 30, 0.8)',
+                border: '1px solid var(--color-border-hairline)',
+                borderRadius: '999px',
+                padding: '4px',
+                gap: '4px',
+              }}
+            >
+              <button
+                onClick={() => setViewMode('earth')}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.72rem',
+                  fontWeight: 600,
+                  padding: '6px 14px',
+                  borderRadius: '999px',
+                  border: 'none',
+                  background: viewMode === 'earth' ? 'var(--color-accent-pass)' : 'transparent',
+                  color: viewMode === 'earth' ? 'var(--color-bg-base)' : 'var(--color-text-muted)',
+                  cursor: 'pointer',
+                  transition: 'all 0.25s ease',
+                }}
+              >
+                <Globe size={13} />
+                3D Earth
+              </button>
+              <button
+                onClick={() => setViewMode('both')}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.72rem',
+                  fontWeight: 600,
+                  padding: '6px 14px',
+                  borderRadius: '999px',
+                  border: 'none',
+                  background: viewMode === 'both' ? 'var(--color-accent-pass)' : 'transparent',
+                  color: viewMode === 'both' ? 'var(--color-bg-base)' : 'var(--color-text-muted)',
+                  cursor: 'pointer',
+                  transition: 'all 0.25s ease',
+                }}
+              >
+                <Sparkle size={13} />
+                Interactive Both
+              </button>
+              <button
+                onClick={() => setViewMode('grid')}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.72rem',
+                  fontWeight: 600,
+                  padding: '6px 14px',
+                  borderRadius: '999px',
+                  border: 'none',
+                  background: viewMode === 'grid' ? 'var(--color-accent-pass)' : 'transparent',
+                  color: viewMode === 'grid' ? 'var(--color-bg-base)' : 'var(--color-text-muted)',
+                  cursor: 'pointer',
+                  transition: 'all 0.25s ease',
+                }}
+              >
+                <Grid size={13} />
+                Grid View
+              </button>
+            </div>
+          </div>
+
+          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.95rem', color: 'var(--color-text-muted)', maxWidth: '650px' }}>
+            3D interactive orbital view of full-stack engineering, QA automation frameworks, and developer toolchains revolving around the global ecosystem.
+          </p>
         </motion.div>
+
+        {/* Category Filter Pills Bar */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4 }}
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '0.5rem',
+            marginBottom: '2rem',
+            alignItems: 'center',
+          }}
+        >
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--color-text-muted)', marginRight: '0.5rem' }}>
+            <SlidersHorizontal size={13} /> Filter Category:
+          </div>
+          {CATEGORY_FILTERS.map((cat) => {
+            const isActive = activeCategory === cat
+            return (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.72rem',
+                  fontWeight: 500,
+                  padding: '0.35rem 0.85rem',
+                  borderRadius: '999px',
+                  background: isActive ? 'rgba(74, 222, 154, 0.15)' : 'rgba(255, 255, 255, 0.04)',
+                  border: isActive ? '1px solid var(--color-accent-pass)' : '1px solid var(--color-border-hairline)',
+                  color: isActive ? 'var(--color-accent-pass)' : 'var(--color-text-muted)',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  boxShadow: isActive ? '0 0 12px rgba(74, 222, 154, 0.25)' : 'none',
+                }}
+              >
+                {cat}
+              </button>
+            )
+          })}
+        </motion.div>
+
+        {/* Render 3D Earth Globe Canvas */}
+        {(viewMode === 'earth' || viewMode === 'both') && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            style={{ marginBottom: viewMode === 'both' ? '3rem' : '0' }}
+          >
+            <EarthSkillsCanvas
+              activeCategory={activeCategory}
+              hoveredSkillId={hoveredSkillId}
+              setHoveredSkillId={setHoveredSkillId}
+            />
+          </motion.div>
+        )}
+
+        {/* Render Categorized Grid Cards */}
+        {(viewMode === 'grid' || viewMode === 'both') && (
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))',
+              gap: '1.75rem',
+            }}
+          >
+            {SKILL_CATEGORIES.map((category, i) => (
+              <SkillCard
+                key={i}
+                category={category}
+                index={i}
+                activeCategory={activeCategory}
+                hoveredSkillId={hoveredSkillId}
+                setHoveredSkillId={setHoveredSkillId}
+              />
+            ))}
+          </motion.div>
+        )}
       </div>
     </section>
   )
