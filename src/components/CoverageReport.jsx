@@ -1,31 +1,12 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
-  Database,
-  CheckSquare,
-  Eye,
-  RotateCcw,
-  Workflow,
-  RefreshCw,
-  Cpu,
-  FileText,
-  Bug,
-  Activity,
-  History,
-  GitBranch,
-  Server,
-  Box,
-  Table,
-  Infinity as InfinityIcon,
-  Video,
-  PenTool,
-  Sparkles,
   Globe,
   Grid,
   Sparkle,
   SlidersHorizontal
 } from 'lucide-react'
-import EarthSkillsCanvas from './EarthSkillsCanvas'
+import EarthSkillsCanvas, { SmartSkillIcon } from './EarthSkillsCanvas'
 
 const ACCENT_COLORS = ['var(--color-accent-pass)', 'var(--color-accent-pending)', 'var(--color-accent-fail)']
 const ACCENT_RGBS = ['74, 222, 154', '242, 169, 59', '232, 97, 92']
@@ -65,142 +46,6 @@ const SKILL_CATEGORIES = [
   },
 ]
 
-// Lucide icons fallback for conceptual skills
-const SKILL_ICONS = {
-  'SQL': Database,
-  'Manual Testing': Eye,
-  'Agile (Scrum)': RotateCcw,
-  'SDLC': Workflow,
-  'STLC': RefreshCw,
-  'API Testing & Automation': Cpu,
-  'Mobile Testing': Cpu,
-  'Test Case Design': FileText,
-  'Bug Tracking & Debugging': Bug,
-  'Defect Life Cycle': Activity,
-  'Regression Testing': History,
-  'Git': GitBranch,
-  'Jenkins': Server,
-  'Page Object Model (POM)': Box,
-  'Data-Driven Testing': Table,
-  'CI/CD Integration': InfinityIcon,
-  'Technical Writing': PenTool,
-  'Video Editing': Video,
-  'Social Media Content': Sparkles,
-  'REST APIs': Cpu,
-}
-
-// Custom SVG for TestNG from the original site
-const TestNGIcon = ({ size = 12 }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 100 100"
-    style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0 }}
-  >
-    <rect width="100" height="100" rx="20" fill="#dc2626" />
-    <text
-      x="50"
-      y="65"
-      fontFamily="Arial, sans-serif"
-      fontWeight="bold"
-      fontSize="50"
-      fill="white"
-      textAnchor="middle"
-    >
-      Tn
-    </text>
-    <path d="M70 20 L90 20 L90 40" stroke="white" strokeWidth="5" fill="none" />
-    <path d="M30 80 L10 80 L10 60" stroke="white" strokeWidth="5" fill="none" />
-  </svg>
-)
-
-// Custom SVG for REST Assured from the original site
-const RestAssuredIcon = ({ size = 12 }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 100 100"
-    style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0 }}
-  >
-    <defs>
-      <linearGradient id="restAssuredGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style={{ stopColor: '#16a34a', stopOpacity: 1 }} />
-        <stop offset="100%" style={{ stopColor: '#059669', stopOpacity: 1 }} />
-      </linearGradient>
-    </defs>
-    <circle cx="50" cy="50" r="45" fill="url(#restAssuredGrad)" />
-    <text
-      x="50"
-      y="65"
-      fontFamily="Arial, sans-serif"
-      fontWeight="bold"
-      fontSize="40"
-      fill="white"
-      textAnchor="middle"
-    >
-      RA
-    </text>
-    <path d="M20 50 A 30 30 0 0 1 80 50" stroke="white" strokeWidth="3" fill="none" strokeLinecap="round" />
-  </svg>
-)
-
-// Helper function to render brand icon or fallback
-const renderSkillIcon = (skill, size = 13) => {
-  if (skill === 'TestNG') {
-    return <TestNGIcon size={size} />
-  }
-  if (skill === 'REST Assured') {
-    return <RestAssuredIcon size={size} />
-  }
-
-  // Brand slug mappings for Simple Icons
-  const brandMapping = {
-    'Java': 'java/F89820',
-    'JavaScript': 'javascript/F7DF1E',
-    'HTML': 'html5/E34F26',
-    'CSS': 'css3/1572B6',
-    'SQL': 'sqlite/003B57',
-    'React': 'react/61DAFB',
-    'Node.js': 'nodedotjs/339933',
-    'Express.js': 'express/E8EAED',
-    'MongoDB': 'mongodb/47A248',
-    'Redux': 'redux/764ABC',
-    'Tailwind CSS': 'tailwindcss/06B6D4',
-    'Selenium WebDriver': 'selenium/43B02A',
-    'Appium': 'appium/E42D42',
-    'Postman': 'postman/FF6C37',
-    'Git': 'git/F05032',
-    'GitHub': 'github/E8EAED',
-    'Jira': 'jira/0052CC',
-    'TestRail': 'testrail/0052CC',
-    'Jenkins': 'jenkins/D24939',
-    'GitHub Actions': 'githubactions/2088FF',
-    'Canva': 'canva/00C4CC',
-    'Figma': 'figma/F24E1E',
-  }
-
-  if (brandMapping[skill]) {
-    const slug = brandMapping[skill]
-    return (
-      <img
-        src={`https://cdn.simpleicons.org/${slug}`}
-        alt={skill}
-        style={{
-          width: `${size}px`,
-          height: `${size}px`,
-          objectFit: 'contain',
-          display: 'inline-block',
-          verticalAlign: 'middle',
-          flexShrink: 0,
-        }}
-      />
-    )
-  }
-
-  const Icon = SKILL_ICONS[skill] || CheckSquare
-  return <Icon size={size} style={{ opacity: 0.8, flexShrink: 0 }} />
-}
-
 const containerVariants = {
   hidden: {},
   visible: {
@@ -238,7 +83,7 @@ function SkillCard({ category, index, activeCategory, hoveredSkillId, setHovered
   const accentColor = ACCENT_COLORS[index % ACCENT_COLORS.length]
   const accentRGB = ACCENT_RGBS[index % ACCENT_RGBS.length]
 
-  const isCategoryMatch = !activeCategory || activeCategory === 'All' || category.title.toLowerCase().includes(activeCategory.toLowerCase()) || (activeCategory === 'Automation' && category.title.includes('Automation')) || (activeCategory === 'Full Stack' && category.title.includes('Full Stack'))
+  const isCategoryMatch = !activeCategory || activeCategory === 'All' || category.title.toLowerCase().includes(activeCategory.toLowerCase()) || (activeCategory === 'Automation Tools & Frameworks' && category.title.includes('Automation')) || (activeCategory === 'Full Stack Development' && category.title.includes('Full Stack'))
 
   useEffect(() => {
     const card = cardRef.current
@@ -314,7 +159,6 @@ function SkillCard({ category, index, activeCategory, hoveredSkillId, setHovered
         transition: 'opacity 0.3s ease',
       }}
     >
-      {/* Ghost Layer 2 */}
       <div
         style={{
           position: 'absolute',
@@ -329,7 +173,6 @@ function SkillCard({ category, index, activeCategory, hoveredSkillId, setHovered
         }}
       />
 
-      {/* Ghost Layer 1 */}
       <div
         style={{
           position: 'absolute',
@@ -344,7 +187,6 @@ function SkillCard({ category, index, activeCategory, hoveredSkillId, setHovered
         }}
       />
 
-      {/* Front card */}
       <motion.div
         ref={cardRef}
         variants={cardVariants}
@@ -438,7 +280,7 @@ function SkillCard({ category, index, activeCategory, hoveredSkillId, setHovered
                   transition: 'all 0.2s ease',
                 }}
               >
-                {renderSkillIcon(skill, 13)}
+                <SmartSkillIcon name={skill} size={13} />
                 <span>{skill}</span>
               </motion.span>
             )
@@ -461,13 +303,12 @@ const CATEGORY_FILTERS = [
 
 export default function CoverageReport() {
   const [activeCategory, setActiveCategory] = useState('All')
-  const [viewMode, setViewMode] = useState('earth') // 'earth' | 'both' | 'grid'
+  const [viewMode, setViewMode] = useState('earth')
   const [hoveredSkillId, setHoveredSkillId] = useState(null)
 
   return (
     <section id="coverage-report" style={{ background: 'rgba(22, 29, 36, 0.75)', backdropFilter: 'blur(10px)', padding: '5rem 0' }}>
       <div className="section-container">
-        {/* Header Title Block */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -497,7 +338,6 @@ export default function CoverageReport() {
               </h2>
             </div>
 
-            {/* View Mode Toggle Buttons */}
             <div
               style={{
                 display: 'inline-flex',
@@ -579,7 +419,6 @@ export default function CoverageReport() {
           </p>
         </motion.div>
 
-        {/* Category Filter Pills Bar */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -622,7 +461,6 @@ export default function CoverageReport() {
           })}
         </motion.div>
 
-        {/* Render 3D Earth Globe Canvas */}
         {(viewMode === 'earth' || viewMode === 'both') && (
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
@@ -638,7 +476,6 @@ export default function CoverageReport() {
           </motion.div>
         )}
 
-        {/* Render Categorized Grid Cards */}
         {(viewMode === 'grid' || viewMode === 'both') && (
           <motion.div
             variants={containerVariants}

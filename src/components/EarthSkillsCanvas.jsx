@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useMemo } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, Html } from '@react-three/drei'
 import * as THREE from 'three'
 import {
@@ -24,11 +24,10 @@ import {
   Sparkles,
   Smartphone,
   Layers,
-  Globe,
-  Sparkle
+  Globe
 } from 'lucide-react'
 
-// Custom SVGs for TestNG and REST Assured
+// Custom SVG for TestNG
 const TestNGIcon = ({ size = 14 }) => (
   <svg width={size} height={size} viewBox="0 0 100 100" style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0 }}>
     <rect width="100" height="100" rx="20" fill="#dc2626" />
@@ -40,6 +39,7 @@ const TestNGIcon = ({ size = 14 }) => (
   </svg>
 )
 
+// Custom SVG for REST Assured
 const RestAssuredIcon = ({ size = 14 }) => (
   <svg width={size} height={size} viewBox="0 0 100 100" style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0 }}>
     <defs>
@@ -56,20 +56,42 @@ const RestAssuredIcon = ({ size = 14 }) => (
   </svg>
 )
 
-// Fallback icon map for concepts
+// Custom SVG for TestRail
+const TestRailIcon = ({ size = 14 }) => (
+  <svg width={size} height={size} viewBox="0 0 100 100" style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0 }}>
+    <rect width="100" height="100" rx="20" fill="#0052CC" />
+    <path d="M30 50 L45 65 L70 35" stroke="white" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+  </svg>
+)
+
+// Custom SVG for JUnit
+const JUnitIcon = ({ size = 14 }) => (
+  <svg width={size} height={size} viewBox="0 0 100 100" style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0 }}>
+    <rect width="100" height="100" rx="20" fill="#2563eb" />
+    <text x="40" y="70" fontFamily="Arial, sans-serif" fontWeight="bold" fontSize="60" fill="white" textAnchor="middle">J</text>
+    <path d="M60 40 L70 55 L90 30" stroke="#4ADE9A" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+  </svg>
+)
+
+// Fallback icon map for conceptual skills
 const SKILL_ICONS = {
   'SQL': Database,
   'Manual Testing': Eye,
   'Agile (Scrum)': RotateCcw,
+  'SDLC': Workflow,
+  'STLC': RefreshCw,
   'SDLC & STLC': Workflow,
+  'API Testing & Automation': Cpu,
   'API Testing': Cpu,
   'Mobile Testing': Smartphone,
   'Test Case Design': FileText,
+  'Bug Tracking & Debugging': Bug,
   'Bug Tracking': Bug,
   'Defect Life Cycle': Activity,
   'Regression Testing': History,
   'Git': GitBranch,
   'Jenkins': Server,
+  'Page Object Model (POM)': Box,
   'Page Object Model': Box,
   'Data-Driven Testing': Table,
   'CI/CD Integration': InfinityIcon,
@@ -77,15 +99,17 @@ const SKILL_ICONS = {
   'Video Editing': Video,
   'Social Media Content': Sparkles,
   'REST APIs': Cpu,
-  'JUnit': CheckSquare,
 }
 
 // Brand mapping for Simple Icons CDN
-const BRAND_MAPPING = {
+const BRAND_SLUGS = {
   'Java': 'java/F89820',
   'JavaScript': 'javascript/F7DF1E',
+  'HTML': 'html5/E34F26',
   'HTML5': 'html5/E34F26',
+  'CSS': 'css3/1572B6',
   'CSS3': 'css3/1572B6',
+  'SQL': 'sqlite/003B57',
   'React': 'react/61DAFB',
   'Node.js': 'nodedotjs/339933',
   'Express.js': 'express/E8EAED',
@@ -93,31 +117,35 @@ const BRAND_MAPPING = {
   'Redux': 'redux/764ABC',
   'Tailwind CSS': 'tailwindcss/06B6D4',
   'Selenium': 'selenium/43B02A',
+  'Selenium WebDriver': 'selenium/43B02A',
   'Appium': 'appium/E42D42',
   'Postman': 'postman/FF6C37',
   'Git': 'git/F05032',
   'GitHub': 'github/E8EAED',
   'Jira': 'jira/0052CC',
-  'TestRail': 'testrail/0052CC',
   'Jenkins': 'jenkins/D24939',
   'GitHub Actions': 'githubactions/2088FF',
   'Canva': 'canva/00C4CC',
   'Figma': 'figma/F24E1E',
 }
 
-const renderSkillIcon = (skill, size = 14) => {
-  if (skill.name === 'TestNG' || skill.custom === 'TestNG') {
-    return <TestNGIcon size={size} />
-  }
-  if (skill.name === 'REST Assured' || skill.custom === 'RESTAssured') {
-    return <RestAssuredIcon size={size} />
-  }
-  if (BRAND_MAPPING[skill.name]) {
-    const slug = BRAND_MAPPING[skill.name]
+export function SmartSkillIcon({ name, size = 13 }) {
+  const [imgFailed, setImgFailed] = useState(false)
+  const normalizedName = name ? name.trim() : ''
+
+  if (normalizedName === 'TestNG') return <TestNGIcon size={size} />
+  if (normalizedName === 'REST Assured') return <RestAssuredIcon size={size} />
+  if (normalizedName === 'TestRail') return <TestRailIcon size={size} />
+  if (normalizedName === 'JUnit') return <JUnitIcon size={size} />
+
+  const slug = BRAND_SLUGS[normalizedName]
+
+  if (slug && !imgFailed) {
     return (
       <img
         src={`https://cdn.simpleicons.org/${slug}`}
-        alt={skill.name}
+        alt={normalizedName}
+        onError={() => setImgFailed(true)}
         style={{
           width: `${size}px`,
           height: `${size}px`,
@@ -130,50 +158,57 @@ const renderSkillIcon = (skill, size = 14) => {
     )
   }
 
-  const IconComponent = SKILL_ICONS[skill.name] || Layers
-  return <IconComponent size={size} style={{ opacity: 0.9, flexShrink: 0 }} />
+  const FallbackIcon = SKILL_ICONS[normalizedName] || Layers
+  return <FallbackIcon size={size} style={{ opacity: 0.9, flexShrink: 0 }} />
 }
 
-// 34 Skills distributed across 4 orbits around the 3D Earth
+// 40 Skills distributed cleanly across 4 orbits around the 3D Earth
 export const ALL_ORBIT_SKILLS = [
-  // Orbit 0: Radius 3.2, inclination ring 1 (Languages & Core)
+  // Orbit 0: Radius 3.1 (Languages & Core APIs)
   { id: 'java', name: 'Java', category: 'Languages & Querying', orbit: 0, initialAngle: 0, color: '#F89820' },
-  { id: 'js', name: 'JavaScript', category: 'Languages & Querying', orbit: 0, initialAngle: (Math.PI * 2 / 7) * 1, color: '#F7DF1E' },
-  { id: 'html', name: 'HTML5', category: 'Languages & Querying', orbit: 0, initialAngle: (Math.PI * 2 / 7) * 2, color: '#E34F26' },
-  { id: 'css', name: 'CSS3', category: 'Languages & Querying', orbit: 0, initialAngle: (Math.PI * 2 / 7) * 3, color: '#1572B6' },
-  { id: 'sql', name: 'SQL', category: 'Languages & Querying', orbit: 0, initialAngle: (Math.PI * 2 / 7) * 4, color: '#38BDF8' },
-  { id: 'restapi', name: 'REST APIs', category: 'Full Stack Development', orbit: 0, initialAngle: (Math.PI * 2 / 7) * 5, color: '#F2A93B' },
-  { id: 'agile', name: 'Agile (Scrum)', category: 'Testing Skills & Methodologies', orbit: 0, initialAngle: (Math.PI * 2 / 7) * 6, color: '#4ADE9A' },
+  { id: 'js', name: 'JavaScript', category: 'Languages & Querying', orbit: 0, initialAngle: (Math.PI * 2 / 8) * 1, color: '#F7DF1E' },
+  { id: 'html', name: 'HTML', category: 'Languages & Querying', orbit: 0, initialAngle: (Math.PI * 2 / 8) * 2, color: '#E34F26' },
+  { id: 'css', name: 'CSS', category: 'Languages & Querying', orbit: 0, initialAngle: (Math.PI * 2 / 8) * 3, color: '#1572B6' },
+  { id: 'sql', name: 'SQL', category: 'Languages & Querying', orbit: 0, initialAngle: (Math.PI * 2 / 8) * 4, color: '#38BDF8' },
+  { id: 'restapi', name: 'REST APIs', category: 'Full Stack Development', orbit: 0, initialAngle: (Math.PI * 2 / 8) * 5, color: '#F2A93B' },
+  { id: 'agile', name: 'Agile (Scrum)', category: 'Testing Skills & Methodologies', orbit: 0, initialAngle: (Math.PI * 2 / 8) * 6, color: '#4ADE9A' },
+  { id: 'sdlc', name: 'SDLC', category: 'Testing Skills & Methodologies', orbit: 0, initialAngle: (Math.PI * 2 / 8) * 7, color: '#A78BFA' },
 
-  // Orbit 1: Radius 4.1, inclination ring 2 (Full Stack)
+  // Orbit 1: Radius 4.0 (Full Stack & Mobile)
   { id: 'react', name: 'React', category: 'Full Stack Development', orbit: 1, initialAngle: 0, color: '#61DAFB' },
-  { id: 'node', name: 'Node.js', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 7) * 1, color: '#339933' },
-  { id: 'express', name: 'Express.js', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 7) * 2, color: '#E8EAED' },
-  { id: 'mongo', name: 'MongoDB', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 7) * 3, color: '#47A248' },
-  { id: 'redux', name: 'Redux', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 7) * 4, color: '#764ABC' },
-  { id: 'tailwind', name: 'Tailwind CSS', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 7) * 5, color: '#06B6D4' },
-  { id: 'manual', name: 'Manual Testing', category: 'Testing Skills & Methodologies', orbit: 1, initialAngle: (Math.PI * 2 / 7) * 6, color: '#F2A93B' },
+  { id: 'node', name: 'Node.js', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 9) * 1, color: '#339933' },
+  { id: 'express', name: 'Express.js', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 9) * 2, color: '#E8EAED' },
+  { id: 'mongo', name: 'MongoDB', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 9) * 3, color: '#47A248' },
+  { id: 'redux', name: 'Redux', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 9) * 4, color: '#764ABC' },
+  { id: 'tailwind', name: 'Tailwind CSS', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 9) * 5, color: '#06B6D4' },
+  { id: 'manual', name: 'Manual Testing', category: 'Testing Skills & Methodologies', orbit: 1, initialAngle: (Math.PI * 2 / 9) * 6, color: '#F2A93B' },
+  { id: 'mobile', name: 'Mobile Testing', category: 'Testing Skills & Methodologies', orbit: 1, initialAngle: (Math.PI * 2 / 9) * 7, color: '#38BDF8' },
+  { id: 'writing', name: 'Technical Writing', category: 'Content Creation & Design', orbit: 1, initialAngle: (Math.PI * 2 / 9) * 8, color: '#E8EAED' },
 
-  // Orbit 2: Radius 5.0, inclination ring 3 (Automation Frameworks)
-  { id: 'selenium', name: 'Selenium', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: 0, color: '#43B02A' },
-  { id: 'appium', name: 'Appium', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 8) * 1, color: '#E42D42' },
-  { id: 'testng', name: 'TestNG', category: 'Automation Tools & Frameworks', custom: 'TestNG', orbit: 2, initialAngle: (Math.PI * 2 / 8) * 2, color: '#dc2626' },
-  { id: 'junit', name: 'JUnit', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 8) * 3, color: '#2563eb' },
-  { id: 'restassured', name: 'REST Assured', category: 'Automation Tools & Frameworks', custom: 'RESTAssured', orbit: 2, initialAngle: (Math.PI * 2 / 8) * 4, color: '#16a34a' },
-  { id: 'postman', name: 'Postman', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 8) * 5, color: '#FF6C37' },
-  { id: 'pom', name: 'Page Object Model', category: 'Design Patterns', orbit: 2, initialAngle: (Math.PI * 2 / 8) * 6, color: '#4ADE9A' },
-  { id: 'ddt', name: 'Data-Driven Testing', category: 'Design Patterns', orbit: 2, initialAngle: (Math.PI * 2 / 8) * 7, color: '#F2A93B' },
+  // Orbit 2: Radius 4.9 (Automation Frameworks & Design Patterns)
+  { id: 'selenium', name: 'Selenium WebDriver', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: 0, color: '#43B02A' },
+  { id: 'appium', name: 'Appium', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 10) * 1, color: '#E42D42' },
+  { id: 'testng', name: 'TestNG', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 10) * 2, color: '#dc2626' },
+  { id: 'junit', name: 'JUnit', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 10) * 3, color: '#2563eb' },
+  { id: 'restassured', name: 'REST Assured', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 10) * 4, color: '#16a34a' },
+  { id: 'postman', name: 'Postman', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 10) * 5, color: '#FF6C37' },
+  { id: 'pom', name: 'Page Object Model (POM)', category: 'Design Patterns', orbit: 2, initialAngle: (Math.PI * 2 / 10) * 6, color: '#4ADE9A' },
+  { id: 'ddt', name: 'Data-Driven Testing', category: 'Design Patterns', orbit: 2, initialAngle: (Math.PI * 2 / 10) * 7, color: '#F2A93B' },
+  { id: 'apitest', name: 'API Testing & Automation', category: 'Testing Skills & Methodologies', orbit: 2, initialAngle: (Math.PI * 2 / 10) * 8, color: '#38BDF8' },
+  { id: 'testcase', name: 'Test Case Design', category: 'Testing Skills & Methodologies', orbit: 2, initialAngle: (Math.PI * 2 / 10) * 9, color: '#A78BFA' },
 
-  // Orbit 3: Radius 5.9, inclination ring 4 (DevOps, Tools & Content)
+  // Orbit 3: Radius 5.8 (DevTools, CI/CD & Content)
   { id: 'git', name: 'Git', category: 'Developer Tools', orbit: 3, initialAngle: 0, color: '#F05032' },
-  { id: 'github', name: 'GitHub', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 9) * 1, color: '#E8EAED' },
-  { id: 'jira', name: 'Jira', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 9) * 2, color: '#0052CC' },
-  { id: 'testrail', name: 'TestRail', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 9) * 3, color: '#0052CC' },
-  { id: 'jenkins', name: 'Jenkins', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 9) * 4, color: '#D24939' },
-  { id: 'actions', name: 'GitHub Actions', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 9) * 5, color: '#2088FF' },
-  { id: 'cicd', name: 'CI/CD Integration', category: 'Design Patterns', orbit: 3, initialAngle: (Math.PI * 2 / 9) * 6, color: '#4ADE9A' },
-  { id: 'canva', name: 'Canva', category: 'Content Creation & Design', orbit: 3, initialAngle: (Math.PI * 2 / 9) * 7, color: '#00C4CC' },
-  { id: 'figma', name: 'Figma', category: 'Content Creation & Design', orbit: 3, initialAngle: (Math.PI * 2 / 9) * 8, color: '#F24E1E' },
+  { id: 'github', name: 'GitHub', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 11) * 1, color: '#E8EAED' },
+  { id: 'jira', name: 'Jira', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 11) * 2, color: '#0052CC' },
+  { id: 'testrail', name: 'TestRail', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 11) * 3, color: '#0052CC' },
+  { id: 'jenkins', name: 'Jenkins', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 11) * 4, color: '#D24939' },
+  { id: 'actions', name: 'GitHub Actions', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 11) * 5, color: '#2088FF' },
+  { id: 'cicd', name: 'CI/CD Integration', category: 'Design Patterns', orbit: 3, initialAngle: (Math.PI * 2 / 11) * 6, color: '#4ADE9A' },
+  { id: 'canva', name: 'Canva', category: 'Content Creation & Design', orbit: 3, initialAngle: (Math.PI * 2 / 11) * 7, color: '#00C4CC' },
+  { id: 'figma', name: 'Figma', category: 'Content Creation & Design', orbit: 3, initialAngle: (Math.PI * 2 / 11) * 8, color: '#F24E1E' },
+  { id: 'video', name: 'Video Editing', category: 'Content Creation & Design', orbit: 3, initialAngle: (Math.PI * 2 / 11) * 9, color: '#F2A93B' },
+  { id: 'bugtrack', name: 'Bug Tracking & Debugging', category: 'Testing Skills & Methodologies', orbit: 3, initialAngle: (Math.PI * 2 / 11) * 10, color: '#E8615C' },
 ]
 
 // Orbit Ring Parameters: [radius, rotX, rotZ, speed]
@@ -192,7 +227,6 @@ function useEarthTexture() {
     canvas.height = 512
     const ctx = canvas.getContext('2d')
 
-    // Deep blue ocean background gradient
     const oceanGrad = ctx.createLinearGradient(0, 0, 0, 512)
     oceanGrad.addColorStop(0, '#091322')
     oceanGrad.addColorStop(0.5, '#0b192e')
@@ -200,7 +234,6 @@ function useEarthTexture() {
     ctx.fillStyle = oceanGrad
     ctx.fillRect(0, 0, 1024, 512)
 
-    // Latitude & Longitude graticule grid lines
     ctx.strokeStyle = 'rgba(56, 189, 248, 0.08)'
     ctx.lineWidth = 1
     for (let x = 0; x <= 1024; x += 64) {
@@ -216,26 +249,16 @@ function useEarthTexture() {
       ctx.stroke()
     }
 
-    // Draw tech landmasses using continent dot matrix
-    // Land shape approximation arrays (normalized lat/long points)
     const continents = [
-      // North America
       { cx: 240, cy: 170, rx: 110, ry: 75 },
-      // South America
       { cx: 310, cy: 330, rx: 65, ry: 95 },
-      // Europe
       { cx: 520, cy: 150, rx: 60, ry: 50 },
-      // Africa
       { cx: 530, cy: 270, rx: 80, ry: 90 },
-      // Asia
       { cx: 720, cy: 160, rx: 150, ry: 95 },
-      // Australia / Oceania
       { cx: 830, cy: 350, rx: 60, ry: 55 },
-      // India / South Asia
       { cx: 690, cy: 230, rx: 45, ry: 45 }
     ]
 
-    // Fill continent dot matrices
     ctx.fillStyle = 'rgba(74, 222, 154, 0.65)'
     continents.forEach(({ cx, cy, rx, ry }) => {
       for (let x = cx - rx; x <= cx + rx; x += 12) {
@@ -243,7 +266,6 @@ function useEarthTexture() {
           const dx = (x - cx) / rx
           const dy = (y - cy) / ry
           if (dx * dx + dy * dy <= 1) {
-            // Draw glowing tech continent dot
             const size = (Math.sin(x * 0.05 + y * 0.05) > 0) ? 2.5 : 1.8
             ctx.beginPath()
             ctx.arc(x + (Math.random() - 0.5) * 4, y + (Math.random() - 0.5) * 4, size, 0, Math.PI * 2)
@@ -253,7 +275,6 @@ function useEarthTexture() {
       }
     })
 
-    // Major Tech Nodes (Bengaluru, Silicon Valley, London, Tokyo)
     const techHubs = [
       { x: 690, y: 230, label: 'Bengaluru (KG HQ)', color: '#4ADE9A' },
       { x: 220, y: 170, label: 'Silicon Valley', color: '#F2A93B' },
@@ -262,7 +283,6 @@ function useEarthTexture() {
     ]
 
     techHubs.forEach(hub => {
-      // Glow circle
       ctx.fillStyle = hub.color
       ctx.beginPath()
       ctx.arc(hub.x, hub.y, 4, 0, Math.PI * 2)
@@ -275,20 +295,19 @@ function useEarthTexture() {
       ctx.stroke()
     })
 
-    // Connect tech hubs with cyan flight/data arc lines
     ctx.strokeStyle = 'rgba(74, 222, 154, 0.35)'
     ctx.setLineDash([4, 4])
     ctx.beginPath()
-    ctx.moveTo(690, 230) // Bengaluru
-    ctx.quadraticCurveTo(400, 100, 220, 170) // to SF
+    ctx.moveTo(690, 230)
+    ctx.quadraticCurveTo(400, 100, 220, 170)
     ctx.stroke()
 
     ctx.beginPath()
     ctx.moveTo(690, 230)
-    ctx.quadraticCurveTo(600, 120, 500, 140) // to London
+    ctx.quadraticCurveTo(600, 120, 500, 140)
     ctx.stroke()
 
-    ctx.setLineDash([]) // reset dash
+    ctx.setLineDash([])
 
     const texture = new THREE.CanvasTexture(canvas)
     texture.colorSpace = THREE.SRGBColorSpace
@@ -313,7 +332,6 @@ function ThreeDEarthGlobe() {
 
   return (
     <group>
-      {/* Central Earth Globe */}
       <mesh ref={earthRef} position={[0, 0, 0]}>
         <sphereGeometry args={[2.0, 64, 64]} />
         <meshStandardMaterial
@@ -325,7 +343,6 @@ function ThreeDEarthGlobe() {
         />
       </mesh>
 
-      {/* Atmospheric Glow Outer Shell */}
       <mesh ref={atmosphereRef} position={[0, 0, 0]}>
         <sphereGeometry args={[2.14, 48, 48]} />
         <meshBasicMaterial
@@ -337,7 +354,6 @@ function ThreeDEarthGlobe() {
         />
       </mesh>
 
-      {/* Inner Glowing Core Wireframe for cyber tech depth */}
       <mesh position={[0, 0, 0]}>
         <sphereGeometry args={[2.02, 24, 24]} />
         <meshBasicMaterial
@@ -375,35 +391,29 @@ function OrbitRings() {
 
 // Single Orbiting Skill Badge Node
 function OrbitingSkillNode({ skill, activeCategory, hoveredSkillId, setHoveredSkillId }) {
-  const nodeRef = useRef()
   const orbitConfig = ORBIT_CONFIGS[skill.orbit]
   const angleRef = useRef(skill.initialAngle)
   const [pos, setPos] = useState([0, 0, 0])
   const [depthZ, setDepthZ] = useState(1)
 
   useFrame((state, delta) => {
-    // If hovered, slow down rotation for readability
     const speedFactor = hoveredSkillId === skill.id ? 0.05 : 1.0
     angleRef.current += orbitConfig.speed * delta * speedFactor
 
     const theta = angleRef.current
     const R = orbitConfig.radius
 
-    // Base position in XY orbit plane
     const x0 = R * Math.cos(theta)
     const y0 = 0
     const z0 = R * Math.sin(theta)
 
-    // Apply Orbit inclination rotations (rotX and rotZ)
     const rotX = orbitConfig.rotX
     const rotZ = orbitConfig.rotZ
 
-    // Rotate around X axis
     const y1 = y0 * Math.cos(rotX) - z0 * Math.sin(rotX)
     const z1 = y0 * Math.sin(rotX) + z0 * Math.cos(rotX)
     const x1 = x0
 
-    // Rotate around Z axis
     const x2 = x1 * Math.cos(rotZ) - y1 * Math.sin(rotZ)
     const y2 = x1 * Math.sin(rotZ) + y1 * Math.cos(rotZ)
     const z2 = z1
@@ -412,12 +422,10 @@ function OrbitingSkillNode({ skill, activeCategory, hoveredSkillId, setHoveredSk
     setDepthZ(z2)
   })
 
-  // Category filter check
   const isMatchCategory = !activeCategory || activeCategory === 'All' || skill.category === activeCategory
   const isHovered = hoveredSkillId === skill.id
   const isBehindEarth = depthZ < -0.3 && Math.sqrt(pos[0] * pos[0] + pos[1] * pos[1]) < 2.3
 
-  // Opacity & scaling based on 3D depth position relative to Earth
   const opacity = !isMatchCategory ? 0.15 : (isBehindEarth ? 0.25 : (isHovered ? 1.0 : 0.92))
   const scale = isHovered ? 1.25 : (isBehindEarth ? 0.8 : 1.0)
   const zIndex = isHovered ? 100 : (isBehindEarth ? 1 : 10)
@@ -447,9 +455,9 @@ function OrbitingSkillNode({ skill, activeCategory, hoveredSkillId, setHoveredSk
           borderRadius: '999px',
           background: isHovered
             ? `color-mix(in srgb, ${skill.color} 25%, #0d1520)`
-            : 'rgba(13, 21, 32, 0.85)',
+            : 'rgba(13, 21, 32, 0.88)',
           backdropFilter: 'blur(8px)',
-          border: `1px solid ${isHovered ? skill.color : 'rgba(255, 255, 255, 0.15)'}`,
+          border: `1px solid ${isHovered ? skill.color : 'rgba(255, 255, 255, 0.18)'}`,
           boxShadow: isHovered
             ? `0 0 20px ${skill.color}80, 0 4px 16px rgba(0,0,0,0.6)`
             : `0 2px 8px rgba(0,0,0,0.4), 0 0 6px ${skill.color}20`,
@@ -463,10 +471,9 @@ function OrbitingSkillNode({ skill, activeCategory, hoveredSkillId, setHoveredSk
           position: 'relative',
         }}
       >
-        {renderSkillIcon(skill, 13)}
+        <SmartSkillIcon name={skill.name} size={13} />
         <span>{skill.name}</span>
 
-        {/* Hover detail tooltip */}
         {isHovered && (
           <div
             style={{
@@ -521,7 +528,6 @@ export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setH
       border: '1px solid var(--color-border-hairline)',
       boxShadow: 'inset 0 0 60px rgba(0, 0, 0, 0.6), 0 12px 40px rgba(0, 0, 0, 0.4)',
     }}>
-      {/* Instructional Badge Overlay */}
       <div style={{
         position: 'absolute',
         top: '1rem',
@@ -554,7 +560,6 @@ export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setH
         <directionalLight position={[-10, -10, -10]} intensity={1.0} color="#38BDF8" />
         <pointLight position={[0, 0, 8]} intensity={1.5} color="#4ADE9A" />
 
-        {/* Orbit Controls for full 3D Earth dragging */}
         <OrbitControls
           enableZoom={false}
           enablePan={false}
@@ -563,13 +568,10 @@ export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setH
           autoRotateSpeed={0.4}
         />
 
-        {/* 3D Earth Globe */}
         <ThreeDEarthGlobe />
 
-        {/* Orbital Wireframe Rings */}
         <OrbitRings />
 
-        {/* 34 Orbiting Skill Nodes */}
         {ALL_ORBIT_SKILLS.map((skill) => (
           <OrbitingSkillNode
             key={skill.id}
