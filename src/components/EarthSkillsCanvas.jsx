@@ -27,7 +27,7 @@ import {
 } from 'lucide-react'
 
 // Custom SVG for TestNG
-const TestNGIcon = ({ size = 14 }) => (
+const TestNGIcon = ({ size = 13 }) => (
   <svg width={size} height={size} viewBox="0 0 100 100" style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0 }}>
     <rect width="100" height="100" rx="20" fill="#dc2626" />
     <text x="50" y="65" fontFamily="Arial, sans-serif" fontWeight="bold" fontSize="50" fill="white" textAnchor="middle">
@@ -39,7 +39,7 @@ const TestNGIcon = ({ size = 14 }) => (
 )
 
 // Custom SVG for REST Assured
-const RestAssuredIcon = ({ size = 14 }) => (
+const RestAssuredIcon = ({ size = 13 }) => (
   <svg width={size} height={size} viewBox="0 0 100 100" style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0 }}>
     <defs>
       <linearGradient id="restAssuredGradEarth" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -56,7 +56,7 @@ const RestAssuredIcon = ({ size = 14 }) => (
 )
 
 // Custom SVG for TestRail
-const TestRailIcon = ({ size = 14 }) => (
+const TestRailIcon = ({ size = 13 }) => (
   <svg width={size} height={size} viewBox="0 0 100 100" style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0 }}>
     <rect width="100" height="100" rx="20" fill="#0052CC" />
     <path d="M30 50 L45 65 L70 35" stroke="white" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" fill="none" />
@@ -64,7 +64,7 @@ const TestRailIcon = ({ size = 14 }) => (
 )
 
 // Custom SVG for JUnit
-const JUnitIcon = ({ size = 14 }) => (
+const JUnitIcon = ({ size = 13 }) => (
   <svg width={size} height={size} viewBox="0 0 100 100" style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0 }}>
     <rect width="100" height="100" rx="20" fill="#2563eb" />
     <text x="40" y="70" fontFamily="Arial, sans-serif" fontWeight="bold" fontSize="60" fill="white" textAnchor="middle">J</text>
@@ -79,23 +79,20 @@ const SKILL_ICONS = {
   'SDLC': Workflow,
   'STLC': RefreshCw,
   'SDLC & STLC': Workflow,
-  'API Testing & Automation': Cpu,
   'API Testing': Cpu,
   'Mobile Testing': Smartphone,
   'Test Case Design': FileText,
-  'Bug Tracking & Debugging': Bug,
   'Bug Tracking': Bug,
-  'Defect Life Cycle': Activity,
+  'Defect Lifecycle': Activity,
   'Regression Testing': History,
   'Git': GitBranch,
   'Jenkins': Server,
-  'Page Object Model (POM)': Box,
-  'Page Object Model': Box,
-  'Data-Driven Testing': Table,
+  'POM Pattern': Box,
+  'Data-Driven': Table,
   'CI/CD Integration': InfinityIcon,
   'Technical Writing': PenTool,
   'Video Editing': Video,
-  'Social Media Content': Sparkles,
+  'Social Content': Sparkles,
   'REST APIs': Cpu,
 }
 
@@ -103,9 +100,7 @@ const BRAND_SLUGS = {
   'Java': 'java/F89820',
   'JavaScript': 'javascript/F7DF1E',
   'HTML': 'html5/E34F26',
-  'HTML5': 'html5/E34F26',
   'CSS': 'css3/1572B6',
-  'CSS3': 'css3/1572B6',
   'SQL': 'sqlite/003B57',
   'React': 'react/61DAFB',
   'Node.js': 'nodedotjs/339933',
@@ -114,7 +109,6 @@ const BRAND_SLUGS = {
   'Redux': 'redux/764ABC',
   'Tailwind CSS': 'tailwindcss/06B6D4',
   'Selenium': 'selenium/43B02A',
-  'Selenium WebDriver': 'selenium/43B02A',
   'Appium': 'appium/E42D42',
   'Postman': 'postman/FF6C37',
   'Git': 'git/F05032',
@@ -159,64 +153,60 @@ export function SmartSkillIcon({ name, size = 13 }) {
   return <FallbackIcon size={size} style={{ opacity: 0.9, flexShrink: 0 }} />
 }
 
-// Structured concentric orbit line tracks inclined at a sleek parallel plane angle (~35 deg tilt)
-const TRACK_ROT_X = Math.PI * 0.20 // ~36° tilt for clean 3D perspective
+// 4 Concentric Orbital Line Tracks with generous 1.3-unit gaps to prevent overlapping
+const TRACK_ROT_X = Math.PI * 0.22 // ~40° tilt for perspective depth
 const TRACK_ROT_Z = -Math.PI * 0.05 // subtle elegant tilt
 
 const ORBIT_CONFIGS = [
-  { radius: 3.0, rotX: TRACK_ROT_X, rotZ: TRACK_ROT_Z, speed: 0.18, color: '#4ADE9A', label: 'Track 1: Core & Querying' },
-  { radius: 3.8, rotX: TRACK_ROT_X, rotZ: TRACK_ROT_Z, speed: -0.14, color: '#F2A93B', label: 'Track 2: Full Stack' },
-  { radius: 4.6, rotX: TRACK_ROT_X, rotZ: TRACK_ROT_Z, speed: 0.11, color: '#38BDF8', label: 'Track 3: Automation' },
-  { radius: 5.4, rotX: TRACK_ROT_X, rotZ: TRACK_ROT_Z, speed: -0.09, color: '#A78BFA', label: 'Track 4: DevOps & Tools' },
+  { radius: 3.2, rotX: TRACK_ROT_X, rotZ: TRACK_ROT_Z, speed: 0.16, color: '#4ADE9A', label: 'Track 1: Languages' },
+  { radius: 4.5, rotX: TRACK_ROT_X, rotZ: TRACK_ROT_Z, speed: -0.12, color: '#F2A93B', label: 'Track 2: Full Stack' },
+  { radius: 5.8, rotX: TRACK_ROT_X, rotZ: TRACK_ROT_Z, speed: 0.09, color: '#38BDF8', label: 'Track 3: Automation' },
+  { radius: 7.1, rotX: TRACK_ROT_X, rotZ: TRACK_ROT_Z, speed: -0.07, color: '#A78BFA', label: 'Track 4: Tools & DevOps' },
 ]
 
-// 40 Skills distributed evenly along the 4 parallel concentric line tracks
+// 34 Skill Badges evenly distributed & staggered across 4 distinct track radii
 export const ALL_ORBIT_SKILLS = [
-  // Line Track 0: Radius 3.0 (8 skills evenly spaced)
-  { id: 'java', name: 'Java', category: 'Languages & Querying', orbit: 0, initialAngle: (Math.PI * 2 / 8) * 0, color: '#F89820' },
-  { id: 'js', name: 'JavaScript', category: 'Languages & Querying', orbit: 0, initialAngle: (Math.PI * 2 / 8) * 1, color: '#F7DF1E' },
-  { id: 'html', name: 'HTML', category: 'Languages & Querying', orbit: 0, initialAngle: (Math.PI * 2 / 8) * 2, color: '#E34F26' },
-  { id: 'css', name: 'CSS', category: 'Languages & Querying', orbit: 0, initialAngle: (Math.PI * 2 / 8) * 3, color: '#1572B6' },
-  { id: 'sql', name: 'SQL', category: 'Languages & Querying', orbit: 0, initialAngle: (Math.PI * 2 / 8) * 4, color: '#38BDF8' },
-  { id: 'restapi', name: 'REST APIs', category: 'Full Stack Development', orbit: 0, initialAngle: (Math.PI * 2 / 8) * 5, color: '#F2A93B' },
-  { id: 'agile', name: 'Agile (Scrum)', category: 'Testing Skills & Methodologies', orbit: 0, initialAngle: (Math.PI * 2 / 8) * 6, color: '#4ADE9A' },
-  { id: 'sdlc', name: 'SDLC', category: 'Testing Skills & Methodologies', orbit: 0, initialAngle: (Math.PI * 2 / 8) * 7, color: '#A78BFA' },
+  // Line Track 0: Radius 3.2 (Languages & Core)
+  { id: 'java', name: 'Java', fullName: 'Java Programming', category: 'Languages & Querying', orbit: 0, initialAngle: (Math.PI * 2 / 7) * 0, color: '#F89820' },
+  { id: 'js', name: 'JavaScript', fullName: 'JavaScript (ES6+)', category: 'Languages & Querying', orbit: 0, initialAngle: (Math.PI * 2 / 7) * 1, color: '#F7DF1E' },
+  { id: 'html', name: 'HTML', fullName: 'HTML5 Markup', category: 'Languages & Querying', orbit: 0, initialAngle: (Math.PI * 2 / 7) * 2, color: '#E34F26' },
+  { id: 'css', name: 'CSS', fullName: 'CSS3 Styling', category: 'Languages & Querying', orbit: 0, initialAngle: (Math.PI * 2 / 7) * 3, color: '#1572B6' },
+  { id: 'sql', name: 'SQL', fullName: 'SQL Database Queries', category: 'Languages & Querying', orbit: 0, initialAngle: (Math.PI * 2 / 7) * 4, color: '#38BDF8' },
+  { id: 'restapi', name: 'REST APIs', fullName: 'RESTful API Architecture', category: 'Full Stack Development', orbit: 0, initialAngle: (Math.PI * 2 / 7) * 5, color: '#F2A93B' },
+  { id: 'agile', name: 'Agile', fullName: 'Agile & Scrum Methodology', category: 'Testing Skills & Methodologies', orbit: 0, initialAngle: (Math.PI * 2 / 7) * 6, color: '#4ADE9A' },
 
-  // Line Track 1: Radius 3.8 (9 skills evenly spaced)
-  { id: 'react', name: 'React', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 9) * 0, color: '#61DAFB' },
-  { id: 'node', name: 'Node.js', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 9) * 1, color: '#339933' },
-  { id: 'express', name: 'Express.js', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 9) * 2, color: '#E8EAED' },
-  { id: 'mongo', name: 'MongoDB', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 9) * 3, color: '#47A248' },
-  { id: 'redux', name: 'Redux', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 9) * 4, color: '#764ABC' },
-  { id: 'tailwind', name: 'Tailwind CSS', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 9) * 5, color: '#06B6D4' },
-  { id: 'manual', name: 'Manual Testing', category: 'Testing Skills & Methodologies', orbit: 1, initialAngle: (Math.PI * 2 / 9) * 6, color: '#F2A93B' },
-  { id: 'mobile', name: 'Mobile Testing', category: 'Testing Skills & Methodologies', orbit: 1, initialAngle: (Math.PI * 2 / 9) * 7, color: '#38BDF8' },
-  { id: 'writing', name: 'Technical Writing', category: 'Content Creation & Design', orbit: 1, initialAngle: (Math.PI * 2 / 9) * 8, color: '#E8EAED' },
+  // Line Track 1: Radius 4.5 (Full Stack & Mobile) - Staggered offset (+PI/7)
+  { id: 'react', name: 'React', fullName: 'React.js Web Framework', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 0 + Math.PI / 7, color: '#61DAFB' },
+  { id: 'node', name: 'Node.js', fullName: 'Node.js Runtime', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 1 + Math.PI / 7, color: '#339933' },
+  { id: 'express', name: 'Express.js', fullName: 'Express.js Backend', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 2 + Math.PI / 7, color: '#E8EAED' },
+  { id: 'mongo', name: 'MongoDB', fullName: 'MongoDB NoSQL Database', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 3 + Math.PI / 7, color: '#47A248' },
+  { id: 'redux', name: 'Redux', fullName: 'Redux State Management', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 4 + Math.PI / 7, color: '#764ABC' },
+  { id: 'tailwind', name: 'Tailwind CSS', fullName: 'Tailwind CSS Styling', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 5 + Math.PI / 7, color: '#06B6D4' },
+  { id: 'manual', name: 'Manual Testing', fullName: 'Manual Test Execution', category: 'Testing Skills & Methodologies', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 6 + Math.PI / 7, color: '#F2A93B' },
+  { id: 'mobile', name: 'Mobile Testing', fullName: 'Mobile App Testing', category: 'Testing Skills & Methodologies', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 7 + Math.PI / 7, color: '#38BDF8' },
 
-  // Line Track 2: Radius 4.6 (10 skills evenly spaced)
-  { id: 'selenium', name: 'Selenium WebDriver', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 10) * 0, color: '#43B02A' },
-  { id: 'appium', name: 'Appium', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 10) * 1, color: '#E42D42' },
-  { id: 'testng', name: 'TestNG', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 10) * 2, color: '#dc2626' },
-  { id: 'junit', name: 'JUnit', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 10) * 3, color: '#2563eb' },
-  { id: 'restassured', name: 'REST Assured', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 10) * 4, color: '#16a34a' },
-  { id: 'postman', name: 'Postman', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 10) * 5, color: '#FF6C37' },
-  { id: 'pom', name: 'Page Object Model (POM)', category: 'Design Patterns', orbit: 2, initialAngle: (Math.PI * 2 / 10) * 6, color: '#4ADE9A' },
-  { id: 'ddt', name: 'Data-Driven Testing', category: 'Design Patterns', orbit: 2, initialAngle: (Math.PI * 2 / 10) * 7, color: '#F2A93B' },
-  { id: 'apitest', name: 'API Testing & Automation', category: 'Testing Skills & Methodologies', orbit: 2, initialAngle: (Math.PI * 2 / 10) * 8, color: '#38BDF8' },
-  { id: 'testcase', name: 'Test Case Design', category: 'Testing Skills & Methodologies', orbit: 2, initialAngle: (Math.PI * 2 / 10) * 9, color: '#A78BFA' },
+  // Line Track 2: Radius 5.8 (Automation Frameworks & Patterns) - Staggered offset (+PI/4)
+  { id: 'selenium', name: 'Selenium', fullName: 'Selenium WebDriver Automation', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 0 + Math.PI / 4, color: '#43B02A' },
+  { id: 'appium', name: 'Appium', fullName: 'Appium Mobile Automation', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 1 + Math.PI / 4, color: '#E42D42' },
+  { id: 'testng', name: 'TestNG', fullName: 'TestNG Test Framework', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 2 + Math.PI / 4, color: '#dc2626' },
+  { id: 'junit', name: 'JUnit', fullName: 'JUnit Unit Testing', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 3 + Math.PI / 4, color: '#2563eb' },
+  { id: 'restassured', name: 'REST Assured', fullName: 'REST Assured API Automation', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 4 + Math.PI / 4, color: '#16a34a' },
+  { id: 'postman', name: 'Postman', fullName: 'Postman API Testing', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 5 + Math.PI / 4, color: '#FF6C37' },
+  { id: 'pom', name: 'POM Pattern', fullName: 'Page Object Model Architecture', category: 'Design Patterns', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 6 + Math.PI / 4, color: '#4ADE9A' },
+  { id: 'ddt', name: 'Data-Driven', fullName: 'Data-Driven Frameworks', category: 'Design Patterns', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 7 + Math.PI / 4, color: '#F2A93B' },
+  { id: 'apitest', name: 'API Testing', fullName: 'API Testing & Automation', category: 'Testing Skills & Methodologies', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 8 + Math.PI / 4, color: '#38BDF8' },
 
-  // Line Track 3: Radius 5.4 (11 skills evenly spaced)
-  { id: 'git', name: 'Git', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 11) * 0, color: '#F05032' },
-  { id: 'github', name: 'GitHub', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 11) * 1, color: '#E8EAED' },
-  { id: 'jira', name: 'Jira', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 11) * 2, color: '#0052CC' },
-  { id: 'testrail', name: 'TestRail', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 11) * 3, color: '#0052CC' },
-  { id: 'jenkins', name: 'Jenkins', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 11) * 4, color: '#D24939' },
-  { id: 'actions', name: 'GitHub Actions', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 11) * 5, color: '#2088FF' },
-  { id: 'cicd', name: 'CI/CD Integration', category: 'Design Patterns', orbit: 3, initialAngle: (Math.PI * 2 / 11) * 6, color: '#4ADE9A' },
-  { id: 'canva', name: 'Canva', category: 'Content Creation & Design', orbit: 3, initialAngle: (Math.PI * 2 / 11) * 7, color: '#00C4CC' },
-  { id: 'figma', name: 'Figma', category: 'Content Creation & Design', orbit: 3, initialAngle: (Math.PI * 2 / 11) * 8, color: '#F24E1E' },
-  { id: 'video', name: 'Video Editing', category: 'Content Creation & Design', orbit: 3, initialAngle: (Math.PI * 2 / 11) * 9, color: '#F2A93B' },
-  { id: 'bugtrack', name: 'Bug Tracking & Debugging', category: 'Testing Skills & Methodologies', orbit: 3, initialAngle: (Math.PI * 2 / 11) * 10, color: '#E8615C' },
+  // Line Track 3: Radius 7.1 (DevTools & DevOps) - Staggered offset (+3PI/8)
+  { id: 'git', name: 'Git', fullName: 'Git Version Control', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 0 + (Math.PI * 3 / 8), color: '#F05032' },
+  { id: 'github', name: 'GitHub', fullName: 'GitHub Code Repositories', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 1 + (Math.PI * 3 / 8), color: '#E8EAED' },
+  { id: 'jira', name: 'Jira', fullName: 'Jira Issue & Defect Tracking', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 2 + (Math.PI * 3 / 8), color: '#0052CC' },
+  { id: 'testrail', name: 'TestRail', fullName: 'TestRail Management', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 3 + (Math.PI * 3 / 8), color: '#0052CC' },
+  { id: 'jenkins', name: 'Jenkins', fullName: 'Jenkins CI/CD Automation', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 4 + (Math.PI * 3 / 8), color: '#D24939' },
+  { id: 'actions', name: 'GitHub Actions', fullName: 'GitHub Actions CI Pipelines', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 5 + (Math.PI * 3 / 8), color: '#2088FF' },
+  { id: 'cicd', name: 'CI/CD Integration', fullName: 'Continuous Integration & Deployment', category: 'Design Patterns', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 6 + (Math.PI * 3 / 8), color: '#4ADE9A' },
+  { id: 'figma', name: 'Figma', fullName: 'Figma UI/UX Design', category: 'Content Creation & Design', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 7 + (Math.PI * 3 / 8), color: '#F24E1E' },
+  { id: 'canva', name: 'Canva', fullName: 'Canva Design & Assets', category: 'Content Creation & Design', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 8 + (Math.PI * 3 / 8), color: '#00C4CC' },
+  { id: 'bugtrack', name: 'Bug Tracking', fullName: 'Bug Tracking & Debugging', category: 'Testing Skills & Methodologies', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 9 + (Math.PI * 3 / 8), color: '#E8615C' },
 ]
 
 function useEarthTexture() {
@@ -365,7 +355,6 @@ function ThreeDEarthGlobe() {
   )
 }
 
-// Render clean, visible parallel ring lines for every orbit track
 function OrbitRings() {
   return (
     <group>
@@ -387,7 +376,6 @@ function OrbitRings() {
   )
 }
 
-// Orbiting Skill Node running cleanly along its designated line track
 function OrbitingSkillNode({ skill, activeCategory, hoveredSkillId, setHoveredSkillId }) {
   const orbitConfig = ORBIT_CONFIGS[skill.orbit]
   const angleRef = useRef(skill.initialAngle)
@@ -401,7 +389,6 @@ function OrbitingSkillNode({ skill, activeCategory, hoveredSkillId, setHoveredSk
     const theta = angleRef.current
     const R = orbitConfig.radius
 
-    // Base position in flat XY orbit plane
     const x0 = R * Math.cos(theta)
     const y0 = 0
     const z0 = R * Math.sin(theta)
@@ -409,7 +396,6 @@ function OrbitingSkillNode({ skill, activeCategory, hoveredSkillId, setHoveredSk
     const rotX = orbitConfig.rotX
     const rotZ = orbitConfig.rotZ
 
-    // Rotate along the clean parallel track plane (rotX then rotZ)
     const y1 = y0 * Math.cos(rotX) - z0 * Math.sin(rotX)
     const z1 = y0 * Math.sin(rotX) + z0 * Math.cos(rotX)
     const x1 = x0
@@ -426,18 +412,19 @@ function OrbitingSkillNode({ skill, activeCategory, hoveredSkillId, setHoveredSk
   const isHovered = hoveredSkillId === skill.id
   const isBehindEarth = depthZ < -0.3 && Math.sqrt(pos[0] * pos[0] + pos[1] * pos[1]) < 2.3
 
-  const opacity = !isMatchCategory ? 0.15 : (isBehindEarth ? 0.25 : (isHovered ? 1.0 : 0.95))
-  const scale = isHovered ? 1.25 : (isBehindEarth ? 0.8 : 1.0)
+  // Hide or dim unselected category badges smoothly
+  const opacity = !isMatchCategory ? 0.08 : (isBehindEarth ? 0.20 : (isHovered ? 1.0 : 0.95))
+  const scale = isHovered ? 1.25 : (isBehindEarth ? 0.75 : 1.0)
   const zIndex = isHovered ? 100 : (isBehindEarth ? 1 : 10)
 
   return (
     <Html
       position={pos}
       center
-      distanceFactor={9.5}
+      distanceFactor={11.5}
       zIndexRange={[1, 100]}
       style={{
-        pointerEvents: 'auto',
+        pointerEvents: isMatchCategory && !isBehindEarth ? 'auto' : 'none',
         transition: 'transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease',
         transform: `scale(${scale})`,
         opacity: opacity,
@@ -450,20 +437,20 @@ function OrbitingSkillNode({ skill, activeCategory, hoveredSkillId, setHoveredSk
         style={{
           display: 'inline-flex',
           alignItems: 'center',
-          gap: '0.4rem',
-          padding: '0.35rem 0.7rem',
+          gap: '0.35rem',
+          padding: '0.28rem 0.6rem',
           borderRadius: '999px',
           background: isHovered
-            ? `color-mix(in srgb, ${skill.color} 25%, #0d1520)`
-            : 'rgba(13, 21, 32, 0.88)',
+            ? `color-mix(in srgb, ${skill.color} 30%, #0a111a)`
+            : 'rgba(10, 16, 26, 0.90)',
           backdropFilter: 'blur(8px)',
-          border: `1px solid ${isHovered ? skill.color : 'rgba(255, 255, 255, 0.18)'}`,
+          border: `1px solid ${isHovered ? skill.color : 'rgba(255, 255, 255, 0.16)'}`,
           boxShadow: isHovered
-            ? `0 0 20px ${skill.color}80, 0 4px 16px rgba(0,0,0,0.6)`
+            ? `0 0 20px ${skill.color}80, 0 4px 16px rgba(0,0,0,0.7)`
             : `0 2px 8px rgba(0,0,0,0.4), 0 0 6px ${skill.color}20`,
           color: '#F3F4F6',
           fontFamily: 'var(--font-mono)',
-          fontSize: '0.72rem',
+          fontSize: '0.68rem',
           fontWeight: 600,
           whiteSpace: 'nowrap',
           cursor: 'pointer',
@@ -471,35 +458,35 @@ function OrbitingSkillNode({ skill, activeCategory, hoveredSkillId, setHoveredSk
           position: 'relative',
         }}
       >
-        <SmartSkillIcon name={skill.name} size={13} />
+        <SmartSkillIcon name={skill.name} size={12} />
         <span>{skill.name}</span>
 
         {isHovered && (
           <div
             style={{
               position: 'absolute',
-              bottom: '125%',
+              bottom: '130%',
               left: '50%',
               transform: 'translateX(-50%)',
-              background: '#0a1017',
+              background: '#070d14',
               border: `1px solid ${skill.color}`,
               borderRadius: '8px',
-              padding: '0.4rem 0.75rem',
-              boxShadow: `0 8px 24px rgba(0,0,0,0.8), 0 0 12px ${skill.color}40`,
+              padding: '0.45rem 0.85rem',
+              boxShadow: `0 8px 24px rgba(0,0,0,0.85), 0 0 16px ${skill.color}50`,
               zIndex: 1000,
               pointerEvents: 'none',
-              minWidth: '150px',
+              minWidth: '160px',
               textAlign: 'center',
             }}
           >
-            <div style={{ fontSize: '0.65rem', color: skill.color, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            <div style={{ fontSize: '0.62rem', color: skill.color, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
               {skill.category}
             </div>
-            <div style={{ fontSize: '0.75rem', color: '#FFF', fontWeight: 700, marginTop: '2px' }}>
-              {skill.name}
+            <div style={{ fontSize: '0.78rem', color: '#FFF', fontWeight: 700, marginTop: '2px' }}>
+              {skill.fullName || skill.name}
             </div>
-            <div style={{ fontSize: '0.62rem', color: '#9CA3AF', marginTop: '2px' }}>
-              ✦ Production Verified
+            <div style={{ fontSize: '0.62rem', color: '#4ADE9A', marginTop: '3px' }}>
+              ✓ Production Ready Framework
             </div>
           </div>
         )}
@@ -520,7 +507,7 @@ export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setH
   return (
     <div style={{
       width: '100%',
-      height: isMobile ? '450px' : '580px',
+      height: isMobile ? '460px' : '620px',
       position: 'relative',
       borderRadius: '20px',
       overflow: 'hidden',
@@ -546,11 +533,11 @@ export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setH
         pointerEvents: 'none',
       }}>
         <Globe size={12} />
-        <span>Structured Parallel Line Orbits · Drag to Rotate</span>
+        <span>Spacious 3D Parallel Line Orbits · Drag to Rotate</span>
       </div>
 
       <Canvas
-        camera={{ position: [0, 0, 11], fov: 45 }}
+        camera={{ position: [0, 0, 13.5], fov: 45 }}
         gl={{ antialias: true, alpha: true }}
         dpr={[1, 1.5]}
         style={{ background: 'transparent' }}
@@ -565,15 +552,13 @@ export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setH
           enablePan={false}
           rotateSpeed={0.6}
           autoRotate={hoveredSkillId === null}
-          autoRotateSpeed={0.4}
+          autoRotateSpeed={0.35}
         />
 
         <ThreeDEarthGlobe />
 
-        {/* Visible Concentric Parallel Orbit Rings */}
         <OrbitRings />
 
-        {/* 40 Skill nodes running cleanly in line tracks */}
         {ALL_ORBIT_SKILLS.map((skill) => (
           <OrbitingSkillNode
             key={skill.id}
