@@ -153,20 +153,19 @@ export function SmartSkillIcon({ name, size = 13 }) {
   return <FallbackIcon size={size} style={{ opacity: 0.9, flexShrink: 0 }} />
 }
 
-// 4 Concentric Orbital Line Tracks with generous 1.3-unit gaps to prevent overlapping
-const TRACK_ROT_X = Math.PI * 0.22 // ~40° tilt for perspective depth
-const TRACK_ROT_Z = -Math.PI * 0.05 // subtle elegant tilt
+// 4 Concentric Orbital Line Tracks inclined at ~50° for clear 3D perspective
+const TRACK_ROT_X = Math.PI * 0.28 // 50° tilt towards viewer
+const TRACK_ROT_Z = -Math.PI * 0.04
 
 const ORBIT_CONFIGS = [
   { radius: 3.2, rotX: TRACK_ROT_X, rotZ: TRACK_ROT_Z, speed: 0.16, color: '#4ADE9A', label: 'Track 1: Languages' },
-  { radius: 4.5, rotX: TRACK_ROT_X, rotZ: TRACK_ROT_Z, speed: -0.12, color: '#F2A93B', label: 'Track 2: Full Stack' },
-  { radius: 5.8, rotX: TRACK_ROT_X, rotZ: TRACK_ROT_Z, speed: 0.09, color: '#38BDF8', label: 'Track 3: Automation' },
-  { radius: 7.1, rotX: TRACK_ROT_X, rotZ: TRACK_ROT_Z, speed: -0.07, color: '#A78BFA', label: 'Track 4: Tools & DevOps' },
+  { radius: 4.4, rotX: TRACK_ROT_X, rotZ: TRACK_ROT_Z, speed: -0.12, color: '#F2A93B', label: 'Track 2: Full Stack' },
+  { radius: 5.6, rotX: TRACK_ROT_X, rotZ: TRACK_ROT_Z, speed: 0.09, color: '#38BDF8', label: 'Track 3: Automation' },
+  { radius: 6.8, rotX: TRACK_ROT_X, rotZ: TRACK_ROT_Z, speed: -0.07, color: '#A78BFA', label: 'Track 4: Tools & DevOps' },
 ]
 
-// 34 Skill Badges evenly distributed & staggered across 4 distinct track radii
 export const ALL_ORBIT_SKILLS = [
-  // Line Track 0: Radius 3.2 (Languages & Core)
+  // Track 0: Radius 3.2 (Languages & Core)
   { id: 'java', name: 'Java', fullName: 'Java Programming', category: 'Languages & Querying', orbit: 0, initialAngle: (Math.PI * 2 / 7) * 0, color: '#F89820' },
   { id: 'js', name: 'JavaScript', fullName: 'JavaScript (ES6+)', category: 'Languages & Querying', orbit: 0, initialAngle: (Math.PI * 2 / 7) * 1, color: '#F7DF1E' },
   { id: 'html', name: 'HTML', fullName: 'HTML5 Markup', category: 'Languages & Querying', orbit: 0, initialAngle: (Math.PI * 2 / 7) * 2, color: '#E34F26' },
@@ -175,38 +174,38 @@ export const ALL_ORBIT_SKILLS = [
   { id: 'restapi', name: 'REST APIs', fullName: 'RESTful API Architecture', category: 'Full Stack Development', orbit: 0, initialAngle: (Math.PI * 2 / 7) * 5, color: '#F2A93B' },
   { id: 'agile', name: 'Agile', fullName: 'Agile & Scrum Methodology', category: 'Testing Skills & Methodologies', orbit: 0, initialAngle: (Math.PI * 2 / 7) * 6, color: '#4ADE9A' },
 
-  // Line Track 1: Radius 4.5 (Full Stack & Mobile) - Staggered offset (+PI/7)
-  { id: 'react', name: 'React', fullName: 'React.js Web Framework', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 0 + Math.PI / 7, color: '#61DAFB' },
-  { id: 'node', name: 'Node.js', fullName: 'Node.js Runtime', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 1 + Math.PI / 7, color: '#339933' },
-  { id: 'express', name: 'Express.js', fullName: 'Express.js Backend', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 2 + Math.PI / 7, color: '#E8EAED' },
-  { id: 'mongo', name: 'MongoDB', fullName: 'MongoDB NoSQL Database', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 3 + Math.PI / 7, color: '#47A248' },
-  { id: 'redux', name: 'Redux', fullName: 'Redux State Management', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 4 + Math.PI / 7, color: '#764ABC' },
-  { id: 'tailwind', name: 'Tailwind CSS', fullName: 'Tailwind CSS Styling', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 5 + Math.PI / 7, color: '#06B6D4' },
-  { id: 'manual', name: 'Manual Testing', fullName: 'Manual Test Execution', category: 'Testing Skills & Methodologies', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 6 + Math.PI / 7, color: '#F2A93B' },
-  { id: 'mobile', name: 'Mobile Testing', fullName: 'Mobile App Testing', category: 'Testing Skills & Methodologies', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 7 + Math.PI / 7, color: '#38BDF8' },
+  // Track 1: Radius 4.4 (Full Stack & Mobile) - Staggered offset
+  { id: 'react', name: 'React', fullName: 'React.js Web Framework', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 0 + Math.PI / 6, color: '#61DAFB' },
+  { id: 'node', name: 'Node.js', fullName: 'Node.js Runtime', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 1 + Math.PI / 6, color: '#339933' },
+  { id: 'express', name: 'Express.js', fullName: 'Express.js Backend', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 2 + Math.PI / 6, color: '#E8EAED' },
+  { id: 'mongo', name: 'MongoDB', fullName: 'MongoDB NoSQL Database', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 3 + Math.PI / 6, color: '#47A248' },
+  { id: 'redux', name: 'Redux', fullName: 'Redux State Management', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 4 + Math.PI / 6, color: '#764ABC' },
+  { id: 'tailwind', name: 'Tailwind CSS', fullName: 'Tailwind CSS Styling', category: 'Full Stack Development', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 5 + Math.PI / 6, color: '#06B6D4' },
+  { id: 'manual', name: 'Manual Testing', fullName: 'Manual Test Execution', category: 'Testing Skills & Methodologies', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 6 + Math.PI / 6, color: '#F2A93B' },
+  { id: 'mobile', name: 'Mobile Testing', fullName: 'Mobile App Testing', category: 'Testing Skills & Methodologies', orbit: 1, initialAngle: (Math.PI * 2 / 8) * 7 + Math.PI / 6, color: '#38BDF8' },
 
-  // Line Track 2: Radius 5.8 (Automation Frameworks & Patterns) - Staggered offset (+PI/4)
-  { id: 'selenium', name: 'Selenium', fullName: 'Selenium WebDriver Automation', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 0 + Math.PI / 4, color: '#43B02A' },
-  { id: 'appium', name: 'Appium', fullName: 'Appium Mobile Automation', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 1 + Math.PI / 4, color: '#E42D42' },
-  { id: 'testng', name: 'TestNG', fullName: 'TestNG Test Framework', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 2 + Math.PI / 4, color: '#dc2626' },
-  { id: 'junit', name: 'JUnit', fullName: 'JUnit Unit Testing', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 3 + Math.PI / 4, color: '#2563eb' },
-  { id: 'restassured', name: 'REST Assured', fullName: 'REST Assured API Automation', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 4 + Math.PI / 4, color: '#16a34a' },
-  { id: 'postman', name: 'Postman', fullName: 'Postman API Testing', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 5 + Math.PI / 4, color: '#FF6C37' },
-  { id: 'pom', name: 'POM Pattern', fullName: 'Page Object Model Architecture', category: 'Design Patterns', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 6 + Math.PI / 4, color: '#4ADE9A' },
-  { id: 'ddt', name: 'Data-Driven', fullName: 'Data-Driven Frameworks', category: 'Design Patterns', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 7 + Math.PI / 4, color: '#F2A93B' },
-  { id: 'apitest', name: 'API Testing', fullName: 'API Testing & Automation', category: 'Testing Skills & Methodologies', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 8 + Math.PI / 4, color: '#38BDF8' },
+  // Track 2: Radius 5.6 (Automation Frameworks & Patterns) - Staggered offset
+  { id: 'selenium', name: 'Selenium', fullName: 'Selenium WebDriver Automation', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 0 + Math.PI / 3, color: '#43B02A' },
+  { id: 'appium', name: 'Appium', fullName: 'Appium Mobile Automation', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 1 + Math.PI / 3, color: '#E42D42' },
+  { id: 'testng', name: 'TestNG', fullName: 'TestNG Test Framework', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 2 + Math.PI / 3, color: '#dc2626' },
+  { id: 'junit', name: 'JUnit', fullName: 'JUnit Unit Testing', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 3 + Math.PI / 3, color: '#2563eb' },
+  { id: 'restassured', name: 'REST Assured', fullName: 'REST Assured API Automation', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 4 + Math.PI / 3, color: '#16a34a' },
+  { id: 'postman', name: 'Postman', fullName: 'Postman API Testing', category: 'Automation Tools & Frameworks', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 5 + Math.PI / 3, color: '#FF6C37' },
+  { id: 'pom', name: 'POM Pattern', fullName: 'Page Object Model Architecture', category: 'Design Patterns', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 6 + Math.PI / 3, color: '#4ADE9A' },
+  { id: 'ddt', name: 'Data-Driven', fullName: 'Data-Driven Frameworks', category: 'Design Patterns', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 7 + Math.PI / 3, color: '#F2A93B' },
+  { id: 'apitest', name: 'API Testing', fullName: 'API Testing & Automation', category: 'Testing Skills & Methodologies', orbit: 2, initialAngle: (Math.PI * 2 / 9) * 8 + Math.PI / 3, color: '#38BDF8' },
 
-  // Line Track 3: Radius 7.1 (DevTools & DevOps) - Staggered offset (+3PI/8)
-  { id: 'git', name: 'Git', fullName: 'Git Version Control', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 0 + (Math.PI * 3 / 8), color: '#F05032' },
-  { id: 'github', name: 'GitHub', fullName: 'GitHub Code Repositories', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 1 + (Math.PI * 3 / 8), color: '#E8EAED' },
-  { id: 'jira', name: 'Jira', fullName: 'Jira Issue & Defect Tracking', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 2 + (Math.PI * 3 / 8), color: '#0052CC' },
-  { id: 'testrail', name: 'TestRail', fullName: 'TestRail Management', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 3 + (Math.PI * 3 / 8), color: '#0052CC' },
-  { id: 'jenkins', name: 'Jenkins', fullName: 'Jenkins CI/CD Automation', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 4 + (Math.PI * 3 / 8), color: '#D24939' },
-  { id: 'actions', name: 'GitHub Actions', fullName: 'GitHub Actions CI Pipelines', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 5 + (Math.PI * 3 / 8), color: '#2088FF' },
-  { id: 'cicd', name: 'CI/CD Integration', fullName: 'Continuous Integration & Deployment', category: 'Design Patterns', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 6 + (Math.PI * 3 / 8), color: '#4ADE9A' },
-  { id: 'figma', name: 'Figma', fullName: 'Figma UI/UX Design', category: 'Content Creation & Design', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 7 + (Math.PI * 3 / 8), color: '#F24E1E' },
-  { id: 'canva', name: 'Canva', fullName: 'Canva Design & Assets', category: 'Content Creation & Design', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 8 + (Math.PI * 3 / 8), color: '#00C4CC' },
-  { id: 'bugtrack', name: 'Bug Tracking', fullName: 'Bug Tracking & Debugging', category: 'Testing Skills & Methodologies', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 9 + (Math.PI * 3 / 8), color: '#E8615C' },
+  // Track 3: Radius 6.8 (DevTools & DevOps) - Staggered offset
+  { id: 'git', name: 'Git', fullName: 'Git Version Control', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 0 + (Math.PI * 4 / 9), color: '#F05032' },
+  { id: 'github', name: 'GitHub', fullName: 'GitHub Code Repositories', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 1 + (Math.PI * 4 / 9), color: '#E8EAED' },
+  { id: 'jira', name: 'Jira', fullName: 'Jira Issue & Defect Tracking', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 2 + (Math.PI * 4 / 9), color: '#0052CC' },
+  { id: 'testrail', name: 'TestRail', fullName: 'TestRail Management', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 3 + (Math.PI * 4 / 9), color: '#0052CC' },
+  { id: 'jenkins', name: 'Jenkins', fullName: 'Jenkins CI/CD Automation', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 4 + (Math.PI * 4 / 9), color: '#D24939' },
+  { id: 'actions', name: 'GitHub Actions', fullName: 'GitHub Actions CI Pipelines', category: 'Developer Tools', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 5 + (Math.PI * 4 / 9), color: '#2088FF' },
+  { id: 'cicd', name: 'CI/CD Integration', fullName: 'Continuous Integration & Deployment', category: 'Design Patterns', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 6 + (Math.PI * 4 / 9), color: '#4ADE9A' },
+  { id: 'figma', name: 'Figma', fullName: 'Figma UI/UX Design', category: 'Content Creation & Design', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 7 + (Math.PI * 4 / 9), color: '#F24E1E' },
+  { id: 'canva', name: 'Canva', fullName: 'Canva Design & Assets', category: 'Content Creation & Design', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 8 + (Math.PI * 4 / 9), color: '#00C4CC' },
+  { id: 'bugtrack', name: 'Bug Tracking', fullName: 'Bug Tracking & Debugging', category: 'Testing Skills & Methodologies', orbit: 3, initialAngle: (Math.PI * 2 / 10) * 9 + (Math.PI * 4 / 9), color: '#E8615C' },
 ]
 
 function useEarthTexture() {
@@ -355,6 +354,7 @@ function ThreeDEarthGlobe() {
   )
 }
 
+// Glowing neon torus tracks
 function OrbitRings() {
   return (
     <group>
@@ -363,11 +363,11 @@ function OrbitRings() {
           key={index}
           rotation={[config.rotX, 0, config.rotZ]}
         >
-          <torusGeometry args={[config.radius, 0.015, 16, 120]} />
+          <torusGeometry args={[config.radius, 0.018, 16, 120]} />
           <meshBasicMaterial
             color={config.color}
             transparent
-            opacity={0.35}
+            opacity={0.45}
             blending={THREE.AdditiveBlending}
           />
         </mesh>
@@ -376,6 +376,7 @@ function OrbitRings() {
   )
 }
 
+// Skill node mathematically anchored directly ON TOP of the glowing circular line track
 function OrbitingSkillNode({ skill, activeCategory, hoveredSkillId, setHoveredSkillId }) {
   const orbitConfig = ORBIT_CONFIGS[skill.orbit]
   const angleRef = useRef(skill.initialAngle)
@@ -389,19 +390,18 @@ function OrbitingSkillNode({ skill, activeCategory, hoveredSkillId, setHoveredSk
     const theta = angleRef.current
     const R = orbitConfig.radius
 
-    const x0 = R * Math.cos(theta)
-    const y0 = 0
-    const z0 = R * Math.sin(theta)
+    // Exact local coordinates on the Torus ring (XY plane in Three.js TorusGeometry)
+    const xLocal = R * Math.cos(theta)
+    const yLocal = R * Math.sin(theta)
+    const zLocal = 0
 
-    const rotX = orbitConfig.rotX
-    const rotZ = orbitConfig.rotZ
+    // Rotate local vector by rotX then rotZ (matching the mesh rotation of OrbitRings)
+    const x1 = xLocal
+    const y1 = yLocal * Math.cos(orbitConfig.rotX) - zLocal * Math.sin(orbitConfig.rotX)
+    const z1 = yLocal * Math.sin(orbitConfig.rotX) + zLocal * Math.cos(orbitConfig.rotX)
 
-    const y1 = y0 * Math.cos(rotX) - z0 * Math.sin(rotX)
-    const z1 = y0 * Math.sin(rotX) + z0 * Math.cos(rotX)
-    const x1 = x0
-
-    const x2 = x1 * Math.cos(rotZ) - y1 * Math.sin(rotZ)
-    const y2 = x1 * Math.sin(rotZ) + y1 * Math.cos(rotZ)
+    const x2 = x1 * Math.cos(orbitConfig.rotZ) - y1 * Math.sin(orbitConfig.rotZ)
+    const y2 = x1 * Math.sin(orbitConfig.rotZ) + y1 * Math.cos(orbitConfig.rotZ)
     const z2 = z1
 
     setPos([x2, y2, z2])
@@ -412,8 +412,7 @@ function OrbitingSkillNode({ skill, activeCategory, hoveredSkillId, setHoveredSk
   const isHovered = hoveredSkillId === skill.id
   const isBehindEarth = depthZ < -0.3 && Math.sqrt(pos[0] * pos[0] + pos[1] * pos[1]) < 2.3
 
-  // Hide or dim unselected category badges smoothly
-  const opacity = !isMatchCategory ? 0.08 : (isBehindEarth ? 0.20 : (isHovered ? 1.0 : 0.95))
+  const opacity = !isMatchCategory ? 0.06 : (isBehindEarth ? 0.20 : (isHovered ? 1.0 : 0.95))
   const scale = isHovered ? 1.25 : (isBehindEarth ? 0.75 : 1.0)
   const zIndex = isHovered ? 100 : (isBehindEarth ? 1 : 10)
 
@@ -442,12 +441,12 @@ function OrbitingSkillNode({ skill, activeCategory, hoveredSkillId, setHoveredSk
           borderRadius: '999px',
           background: isHovered
             ? `color-mix(in srgb, ${skill.color} 30%, #0a111a)`
-            : 'rgba(10, 16, 26, 0.90)',
+            : 'rgba(10, 16, 26, 0.92)',
           backdropFilter: 'blur(8px)',
-          border: `1px solid ${isHovered ? skill.color : 'rgba(255, 255, 255, 0.16)'}`,
+          border: `1px solid ${isHovered ? skill.color : 'rgba(255, 255, 255, 0.18)'}`,
           boxShadow: isHovered
-            ? `0 0 20px ${skill.color}80, 0 4px 16px rgba(0,0,0,0.7)`
-            : `0 2px 8px rgba(0,0,0,0.4), 0 0 6px ${skill.color}20`,
+            ? `0 0 22px ${skill.color}90, 0 4px 16px rgba(0,0,0,0.8)`
+            : `0 2px 8px rgba(0,0,0,0.5), 0 0 8px ${skill.color}30`,
           color: '#F3F4F6',
           fontFamily: 'var(--font-mono)',
           fontSize: '0.68rem',
@@ -486,7 +485,7 @@ function OrbitingSkillNode({ skill, activeCategory, hoveredSkillId, setHoveredSk
               {skill.fullName || skill.name}
             </div>
             <div style={{ fontSize: '0.62rem', color: '#4ADE9A', marginTop: '3px' }}>
-              ✓ Production Ready Framework
+              ✓ Running directly on orbit track
             </div>
           </div>
         )}
@@ -533,7 +532,7 @@ export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setH
         pointerEvents: 'none',
       }}>
         <Globe size={12} />
-        <span>Spacious 3D Parallel Line Orbits · Drag to Rotate</span>
+        <span>Skills Running Directly On Glowing Circular Orbit Lines</span>
       </div>
 
       <Canvas
@@ -557,8 +556,10 @@ export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setH
 
         <ThreeDEarthGlobe />
 
+        {/* Visible Concentric Parallel Orbit Rings */}
         <OrbitRings />
 
+        {/* Skill nodes mathematically locked onto the circular track lines */}
         {ALL_ORBIT_SKILLS.map((skill) => (
           <OrbitingSkillNode
             key={skill.id}
