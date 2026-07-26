@@ -11,7 +11,7 @@ const NAV_LINKS = [
   { label: 'DEPLOY', href: '#deploy' },
 ]
 
-export default function Navbar() {
+export default function Navbar({ onOpenResume }) {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
 
@@ -109,9 +109,8 @@ export default function Navbar() {
       </div>
 
       {/* Resume button */}
-      <a
-        href="/Kishor_Gogoi_Resume.pdf"
-        download
+      <button
+        onClick={onOpenResume}
         id="nav-resume-btn"
         style={{
           display: 'flex',
@@ -144,7 +143,7 @@ export default function Navbar() {
       >
         <Download size={12} />
         Resume
-      </a>
+      </button>
 
       {/* Mobile hamburger */}
       <button
@@ -206,9 +205,11 @@ export default function Navbar() {
                 {link.label}
               </a>
             ))}
-            <a
-              href="/Kishor_Gogoi_Resume.pdf"
-              download
+            <button
+              onClick={() => {
+                setMobileOpen(false)
+                onOpenResume()
+              }}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -219,16 +220,17 @@ export default function Navbar() {
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
                 color: 'var(--color-accent-pending)',
-                textDecoration: 'none',
+                background: 'transparent',
                 padding: '10px 20px',
                 borderRadius: '999px',
                 border: '1px solid var(--color-accent-pending)',
                 width: 'fit-content',
+                cursor: 'pointer',
               }}
             >
               <Download size={12} />
               Resume
-            </a>
+            </button>
           </motion.div>
         )}
       </AnimatePresence>

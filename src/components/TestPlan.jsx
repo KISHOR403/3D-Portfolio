@@ -84,7 +84,7 @@ const QUICK_FACTS = [
   },
 ]
 
-export default function TestPlan() {
+export default function TestPlan({ onOpenResume }) {
   const [imgError, setImgError] = useState(false)
   const frameRef = useRef(null)
   const highlightRef = useRef(null)
@@ -419,9 +419,8 @@ export default function TestPlan() {
               >
                 ↓ View Projects
               </a>
-              <a
-                href="/Kishor_Gogoi_Resume.pdf"
-                download
+              <button
+                onClick={onOpenResume}
                 className="cta-secondary"
                 style={{
                   display: 'inline-flex',
@@ -432,13 +431,13 @@ export default function TestPlan() {
                   fontWeight: 600,
                   letterSpacing: '0.06em',
                   textTransform: 'uppercase',
-                  textDecoration: 'none',
                   color: '#F2A93B',
                   background: 'transparent',
                   border: '1px solid rgba(242, 169, 59, 0.4)',
                   borderRadius: '999px',
                   padding: '0.7rem 1.5rem',
                   transition: 'border-color 0.2s ease, color 0.2s ease, transform 0.2s ease',
+                  cursor: 'pointer',
                 }}
                 onMouseEnter={e => {
                   e.currentTarget.style.borderColor = 'rgba(242, 169, 59, 0.8)'
@@ -453,7 +452,7 @@ export default function TestPlan() {
               >
                 <Download size={14} strokeWidth={2.5} />
                 Download Resume
-              </a>
+              </button>
             </div>
           </motion.div>
         </div>

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import StatusStrip from './components/StatusStrip'
@@ -9,16 +10,22 @@ import PipelineRuns from './components/PipelineRuns'
 import QualityGates from './components/QualityGates'
 import Deploy from './components/Deploy'
 import PipelineGridBg from './components/PipelineGridBg'
+import ResumeModal from './components/ResumeModal'
 
 export default function App() {
+  const [isResumeModalOpen, setIsResumeModalOpen] = useState(false)
+
+  const openResumeModal = () => setIsResumeModalOpen(true)
+  const closeResumeModal = () => setIsResumeModalOpen(false)
+
   return (
     <>
       <PipelineGridBg />
-      <Navbar />
+      <Navbar onOpenResume={openResumeModal} />
       <main style={{ position: 'relative', zIndex: 1 }}>
-        <Hero />
+        <Hero onOpenResume={openResumeModal} />
         <StatusStrip />
-        <TestPlan />
+        <TestPlan onOpenResume={openResumeModal} />
         <BeyondTheConsole />
         <Education />
         <CoverageReport />
@@ -26,7 +33,9 @@ export default function App() {
         <QualityGates />
         <Deploy />
       </main>
+      <ResumeModal isOpen={isResumeModalOpen} onClose={closeResumeModal} />
     </>
   )
 }
+
 

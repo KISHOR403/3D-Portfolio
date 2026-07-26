@@ -6,7 +6,7 @@ import ConsoleFallback from './ConsoleFallback'
 // Synchronous mobile check to avoid layout flash on refresh
 const getIsMobile = () => typeof window !== 'undefined' && window.innerWidth < 768
 
-export default function Hero() {
+export default function Hero({ onOpenResume }) {
   const [isMobile, setIsMobile] = useState(getIsMobile)
 
   useEffect(() => {
@@ -156,9 +156,8 @@ export default function Hero() {
               View Pipeline Runs
             </a>
 
-            <a
-              href="/Kishor_Gogoi_Resume.pdf"
-              download
+            <button
+              onClick={onOpenResume}
               id="hero-cta-resume"
               style={{
                 display: 'inline-flex',
@@ -171,11 +170,11 @@ export default function Hero() {
                 textTransform: 'uppercase',
                 color: 'var(--color-text-primary)',
                 background: 'transparent',
-                textDecoration: 'none',
                 padding: '12px 24px',
                 borderRadius: '999px',
                 border: '1px solid var(--color-border-hairline)',
                 transition: 'all 0.25s ease',
+                cursor: 'pointer',
               }}
               onMouseEnter={e => {
                 e.currentTarget.style.borderColor = 'var(--color-text-muted)'
@@ -188,7 +187,7 @@ export default function Hero() {
             >
               <Download size={13} />
               Download Resume
-            </a>
+            </button>
           </div>
         </motion.div>
 
