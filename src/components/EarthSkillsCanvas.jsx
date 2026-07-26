@@ -22,8 +22,7 @@ import {
   Video,
   Sparkles,
   Smartphone,
-  Layers,
-  Globe
+  Layers
 } from 'lucide-react'
 
 // Custom SVG for TestNG
@@ -153,7 +152,7 @@ export function SmartSkillIcon({ name, size = 13 }) {
   return <FallbackIcon size={size} style={{ opacity: 0.9, flexShrink: 0 }} />
 }
 
-// Compact orbit radii (2.7, 3.5, 4.3, 5.2) designed to fit 100% inside container card with 30%+ margins
+// 4 Concentric Orbit Line Tracks
 const TRACK_ROT_X = Math.PI * 0.22 // ~40° tilt for sleek 3D perspective
 const TRACK_ROT_Z = -Math.PI * 0.03
 
@@ -504,33 +503,9 @@ export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setH
       width: '100%',
       height: isMobile ? '480px' : '620px',
       position: 'relative',
-      borderRadius: '20px',
-      overflow: 'hidden',
-      background: 'radial-gradient(ellipse at center, rgba(16, 26, 40, 0.8) 0%, rgba(9, 14, 23, 0.95) 100%)',
-      border: '1px solid var(--color-border-hairline)',
-      boxShadow: 'inset 0 0 60px rgba(0, 0, 0, 0.6), 0 12px 40px rgba(0, 0, 0, 0.4)',
+      overflow: 'visible',
+      background: 'transparent',
     }}>
-      <div style={{
-        position: 'absolute',
-        top: '1rem',
-        left: '1rem',
-        zIndex: 10,
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '6px',
-        fontFamily: 'var(--font-mono)',
-        fontSize: '0.68rem',
-        color: 'var(--color-accent-pass)',
-        background: 'rgba(74, 222, 154, 0.08)',
-        border: '1px solid rgba(74, 222, 154, 0.2)',
-        borderRadius: '999px',
-        padding: '4px 12px',
-        pointerEvents: 'none',
-      }}>
-        <Globe size={12} />
-        <span>3D Parallel Orbit Tracks · 100% Unclipped Frame</span>
-      </div>
-
       <Canvas
         camera={{ position: [0, 0, 20.0], fov: 45 }}
         gl={{ antialias: true, alpha: true }}
