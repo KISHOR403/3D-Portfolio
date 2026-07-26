@@ -113,7 +113,7 @@ function OrbitRings() {
   ))}</group>)
 }
 
-function OrbitingSkillNode({ skill, activeCategory, hoveredSkillId, setHoveredSkillId, isMobile }) {
+function OrbitingSkillNode({ skill, activeCategory, hoveredSkillId, setHoveredSkillId, deviceTier }) {
   const cfg = ORBIT_CONFIGS[skill.orbit]
   const angleRef = useRef(skill.initialAngle)
   const [pos, setPos] = useState([0,0,0])
@@ -134,19 +134,24 @@ function OrbitingSkillNode({ skill, activeCategory, hoveredSkillId, setHoveredSk
   const behind = depthZ < -0.2 && Math.sqrt(pos[0]**2+pos[1]**2) < 1.8
   const op = !isMatch ? 0.05 : behind ? 0.15 : isHov ? 1 : 0.88
   const sc = isHov ? 1.15 : behind ? 0.65 : 1
-  const df = isMobile ? 18 : 14
+
+  // Dynamic distanceFactor & typography per device tier
+  const df = deviceTier === 'mobile' ? 24 : (deviceTier === 'tablet' ? 18 : 14)
+  const fontSz = deviceTier === 'mobile' ? '0.38rem' : (deviceTier === 'tablet' ? 0.44 + 'rem' : '0.50rem')
+  const iconSz = deviceTier === 'mobile' ? 6 : (deviceTier === 'tablet' ? 8 : 9)
+  const padStr = deviceTier === 'mobile' ? '1.5px 4px' : '2px 5px'
 
   return (
     <Html position={pos} center distanceFactor={df} zIndexRange={[1,100]}
       style={{ pointerEvents: isMatch&&!behind?'auto':'none', transition:'transform 0.15s ease,opacity 0.2s ease', transform:`scale(${sc})`, opacity:op, zIndex:isHov?100:behind?1:10 }}>
       <div onMouseEnter={()=>setHoveredSkillId(skill.id)} onMouseLeave={()=>setHoveredSkillId(null)}
-        style={{ display:'inline-flex',alignItems:'center',gap:'3px',padding:'2px 5px',borderRadius:'999px',
+        style={{ display:'inline-flex',alignItems:'center',gap:'3px',padding:padStr,borderRadius:'999px',
           background:isHov?`color-mix(in srgb,${skill.color} 25%,#0a111a)`:'rgba(10,16,26,0.88)',
           backdropFilter:'blur(4px)',border:`1px solid ${isHov?skill.color:'rgba(255,255,255,0.12)'}`,
           boxShadow:isHov?`0 0 14px ${skill.color}80`:'0 1px 4px rgba(0,0,0,0.3)',
-          color:'#E5E7EB',fontFamily:'var(--font-mono)',fontSize:isMobile?'0.42rem':'0.50rem',fontWeight:600,
+          color:'#E5E7EB',fontFamily:'var(--font-mono)',fontSize:fontSz,fontWeight:600,
           whiteSpace:'nowrap',cursor:'pointer',userSelect:'none',position:'relative' }}>
-        <SmartSkillIcon name={skill.name} size={isMobile?7:9}/>
+        <SmartSkillIcon name={skill.name} size={iconSz}/>
         <span>{skill.name}</span>
         {isHov && (
           <div style={{ position:'absolute',bottom:'140%',left:'50%',transform:'translateX(-50%)',background:'#070d14',
@@ -161,16 +166,38 @@ function OrbitingSkillNode({ skill, activeCategory, hoveredSkillId, setHoveredSk
   )
 }
 
-export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setHoveredSkillId }) {
-  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768)
-  useEffect(() => { const h=()=>setIsMobile(window.innerWidth<768); window.addEventListener('resize',h); return ()=>window.removeEventListener('resize',h) }, [])
+function getDeviceTier() {
+  if (typeof window === 'undefined') return 'desktop'
+  const w = window.innerWidth
+  if (w < 640) return 'mobile'
+  if (w < 1024) return 'tablet'
+  return 'desktop'
+}
 
-  const camZ = isMobile ? 18 : 14
-  const fov = isMobile ? 50 : 38
+export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setHoveredSkillId }) {
+  const [deviceTier, setDeviceTier] = useState(getDeviceTier)
+
+  useEffect(() => {
+    const handleResize = () => setDeviceTier(getDeviceTier())
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  // Adapt camera position & container height cleanly across all screen sizes
+  const camZ = deviceTier === 'mobile' ? 24 : (deviceTier === 'tablet' ? 18 : 14)
+  const fov = deviceTier === 'mobile' ? 48 : (deviceTier === 'tablet' ? 42 : 38)
+  const containerHeight = deviceTier === 'mobile' ? '380px' : (deviceTier === 'tablet' ? '480px' : '620px')
 
   return (
-    <div style={{ width:'100%', height:isMobile?'420px':'620px', position:'relative', overflow:'hidden', background:'transparent' }}>
-      <Canvas camera={{position:[0,1.5,camZ],fov}} gl={{antialias:true,alpha:true}} dpr={[1,1.5]} style={{background:'transparent'}}>
+    <div style={{
+      width: '100%',
+      height: containerHeight,
+      position: 'relative',
+      overflow: 'hidden',
+      background: 'transparent',
+      touchAction: 'pan-y', // allows smooth vertical scrolling on mobile touch screens
+    }}>
+      <Canvas camera={{position:[0, 1.2, camZ], fov}} gl={{antialias:true,alpha:true}} dpr={[1, 1.5]} style={{background:'transparent'}}>
         <ambientLight intensity={1.2}/>
         <directionalLight position={[10,10,10]} intensity={2.0} color="#FFFFFF"/>
         <directionalLight position={[-10,-10,-10]} intensity={0.8} color="#38BDF8"/>
@@ -178,7 +205,16 @@ export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setH
         <OrbitControls enableZoom={false} enablePan={false} rotateSpeed={0.6} autoRotate={!hoveredSkillId} autoRotateSpeed={0.4}/>
         <ThreeDEarthGlobe/>
         <OrbitRings/>
-        {ALL_ORBIT_SKILLS.map(s=>(<OrbitingSkillNode key={s.id} skill={s} activeCategory={activeCategory} hoveredSkillId={hoveredSkillId} setHoveredSkillId={setHoveredSkillId} isMobile={isMobile}/>))}
+        {ALL_ORBIT_SKILLS.map(s=>(
+          <OrbitingSkillNode
+            key={s.id}
+            skill={s}
+            activeCategory={activeCategory}
+            hoveredSkillId={hoveredSkillId}
+            setHoveredSkillId={setHoveredSkillId}
+            deviceTier={deviceTier}
+          />
+        ))}
       </Canvas>
     </div>
   )
