@@ -44,12 +44,12 @@ export default function ConsoleFallback() {
   // Parallax tilt effect
   const [tilt, setTilt] = useState({ x: 0, y: 0 })
   const containerRef = useRef(null)
-  const terminalEndRef = useRef(null)
+  const tabContentRef = useRef(null)
 
-  // Auto-scroll terminal on log change
+  // Auto-scroll terminal log internally without jumping the outer browser page
   useEffect(() => {
-    if (activeTab === 'terminal' && terminalEndRef.current) {
-      terminalEndRef.current.scrollIntoView({ behavior: 'smooth' })
+    if (activeTab === 'terminal' && tabContentRef.current) {
+      tabContentRef.current.scrollTop = tabContentRef.current.scrollHeight
     }
   }, [logs, activeTab])
 
@@ -374,15 +374,18 @@ export default function ConsoleFallback() {
           </div>
 
           {/* TAB CONTENT AREA */}
-          <div style={{
-            padding: '16px',
-            minHeight: '300px',
-            maxHeight: '340px',
-            overflowY: 'auto',
-            fontFamily: "'JetBrains Mono', monospace",
-            fontSize: '12px',
-            lineHeight: '1.7',
-          }}>
+          <div
+            ref={tabContentRef}
+            style={{
+              padding: '16px',
+              minHeight: '300px',
+              maxHeight: '340px',
+              overflowY: 'auto',
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: '12px',
+              lineHeight: '1.7',
+            }}
+          >
 
             {/* TAB 1: TERMINAL INTERACTIVE */}
             {activeTab === 'terminal' && (
@@ -452,7 +455,6 @@ export default function ConsoleFallback() {
                       {log.text}
                     </div>
                   ))}
-                  <div ref={terminalEndRef} />
                 </div>
 
                 {/* Interactive CLI Input Line */}
