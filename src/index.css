@@ -110,6 +110,12 @@
   padding: 6rem 1.5rem;
 }
 
+@media (max-width: 640px) {
+  .section-container {
+    padding: 3rem 1rem;
+  }
+}
+
 /* Glass card */
 .glass-card {
   background: var(--color-bg-surface);

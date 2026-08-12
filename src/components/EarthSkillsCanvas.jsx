@@ -85,7 +85,7 @@ function FibonacciSphereCluster({ activeCategory, hoveredSkillId, setHoveredSkil
   const N = visibleSkills.length
   const phi = Math.PI * (3 - Math.sqrt(5)) // Golden ratio angle
 
-  const R = deviceTier === 'mobile' ? 2.6 : (deviceTier === 'tablet' ? 3.0 : 3.4)
+  const R = deviceTier === 'mobile' ? 2.1 : (deviceTier === 'tablet' ? 2.9 : 3.4)
 
   const nodes = useMemo(() => {
     return visibleSkills.map((skill, i) => {
@@ -107,16 +107,16 @@ function FibonacciSphereCluster({ activeCategory, hoveredSkillId, setHoveredSkil
       </mesh>
       {/* Inner Glowing Reactor Core */}
       <mesh>
-        <sphereGeometry args={[1.1, 24, 24]} />
+        <sphereGeometry args={[deviceTier === 'mobile' ? 0.85 : 1.1, 24, 24]} />
         <meshStandardMaterial color="#081524" emissive="#4ADE9A" emissiveIntensity={0.4} wireframe />
       </mesh>
 
       {nodes.map(({ skill, pos }) => {
         const isMatch = !activeCategory || activeCategory === 'All' || skill.category === activeCategory
         const isHov = hoveredSkillId === skill.id
-        const df = deviceTier === 'mobile' ? 24 : (deviceTier === 'tablet' ? 18 : 15)
-        const fontSz = deviceTier === 'mobile' ? '0.38rem' : (deviceTier === 'tablet' ? '0.44rem' : '0.50rem')
-        const iconSz = deviceTier === 'mobile' ? 6 : (deviceTier === 'tablet' ? 8 : 9)
+        const df = deviceTier === 'mobile' ? 14 : (deviceTier === 'tablet' ? 18 : 15)
+        const fontSz = deviceTier === 'mobile' ? '0.40rem' : (deviceTier === 'tablet' ? '0.44rem' : '0.50rem')
+        const iconSz = deviceTier === 'mobile' ? 7 : (deviceTier === 'tablet' ? 8 : 9)
 
         return (
           <Html key={skill.id} position={pos} center distanceFactor={df} zIndexRange={[1,100]}
@@ -129,7 +129,7 @@ function FibonacciSphereCluster({ activeCategory, hoveredSkillId, setHoveredSkil
             }}>
             <div onMouseEnter={() => setHoveredSkillId(skill.id)} onMouseLeave={() => setHoveredSkillId(null)}
               style={{
-                display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '2.5px 7px', borderRadius: '999px',
+                display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '2px 6px', borderRadius: '999px',
                 background: isHov ? `color-mix(in srgb, ${skill.color} 25%, #070e17)` : 'rgba(10, 16, 26, 0.92)',
                 backdropFilter: 'blur(6px)', border: `1px solid ${isHov ? skill.color : 'rgba(255, 255, 255, 0.15)'}`,
                 boxShadow: isHov ? `0 0 16px ${skill.color}80` : '0 2px 6px rgba(0,0,0,0.4)',
@@ -171,9 +171,9 @@ export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setH
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const camZ = deviceTier === 'mobile' ? 22 : (deviceTier === 'tablet' ? 18 : 15)
-  const fov = deviceTier === 'mobile' ? 44 : (deviceTier === 'tablet' ? 40 : 36)
-  const containerHeight = deviceTier === 'mobile' ? '420px' : (deviceTier === 'tablet' ? '500px' : '580px')
+  const camZ = deviceTier === 'mobile' ? 15 : (deviceTier === 'tablet' ? 18 : 15)
+  const fov = deviceTier === 'mobile' ? 38 : (deviceTier === 'tablet' ? 40 : 36)
+  const containerHeight = deviceTier === 'mobile' ? '360px' : (deviceTier === 'tablet' ? '500px' : '580px')
 
   return (
     <div style={{

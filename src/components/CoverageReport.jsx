@@ -456,16 +456,21 @@ export default function CoverageReport() {
           transition={{ duration: 0.4 }}
           style={{
             display: 'flex',
-            flexWrap: 'wrap',
-            gap: '0.5rem',
-            marginBottom: '2rem',
+            flexWrap: 'nowrap',
+            overflowX: 'auto',
+            gap: '0.4rem',
+            marginBottom: '1.5rem',
+            paddingBottom: '0.5rem',
             alignItems: 'center',
             position: 'relative',
             zIndex: 20,
+            WebkitOverflowScrolling: 'touch',
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
           }}
         >
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--color-text-muted)', marginRight: '0.5rem' }}>
-            <SlidersHorizontal size={13} /> Filter Category:
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--color-text-muted)', marginRight: '0.25rem', flexShrink: 0 }}>
+            <SlidersHorizontal size={13} /> Filter:
           </div>
           {CATEGORY_FILTERS.map((cat) => {
             const isActive = activeCategory === cat
@@ -485,6 +490,8 @@ export default function CoverageReport() {
                   cursor: 'pointer',
                   transition: 'all 0.2s ease',
                   boxShadow: isActive ? '0 0 12px rgba(74, 222, 154, 0.25)' : 'none',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
                 }}
               >
                 {cat}
