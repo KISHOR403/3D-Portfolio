@@ -29,140 +29,128 @@ export function SmartSkillIcon({ name, size = 10 }) {
   return <F size={size} style={{opacity:0.9,flexShrink:0}}/>
 }
 
-/* Each orbit has RADICALLY different tilt so they never converge */
-const ORBIT_CONFIGS = [
-  { radius: 2.8, rotX: 1.26, rotZ: 0.0,   speed: 0.14,  color: '#4ADE9A' },
-  { radius: 4.2, rotX: 0.70, rotZ: 0.50,  speed:-0.10,  color: '#F2A93B' },
-  { radius: 5.8, rotX: 0.44, rotZ:-0.30,  speed: 0.07,  color: '#38BDF8' },
-  { radius: 7.4, rotX: 0.21, rotZ: 0.10,  speed:-0.05,  color: '#A78BFA' },
+export const RAW_SKILLS = [
+  { id:'java', name:'Java', fullName:'Java Programming', category:'Languages & Querying', featured:true, color:'#F89820' },
+  { id:'js', name:'JavaScript', fullName:'JavaScript (ES6+)', category:'Languages & Querying', featured:true, color:'#F7DF1E' },
+  { id:'react', name:'React', fullName:'React.js', category:'Full Stack Development', featured:true, color:'#61DAFB' },
+  { id:'node', name:'Node.js', fullName:'Node.js Runtime', category:'Full Stack Development', featured:true, color:'#339933' },
+  { id:'html', name:'HTML', fullName:'HTML5 Markup', category:'Languages & Querying', featured:false, color:'#E34F26' },
+  { id:'css', name:'CSS', fullName:'CSS3 Styling', category:'Languages & Querying', featured:false, color:'#1572B6' },
+
+  { id:'sql', name:'SQL', fullName:'SQL Queries', category:'Languages & Querying', featured:true, color:'#38BDF8' },
+  { id:'mongo', name:'MongoDB', fullName:'MongoDB', category:'Full Stack Development', featured:true, color:'#47A248' },
+  { id:'tailwind', name:'Tailwind CSS', fullName:'Tailwind CSS', category:'Full Stack Development', featured:true, color:'#06B6D4' },
+  { id:'restapi', name:'REST APIs', fullName:'RESTful APIs', category:'Full Stack Development', featured:true, color:'#F2A93B' },
+  { id:'express', name:'Express.js', fullName:'Express.js', category:'Full Stack Development', featured:false, color:'#E8EAED' },
+  { id:'redux', name:'Redux', fullName:'Redux', category:'Full Stack Development', featured:false, color:'#764ABC' },
+  { id:'junit', name:'JUnit', fullName:'JUnit Testing', category:'Automation Tools & Frameworks', featured:false, color:'#2563eb' },
+  { id:'pom', name:'POM Pattern', fullName:'Page Object Model', category:'Design Patterns', featured:false, color:'#4ADE9A' },
+
+  { id:'selenium', name:'Selenium', fullName:'Selenium WebDriver', category:'Automation Tools & Frameworks', featured:true, color:'#43B02A' },
+  { id:'appium', name:'Appium', fullName:'Appium Mobile', category:'Automation Tools & Frameworks', featured:true, color:'#E42D42' },
+  { id:'testng', name:'TestNG', fullName:'TestNG Framework', category:'Automation Tools & Frameworks', featured:true, color:'#dc2626' },
+  { id:'restassured', name:'REST Assured', fullName:'REST Assured', category:'Automation Tools & Frameworks', featured:true, color:'#16a34a' },
+  { id:'postman', name:'Postman', fullName:'Postman API', category:'Automation Tools & Frameworks', featured:false, color:'#FF6C37' },
+  { id:'ddt', name:'Data-Driven', fullName:'Data-Driven Testing', category:'Design Patterns', featured:false, color:'#F2A93B' },
+  { id:'apitest', name:'API Testing', fullName:'API Automation', category:'Testing Skills & Methodologies', featured:false, color:'#38BDF8' },
+  { id:'github', name:'GitHub', fullName:'GitHub Repos', category:'Developer Tools', featured:false, color:'#E8EAED' },
+  { id:'testrail', name:'TestRail', fullName:'TestRail Mgmt', category:'Developer Tools', featured:false, color:'#0052CC' },
+
+  { id:'manual', name:'Manual Testing', fullName:'Manual QA', category:'Testing Skills & Methodologies', featured:true, color:'#F2A93B' },
+  { id:'agile', name:'Agile', fullName:'Agile & Scrum', category:'Testing Skills & Methodologies', featured:true, color:'#4ADE9A' },
+  { id:'git', name:'Git', fullName:'Git Version Control', category:'Developer Tools', featured:true, color:'#F05032' },
+  { id:'jira', name:'Jira', fullName:'Jira Tracking', category:'Developer Tools', featured:true, color:'#0052CC' },
+  { id:'jenkins', name:'Jenkins', fullName:'Jenkins CI/CD', category:'Developer Tools', featured:true, color:'#D24939' },
+  { id:'cicd', name:'CI/CD', fullName:'CI/CD Pipelines', category:'Design Patterns', featured:true, color:'#4ADE9A' },
+  { id:'actions', name:'GitHub Actions', fullName:'GitHub Actions', category:'Developer Tools', featured:false, color:'#2088FF' },
+  { id:'figma', name:'Figma', fullName:'Figma UI/UX', category:'Content Creation & Design', featured:false, color:'#F24E1E' },
+  { id:'canva', name:'Canva', fullName:'Canva Design', category:'Content Creation & Design', featured:false, color:'#00C4CC' },
+  { id:'bugtrack', name:'Bug Tracking', fullName:'Bug Tracking', category:'Testing Skills & Methodologies', featured:false, color:'#E8615C' },
+  { id:'mobile', name:'Mobile Testing', fullName:'Mobile Testing', category:'Testing Skills & Methodologies', featured:false, color:'#A78BFA' },
 ]
 
-const ang = (i, n, off = 0) => (Math.PI * 2 / n) * i + off
+function FibonacciSphereCluster({ activeCategory, hoveredSkillId, setHoveredSkillId, deviceTier, orbitDensity }) {
+  const groupRef = useRef()
 
-export const ALL_ORBIT_SKILLS = [
-  { id:'java',name:'Java',fullName:'Java Programming',category:'Languages & Querying',orbit:0,initialAngle:ang(0,5),color:'#F89820' },
-  { id:'js',name:'JavaScript',fullName:'JavaScript (ES6+)',category:'Languages & Querying',orbit:0,initialAngle:ang(1,5),color:'#F7DF1E' },
-  { id:'html',name:'HTML',fullName:'HTML5 Markup',category:'Languages & Querying',orbit:0,initialAngle:ang(2,5),color:'#E34F26' },
-  { id:'css',name:'CSS',fullName:'CSS3 Styling',category:'Languages & Querying',orbit:0,initialAngle:ang(3,5),color:'#1572B6' },
-  { id:'sql',name:'SQL',fullName:'SQL Queries',category:'Languages & Querying',orbit:0,initialAngle:ang(4,5),color:'#38BDF8' },
-
-  { id:'react',name:'React',fullName:'React.js',category:'Full Stack Development',orbit:1,initialAngle:ang(0,8,0.4),color:'#61DAFB' },
-  { id:'node',name:'Node.js',fullName:'Node.js Runtime',category:'Full Stack Development',orbit:1,initialAngle:ang(1,8,0.4),color:'#339933' },
-  { id:'express',name:'Express.js',fullName:'Express.js',category:'Full Stack Development',orbit:1,initialAngle:ang(2,8,0.4),color:'#E8EAED' },
-  { id:'mongo',name:'MongoDB',fullName:'MongoDB',category:'Full Stack Development',orbit:1,initialAngle:ang(3,8,0.4),color:'#47A248' },
-  { id:'redux',name:'Redux',fullName:'Redux',category:'Full Stack Development',orbit:1,initialAngle:ang(4,8,0.4),color:'#764ABC' },
-  { id:'tailwind',name:'Tailwind CSS',fullName:'Tailwind CSS',category:'Full Stack Development',orbit:1,initialAngle:ang(5,8,0.4),color:'#06B6D4' },
-  { id:'restapi',name:'REST APIs',fullName:'RESTful APIs',category:'Full Stack Development',orbit:1,initialAngle:ang(6,8,0.4),color:'#F2A93B' },
-  { id:'manual',name:'Manual Testing',fullName:'Manual QA',category:'Testing Skills & Methodologies',orbit:1,initialAngle:ang(7,8,0.4),color:'#F2A93B' },
-
-  { id:'selenium',name:'Selenium',fullName:'Selenium WebDriver',category:'Automation Tools & Frameworks',orbit:2,initialAngle:ang(0,9,0.9),color:'#43B02A' },
-  { id:'appium',name:'Appium',fullName:'Appium Mobile',category:'Automation Tools & Frameworks',orbit:2,initialAngle:ang(1,9,0.9),color:'#E42D42' },
-  { id:'testng',name:'TestNG',fullName:'TestNG Framework',category:'Automation Tools & Frameworks',orbit:2,initialAngle:ang(2,9,0.9),color:'#dc2626' },
-  { id:'junit',name:'JUnit',fullName:'JUnit Testing',category:'Automation Tools & Frameworks',orbit:2,initialAngle:ang(3,9,0.9),color:'#2563eb' },
-  { id:'restassured',name:'REST Assured',fullName:'REST Assured',category:'Automation Tools & Frameworks',orbit:2,initialAngle:ang(4,9,0.9),color:'#16a34a' },
-  { id:'postman',name:'Postman',fullName:'Postman API',category:'Automation Tools & Frameworks',orbit:2,initialAngle:ang(5,9,0.9),color:'#FF6C37' },
-  { id:'pom',name:'POM Pattern',fullName:'Page Object Model',category:'Design Patterns',orbit:2,initialAngle:ang(6,9,0.9),color:'#4ADE9A' },
-  { id:'ddt',name:'Data-Driven',fullName:'Data-Driven Testing',category:'Design Patterns',orbit:2,initialAngle:ang(7,9,0.9),color:'#F2A93B' },
-  { id:'apitest',name:'API Testing',fullName:'API Automation',category:'Testing Skills & Methodologies',orbit:2,initialAngle:ang(8,9,0.9),color:'#38BDF8' },
-
-  { id:'git',name:'Git',fullName:'Git Version Control',category:'Developer Tools',orbit:3,initialAngle:ang(0,10,1.5),color:'#F05032' },
-  { id:'github',name:'GitHub',fullName:'GitHub Repos',category:'Developer Tools',orbit:3,initialAngle:ang(1,10,1.5),color:'#E8EAED' },
-  { id:'jira',name:'Jira',fullName:'Jira Tracking',category:'Developer Tools',orbit:3,initialAngle:ang(2,10,1.5),color:'#0052CC' },
-  { id:'testrail',name:'TestRail',fullName:'TestRail Mgmt',category:'Developer Tools',orbit:3,initialAngle:ang(3,10,1.5),color:'#0052CC' },
-  { id:'jenkins',name:'Jenkins',fullName:'Jenkins CI/CD',category:'Developer Tools',orbit:3,initialAngle:ang(4,10,1.5),color:'#D24939' },
-  { id:'actions',name:'GitHub Actions',fullName:'GitHub Actions',category:'Developer Tools',orbit:3,initialAngle:ang(5,10,1.5),color:'#2088FF' },
-  { id:'cicd',name:'CI/CD',fullName:'CI/CD Pipelines',category:'Design Patterns',orbit:3,initialAngle:ang(6,10,1.5),color:'#4ADE9A' },
-  { id:'figma',name:'Figma',fullName:'Figma UI/UX',category:'Content Creation & Design',orbit:3,initialAngle:ang(7,10,1.5),color:'#F24E1E' },
-  { id:'canva',name:'Canva',fullName:'Canva Design',category:'Content Creation & Design',orbit:3,initialAngle:ang(8,10,1.5),color:'#00C4CC' },
-  { id:'bugtrack',name:'Bug Tracking',fullName:'Bug Tracking',category:'Testing Skills & Methodologies',orbit:3,initialAngle:ang(9,10,1.5),color:'#E8615C' },
-  { id:'mobile',name:'Mobile Testing',fullName:'Mobile Testing',category:'Testing Skills & Methodologies',orbit:3,initialAngle:ang(9,10,1.5+0.63),color:'#A78BFA' },
-  { id:'agile',name:'Agile',fullName:'Agile & Scrum',category:'Testing Skills & Methodologies',orbit:3,initialAngle:ang(9,10,1.5+1.26),color:'#4ADE9A' },
-]
-
-function useEarthTexture() {
-  return useMemo(() => {
-    const c = document.createElement('canvas'); c.width = 1024; c.height = 512
-    const ctx = c.getContext('2d')
-    const g = ctx.createLinearGradient(0,0,0,512)
-    g.addColorStop(0,'#091322'); g.addColorStop(0.5,'#0b192e'); g.addColorStop(1,'#08101d')
-    ctx.fillStyle = g; ctx.fillRect(0,0,1024,512)
-    ctx.strokeStyle = 'rgba(56,189,248,0.08)'; ctx.lineWidth = 1
-    for(let x=0;x<=1024;x+=64){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,512);ctx.stroke()}
-    for(let y=0;y<=512;y+=32){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(1024,y);ctx.stroke()}
-    const continents = [{cx:240,cy:170,rx:110,ry:75},{cx:310,cy:330,rx:65,ry:95},{cx:520,cy:150,rx:60,ry:50},{cx:530,cy:270,rx:80,ry:90},{cx:720,cy:160,rx:150,ry:95},{cx:830,cy:350,rx:60,ry:55},{cx:690,cy:230,rx:45,ry:45}]
-    ctx.fillStyle = 'rgba(74,222,154,0.65)'
-    continents.forEach(({cx,cy,rx,ry})=>{for(let x=cx-rx;x<=cx+rx;x+=12)for(let y=cy-ry;y<=cy+ry;y+=12){const dx=(x-cx)/rx,dy=(y-cy)/ry;if(dx*dx+dy*dy<=1){ctx.beginPath();ctx.arc(x+(Math.random()-0.5)*4,y+(Math.random()-0.5)*4,Math.sin(x*0.05+y*0.05)>0?2.5:1.8,0,Math.PI*2);ctx.fill()}}})
-    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t
-  }, [])
-}
-
-function ThreeDEarthGlobe() {
-  const ref = useRef(), atmo = useRef()
-  const tex = useEarthTexture()
-  useFrame((_,d) => { if(ref.current) ref.current.rotation.y+=d*0.08; if(atmo.current) atmo.current.rotation.y+=d*0.05 })
-  return (<group>
-    <mesh ref={ref}><sphereGeometry args={[1.6,64,64]}/><meshStandardMaterial map={tex} roughness={0.65} metalness={0.3} emissive="#091829" emissiveIntensity={0.4}/></mesh>
-    <mesh ref={atmo}><sphereGeometry args={[1.72,48,48]}/><meshBasicMaterial color="#4ADE9A" transparent opacity={0.12} side={THREE.BackSide} blending={THREE.AdditiveBlending}/></mesh>
-    <mesh><sphereGeometry args={[1.62,24,24]}/><meshBasicMaterial color="#38BDF8" wireframe transparent opacity={0.06}/></mesh>
-  </group>)
-}
-
-function OrbitRings() {
-  return (<group>{ORBIT_CONFIGS.map((c,i) => (
-    <mesh key={i} rotation={[c.rotX,0,c.rotZ]}><torusGeometry args={[c.radius,0.012,16,140]}/><meshBasicMaterial color={c.color} transparent opacity={0.30} blending={THREE.AdditiveBlending}/></mesh>
-  ))}</group>)
-}
-
-function OrbitingSkillNode({ skill, activeCategory, hoveredSkillId, setHoveredSkillId, deviceTier }) {
-  const cfg = ORBIT_CONFIGS[skill.orbit]
-  const angleRef = useRef(skill.initialAngle)
-  const [pos, setPos] = useState([0,0,0])
-  const [depthZ, setDepthZ] = useState(1)
-
-  useFrame((_,delta) => {
-    angleRef.current += cfg.speed * delta * (hoveredSkillId === skill.id ? 0.05 : 1.0)
-    const t = angleRef.current, R = cfg.radius
-    const lx = R*Math.cos(t), ly = R*Math.sin(t)
-    const y1 = ly*Math.cos(cfg.rotX), z1 = ly*Math.sin(cfg.rotX)
-    const x2 = lx*Math.cos(cfg.rotZ) - y1*Math.sin(cfg.rotZ)
-    const y2 = lx*Math.sin(cfg.rotZ) + y1*Math.cos(cfg.rotZ)
-    setPos([x2,y2,z1]); setDepthZ(z1)
+  useFrame((_, delta) => {
+    if (groupRef.current && !hoveredSkillId) {
+      groupRef.current.rotation.y += delta * 0.10
+    }
   })
 
-  const isMatch = !activeCategory || activeCategory === 'All' || skill.category === activeCategory
-  const isHov = hoveredSkillId === skill.id
-  const behind = depthZ < -0.2 && Math.sqrt(pos[0]**2+pos[1]**2) < 1.8
-  const op = !isMatch ? 0.05 : behind ? 0.15 : isHov ? 1 : 0.88
-  const sc = isHov ? 1.15 : behind ? 0.65 : 1
+  const visibleSkills = useMemo(() => {
+    return RAW_SKILLS.filter(s => orbitDensity !== 'core' || s.featured)
+  }, [orbitDensity])
 
-  // Dynamic distanceFactor & typography per device tier
-  const df = deviceTier === 'mobile' ? 24 : (deviceTier === 'tablet' ? 18 : 14)
-  const fontSz = deviceTier === 'mobile' ? '0.38rem' : (deviceTier === 'tablet' ? 0.44 + 'rem' : '0.50rem')
-  const iconSz = deviceTier === 'mobile' ? 6 : (deviceTier === 'tablet' ? 8 : 9)
-  const padStr = deviceTier === 'mobile' ? '1.5px 4px' : '2px 5px'
+  const N = visibleSkills.length
+  const phi = Math.PI * (3 - Math.sqrt(5)) // Golden ratio angle
+
+  const R = deviceTier === 'mobile' ? 2.6 : (deviceTier === 'tablet' ? 3.0 : 3.4)
+
+  const nodes = useMemo(() => {
+    return visibleSkills.map((skill, i) => {
+      const y = N > 1 ? 1 - (i / (N - 1)) * 2 : 0
+      const radiusAtY = Math.sqrt(Math.max(0, 1 - y * y))
+      const theta = phi * i
+      const x = Math.cos(theta) * radiusAtY * R
+      const z = Math.sin(theta) * radiusAtY * R
+      return { skill, pos: [x, y * R, z] }
+    })
+  }, [visibleSkills, N, R])
 
   return (
-    <Html position={pos} center distanceFactor={df} zIndexRange={[1,100]}
-      style={{ pointerEvents: isMatch&&!behind?'auto':'none', transition:'transform 0.15s ease,opacity 0.2s ease', transform:`scale(${sc})`, opacity:op, zIndex:isHov?100:behind?1:10 }}>
-      <div onMouseEnter={()=>setHoveredSkillId(skill.id)} onMouseLeave={()=>setHoveredSkillId(null)}
-        style={{ display:'inline-flex',alignItems:'center',gap:'3px',padding:padStr,borderRadius:'999px',
-          background:isHov?`color-mix(in srgb,${skill.color} 25%,#0a111a)`:'rgba(10,16,26,0.88)',
-          backdropFilter:'blur(4px)',border:`1px solid ${isHov?skill.color:'rgba(255,255,255,0.12)'}`,
-          boxShadow:isHov?`0 0 14px ${skill.color}80`:'0 1px 4px rgba(0,0,0,0.3)',
-          color:'#E5E7EB',fontFamily:'var(--font-mono)',fontSize:fontSz,fontWeight:600,
-          whiteSpace:'nowrap',cursor:'pointer',userSelect:'none',position:'relative' }}>
-        <SmartSkillIcon name={skill.name} size={iconSz}/>
-        <span>{skill.name}</span>
-        {isHov && (
-          <div style={{ position:'absolute',bottom:'140%',left:'50%',transform:'translateX(-50%)',background:'#070d14',
-            border:`1px solid ${skill.color}`,borderRadius:'6px',padding:'4px 8px',
-            boxShadow:`0 6px 16px rgba(0,0,0,0.8)`,zIndex:1000,pointerEvents:'none',minWidth:'100px',textAlign:'center' }}>
-            <div style={{fontSize:'0.45rem',color:skill.color,textTransform:'uppercase',letterSpacing:'0.06em'}}>{skill.category}</div>
-            <div style={{fontSize:'0.58rem',color:'#FFF',fontWeight:700,marginTop:'2px'}}>{skill.fullName}</div>
-          </div>
-        )}
-      </div>
-    </Html>
+    <group ref={groupRef}>
+      {/* Holographic Mesh Globe matching cluster radius */}
+      <mesh>
+        <sphereGeometry args={[R * 0.88, 32, 32]} />
+        <meshBasicMaterial color="#38BDF8" wireframe transparent opacity={0.10} />
+      </mesh>
+      {/* Inner Glowing Reactor Core */}
+      <mesh>
+        <sphereGeometry args={[1.1, 24, 24]} />
+        <meshStandardMaterial color="#081524" emissive="#4ADE9A" emissiveIntensity={0.4} wireframe />
+      </mesh>
+
+      {nodes.map(({ skill, pos }) => {
+        const isMatch = !activeCategory || activeCategory === 'All' || skill.category === activeCategory
+        const isHov = hoveredSkillId === skill.id
+        const df = deviceTier === 'mobile' ? 24 : (deviceTier === 'tablet' ? 18 : 15)
+        const fontSz = deviceTier === 'mobile' ? '0.38rem' : (deviceTier === 'tablet' ? '0.44rem' : '0.50rem')
+        const iconSz = deviceTier === 'mobile' ? 6 : (deviceTier === 'tablet' ? 8 : 9)
+
+        return (
+          <Html key={skill.id} position={pos} center distanceFactor={df} zIndexRange={[1,100]}
+            style={{
+              pointerEvents: isMatch ? 'auto' : 'none',
+              transition: 'transform 0.2s ease, opacity 0.2s ease',
+              transform: `scale(${isHov ? 1.2 : isMatch ? 1 : 0.75})`,
+              opacity: isHov ? 1.0 : isMatch ? 0.92 : 0.12,
+              zIndex: isHov ? 100 : 10,
+            }}>
+            <div onMouseEnter={() => setHoveredSkillId(skill.id)} onMouseLeave={() => setHoveredSkillId(null)}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '2.5px 7px', borderRadius: '999px',
+                background: isHov ? `color-mix(in srgb, ${skill.color} 25%, #070e17)` : 'rgba(10, 16, 26, 0.92)',
+                backdropFilter: 'blur(6px)', border: `1px solid ${isHov ? skill.color : 'rgba(255, 255, 255, 0.15)'}`,
+                boxShadow: isHov ? `0 0 16px ${skill.color}80` : '0 2px 6px rgba(0,0,0,0.4)',
+                color: '#E5E7EB', fontFamily: 'var(--font-mono)', fontSize: fontSz, fontWeight: 600,
+                whiteSpace: 'nowrap', cursor: 'pointer', userSelect: 'none', position: 'relative'
+              }}>
+              <SmartSkillIcon name={skill.name} size={iconSz} />
+              <span>{skill.name}</span>
+              {isHov && (
+                <div style={{ position:'absolute',bottom:'140%',left:'50%',transform:'translateX(-50%)',background:'#070d14',
+                  border:`1px solid ${skill.color}`,borderRadius:'6px',padding:'4px 8px',
+                  boxShadow:`0 6px 16px rgba(0,0,0,0.8)`,zIndex:1000,pointerEvents:'none',minWidth:'110px',textAlign:'center' }}>
+                  <div style={{fontSize:'0.45rem',color:skill.color,textTransform:'uppercase',letterSpacing:'0.06em'}}>{skill.category}</div>
+                  <div style={{fontSize:'0.58rem',color:'#FFF',fontWeight:700,marginTop:'2px'}}>{skill.fullName}</div>
+                </div>
+              )}
+            </div>
+          </Html>
+        )
+      })}
+    </group>
   )
 }
 
@@ -174,7 +162,7 @@ function getDeviceTier() {
   return 'desktop'
 }
 
-export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setHoveredSkillId }) {
+export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setHoveredSkillId, orbitDensity = 'core' }) {
   const [deviceTier, setDeviceTier] = useState(getDeviceTier)
 
   useEffect(() => {
@@ -183,10 +171,9 @@ export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setH
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // Adapt camera position & container height cleanly across all screen sizes
-  const camZ = deviceTier === 'mobile' ? 24 : (deviceTier === 'tablet' ? 18 : 14)
-  const fov = deviceTier === 'mobile' ? 48 : (deviceTier === 'tablet' ? 42 : 38)
-  const containerHeight = deviceTier === 'mobile' ? '380px' : (deviceTier === 'tablet' ? '480px' : '620px')
+  const camZ = deviceTier === 'mobile' ? 22 : (deviceTier === 'tablet' ? 18 : 15)
+  const fov = deviceTier === 'mobile' ? 44 : (deviceTier === 'tablet' ? 40 : 36)
+  const containerHeight = deviceTier === 'mobile' ? '420px' : (deviceTier === 'tablet' ? '500px' : '580px')
 
   return (
     <div style={{
@@ -195,26 +182,22 @@ export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setH
       position: 'relative',
       overflow: 'hidden',
       background: 'transparent',
-      touchAction: 'pan-y', // allows smooth vertical scrolling on mobile touch screens
+      touchAction: 'pan-y',
     }}>
-      <Canvas camera={{position:[0, 1.2, camZ], fov}} gl={{antialias:true,alpha:true}} dpr={[1, 1.5]} style={{background:'transparent'}}>
+      <Canvas camera={{position:[0, 0, camZ], fov}} gl={{antialias:true,alpha:true}} dpr={[1, 1.5]} style={{background:'transparent'}}>
         <ambientLight intensity={1.2}/>
         <directionalLight position={[10,10,10]} intensity={2.0} color="#FFFFFF"/>
         <directionalLight position={[-10,-10,-10]} intensity={0.8} color="#38BDF8"/>
         <pointLight position={[0,0,8]} intensity={1.2} color="#4ADE9A"/>
         <OrbitControls enableZoom={false} enablePan={false} rotateSpeed={0.6} autoRotate={!hoveredSkillId} autoRotateSpeed={0.4}/>
-        <ThreeDEarthGlobe/>
-        <OrbitRings/>
-        {ALL_ORBIT_SKILLS.map(s=>(
-          <OrbitingSkillNode
-            key={s.id}
-            skill={s}
-            activeCategory={activeCategory}
-            hoveredSkillId={hoveredSkillId}
-            setHoveredSkillId={setHoveredSkillId}
-            deviceTier={deviceTier}
-          />
-        ))}
+
+        <FibonacciSphereCluster
+          activeCategory={activeCategory}
+          hoveredSkillId={hoveredSkillId}
+          setHoveredSkillId={setHoveredSkillId}
+          deviceTier={deviceTier}
+          orbitDensity={orbitDensity}
+        />
       </Canvas>
     </div>
   )

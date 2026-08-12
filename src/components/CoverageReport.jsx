@@ -303,7 +303,8 @@ const CATEGORY_FILTERS = [
 
 export default function CoverageReport() {
   const [activeCategory, setActiveCategory] = useState('All')
-  const [viewMode, setViewMode] = useState('earth')
+  const [viewStyle, setViewStyle] = useState('sphere') // 'sphere', 'grid'
+  const [orbitDensity, setOrbitDensity] = useState('core')
   const [hoveredSkillId, setHoveredSkillId] = useState(null)
 
   return (
@@ -338,84 +339,113 @@ export default function CoverageReport() {
               </h2>
             </div>
 
-            <div
-              style={{
-                display: 'inline-flex',
-                background: 'rgba(13, 20, 30, 0.8)',
-                border: '1px solid var(--color-border-hairline)',
-                borderRadius: '999px',
-                padding: '4px',
-                gap: '4px',
-              }}
-            >
-              <button
-                onClick={() => setViewMode('earth')}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center', position: 'relative', zIndex: 20 }}>
+              {viewStyle === 'sphere' && (
+                <div
+                  style={{
+                    display: 'inline-flex',
+                    background: 'rgba(13, 20, 30, 0.8)',
+                    border: '1px solid var(--color-border-hairline)',
+                    borderRadius: '999px',
+                    padding: '4px',
+                    gap: '4px',
+                  }}
+                >
+                  <button
+                    onClick={() => setOrbitDensity('core')}
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.72rem',
+                      fontWeight: 600,
+                      padding: '6px 12px',
+                      borderRadius: '999px',
+                      border: 'none',
+                      background: orbitDensity === 'core' ? 'rgba(56, 189, 248, 0.2)' : 'transparent',
+                      color: orbitDensity === 'core' ? '#38BDF8' : 'var(--color-text-muted)',
+                      cursor: 'pointer',
+                      transition: 'all 0.25s ease',
+                    }}
+                  >
+                    🎯 Core Skills (18)
+                  </button>
+                  <button
+                    onClick={() => setOrbitDensity('all')}
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.72rem',
+                      fontWeight: 600,
+                      padding: '6px 12px',
+                      borderRadius: '999px',
+                      border: 'none',
+                      background: orbitDensity === 'all' ? 'rgba(56, 189, 248, 0.2)' : 'transparent',
+                      color: orbitDensity === 'all' ? '#38BDF8' : 'var(--color-text-muted)',
+                      cursor: 'pointer',
+                      transition: 'all 0.25s ease',
+                    }}
+                  >
+                    🌌 All Skills (34)
+                  </button>
+                </div>
+              )}
+
+              <div
                 style={{
                   display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.72rem',
-                  fontWeight: 600,
-                  padding: '6px 14px',
+                  background: 'rgba(13, 20, 30, 0.8)',
+                  border: '1px solid var(--color-border-hairline)',
                   borderRadius: '999px',
-                  border: 'none',
-                  background: viewMode === 'earth' ? 'var(--color-accent-pass)' : 'transparent',
-                  color: viewMode === 'earth' ? 'var(--color-bg-base)' : 'var(--color-text-muted)',
-                  cursor: 'pointer',
-                  transition: 'all 0.25s ease',
+                  padding: '4px',
+                  gap: '4px',
                 }}
               >
-                <Globe size={13} />
-                3D Earth
-              </button>
-              <button
-                onClick={() => setViewMode('both')}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.72rem',
-                  fontWeight: 600,
-                  padding: '6px 14px',
-                  borderRadius: '999px',
-                  border: 'none',
-                  background: viewMode === 'both' ? 'var(--color-accent-pass)' : 'transparent',
-                  color: viewMode === 'both' ? 'var(--color-bg-base)' : 'var(--color-text-muted)',
-                  cursor: 'pointer',
-                  transition: 'all 0.25s ease',
-                }}
-              >
-                <Sparkle size={13} />
-                Interactive Both
-              </button>
-              <button
-                onClick={() => setViewMode('grid')}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.72rem',
-                  fontWeight: 600,
-                  padding: '6px 14px',
-                  borderRadius: '999px',
-                  border: 'none',
-                  background: viewMode === 'grid' ? 'var(--color-accent-pass)' : 'transparent',
-                  color: viewMode === 'grid' ? 'var(--color-bg-base)' : 'var(--color-text-muted)',
-                  cursor: 'pointer',
-                  transition: 'all 0.25s ease',
-                }}
-              >
-                <Grid size={13} />
-                Grid View
-              </button>
+                <button
+                  onClick={() => setViewStyle('sphere')}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.72rem',
+                    fontWeight: 600,
+                    padding: '6px 14px',
+                    borderRadius: '999px',
+                    border: 'none',
+                    background: viewStyle === 'sphere' ? 'var(--color-accent-pass)' : 'transparent',
+                    color: viewStyle === 'sphere' ? 'var(--color-bg-base)' : 'var(--color-text-muted)',
+                    cursor: 'pointer',
+                    transition: 'all 0.25s ease',
+                  }}
+                >
+                  <Sparkle size={13} />
+                  3D Cyber Sphere
+                </button>
+                <button
+                  onClick={() => setViewStyle('grid')}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.72rem',
+                    fontWeight: 600,
+                    padding: '6px 14px',
+                    borderRadius: '999px',
+                    border: 'none',
+                    background: viewStyle === 'grid' ? 'var(--color-accent-pass)' : 'transparent',
+                    color: viewStyle === 'grid' ? 'var(--color-bg-base)' : 'var(--color-text-muted)',
+                    cursor: 'pointer',
+                    transition: 'all 0.25s ease',
+                  }}
+                >
+                  <Grid size={13} />
+                  Grid View
+                </button>
+              </div>
             </div>
           </div>
 
           <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.95rem', color: 'var(--color-text-muted)', maxWidth: '650px' }}>
-            3D interactive orbital view of full-stack engineering, QA automation frameworks, and developer toolchains revolving around the global ecosystem.
+            Interactive 3D visualization of full-stack engineering, QA automation frameworks, and developer toolchains.
           </p>
         </motion.div>
 
@@ -430,6 +460,8 @@ export default function CoverageReport() {
             gap: '0.5rem',
             marginBottom: '2rem',
             alignItems: 'center',
+            position: 'relative',
+            zIndex: 20,
           }}
         >
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--color-text-muted)', marginRight: '0.5rem' }}>
@@ -461,22 +493,23 @@ export default function CoverageReport() {
           })}
         </motion.div>
 
-        {(viewMode === 'earth' || viewMode === 'both') && (
+        {viewStyle === 'sphere' && (
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            style={{ marginBottom: viewMode === 'both' ? '3rem' : '0' }}
           >
             <EarthSkillsCanvas
               activeCategory={activeCategory}
               hoveredSkillId={hoveredSkillId}
               setHoveredSkillId={setHoveredSkillId}
+              orbitDensity={orbitDensity}
+              viewStyle="sphere"
             />
           </motion.div>
         )}
 
-        {(viewMode === 'grid' || viewMode === 'both') && (
+        {viewStyle === 'grid' && (
           <motion.div
             variants={containerVariants}
             initial="hidden"
