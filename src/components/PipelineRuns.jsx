@@ -16,6 +16,18 @@ const PROJECTS = [
     ],
   },
   {
+    title: 'RepoWiki AI',
+    featured: true,
+    description: 'AI-powered repository documentation & wiki generator that automatically analyzes codebase structures, extracts architecture insights, and produces comprehensive interactive markdown documentation.',
+    stack: ['React', 'Node.js', 'Google Gemini API', 'Express', 'Tailwind CSS'],
+    link: 'https://github.com/KISHOR403/repowiki-ai',
+    outcomes: [
+      'Automates multi-file codebase analysis and architecture mapping',
+      'Generates hierarchical wiki documentation with interactive diagrams',
+      'Integrates Gemini AI context management for fast and structured repo insights',
+    ],
+  },
+  {
     title: 'Doorkit',
     featured: true,
     description: 'A smart home security device marketplace web & mobile ecosystem, featuring a Node.js backend API and a React Native mobile application with state management, product catalogs, and cart checkout.',

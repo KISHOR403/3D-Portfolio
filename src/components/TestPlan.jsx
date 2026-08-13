@@ -80,7 +80,7 @@ const QUICK_FACTS = [
   {
     icon: '⚡',
     label: 'Currently building',
-    value: 'Testnexa AI (testnexa-ai.vercel.app)',
+    value: 'Testnexa AI & RepoWiki AI',
   },
 ]
 

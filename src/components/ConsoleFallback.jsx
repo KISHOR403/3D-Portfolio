@@ -104,10 +104,10 @@ export default function ConsoleFallback() {
     } else if (cmd === 'projects') {
       newLogs.push(
         { type: 'accent', text: '=== RECENT PIPELINE PROJECTS ===' },
-        { type: 'success', text: '✓ 3D Portfolio      [Vite + React + Three.js]' },
-        { type: 'success', text: '✓ EduVerse Admin    [Next.js + Tailwind + Fullstack]' },
-        { type: 'success', text: '✓ Repowiki AI       [FastAPI + Next.js + Redis]' },
-        { type: 'success', text: '✓ Asom Bazaar       [E-Commerce Modern UI]' }
+        { type: 'success', text: '✓ Testnexa AI       [React + Node.js + Gemini AI]' },
+        { type: 'success', text: '✓ RepoWiki AI       [React + Node.js + Gemini AI]' },
+        { type: 'success', text: '✓ Doorkit           [React Native + Redux + Node.js]' },
+        { type: 'success', text: '✓ Asom Bazaar       [React + Node.js + Express]' }
       )
     } else if (cmd.includes('hire') || cmd.includes('sudo hire')) {
       newLogs.push(

@@ -3,7 +3,7 @@ import { useRef, useEffect, useState } from 'react'
 const CHIPS = [
   { icon: '⬡', label: 'Full-Stack Builder', detail: 'MERN, React, Node.js, MongoDB' },
   { icon: '⬡', label: 'Content Creator', detail: 'Technical writing, video editing & social media' },
-  { icon: '⬡', label: 'Founder Mindset', detail: 'Testnexa AI, Asom Bazaar' },
+  { icon: '⬡', label: 'Founder Mindset', detail: 'Testnexa AI, RepoWiki AI, Asom Bazaar' },
 ]
 
 export default function BeyondTheConsole() {
