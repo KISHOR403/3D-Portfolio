@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 export default function Preloader({ onComplete }) {
   const [progress, setProgress] = useState(0)
   const [isComplete, setIsComplete] = useState(false)
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+  const [mousePos, setMousePos] = useState({ x: 50, y: 30 })
   const [pongPos, setPongPos] = useState(20)
 
   // Counter loop from 0 to 100
@@ -25,7 +25,7 @@ export default function Preloader({ onComplete }) {
           setIsComplete(true)
           setTimeout(() => {
             if (onComplete) onComplete()
-          }, 800) // Wait for expanding circle transition
+          }, 800)
         }, 500)
       }
     }, intervalTime)
@@ -33,7 +33,7 @@ export default function Preloader({ onComplete }) {
     return () => clearInterval(timer)
   }, [onComplete])
 
-  // Mini pong game animation frame in top-right
+  // Mini pong game animation frame
   useEffect(() => {
     let dir = 1
     const pongTimer = setInterval(() => {
@@ -46,11 +46,13 @@ export default function Preloader({ onComplete }) {
     return () => clearInterval(pongTimer)
   }, [])
 
-  const handleMouseMove = (e) => {
+  const handlePointerMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect()
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY
     setMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
+      x: clientX - rect.left,
+      y: clientY - rect.top,
     })
   }
 
@@ -70,11 +72,12 @@ export default function Preloader({ onComplete }) {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            padding: '2rem 3rem',
+            padding: '1.5rem 1.5rem',
             overflow: 'hidden',
             fontFamily: 'var(--font-sans)',
             userSelect: 'none',
           }}
+          className="preloader-wrapper"
         >
           {/* Top Bar Header */}
           <div
@@ -91,7 +94,7 @@ export default function Preloader({ onComplete }) {
               style={{
                 fontFamily: 'var(--font-display)',
                 fontWeight: 700,
-                fontSize: '1.2rem',
+                fontSize: '1.1rem',
                 letterSpacing: '-0.02em',
                 color: '#0F1419',
               }}
@@ -104,49 +107,44 @@ export default function Preloader({ onComplete }) {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '8px',
-                height: '32px',
-                width: '60px',
+                gap: '6px',
+                height: '28px',
+                width: '52px',
                 position: 'relative',
               }}
               title="Mini Pong Loader"
             >
-              {/* Left Paddle */}
               <div
                 style={{
                   width: '3px',
-                  height: '18px',
+                  height: '16px',
                   background: '#0F1419',
                   borderRadius: '2px',
-                  transform: `translateY(${Math.sin(pongPos * 0.1) * 6}px)`,
+                  transform: `translateY(${Math.sin(pongPos * 0.1) * 5}px)`,
                 }}
               />
-
-              {/* Bouncing Ball */}
               <div
                 style={{
-                  width: '6px',
-                  height: '6px',
+                  width: '5px',
+                  height: '5px',
                   borderRadius: '50%',
                   background: '#A855F7',
                   position: 'absolute',
                   left: `${pongPos}%`,
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  boxShadow: '0 0 8px rgba(168, 85, 247, 0.8)',
+                  boxShadow: '0 0 6px rgba(168, 85, 247, 0.8)',
                 }}
               />
-
-              {/* Right Paddle */}
               <div
                 style={{
                   width: '3px',
-                  height: '18px',
+                  height: '16px',
                   background: '#0F1419',
                   borderRadius: '2px',
                   position: 'absolute',
                   right: 0,
-                  transform: `translateY(${Math.cos(pongPos * 0.1) * 6}px)`,
+                  transform: `translateY(${Math.cos(pongPos * 0.1) * 5}px)`,
                 }}
               />
             </div>
@@ -173,7 +171,7 @@ export default function Preloader({ onComplete }) {
               style={{
                 display: 'inline-block',
                 fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(4rem, 12vw, 10rem)',
+                fontSize: 'clamp(3rem, 10vw, 8rem)',
                 fontWeight: 900,
                 letterSpacing: '0.04em',
                 textTransform: 'uppercase',
@@ -196,42 +194,43 @@ export default function Preloader({ onComplete }) {
             }}
           >
             <div
-              onMouseMove={handleMouseMove}
+              onMouseMove={handlePointerMove}
+              onTouchMove={handlePointerMove}
+              className="preloader-pill"
               style={{
                 position: 'relative',
                 background: '#0F1419',
                 color: '#FFFFFF',
                 borderRadius: '999px',
-                padding: '16px 44px',
+                padding: '14px 36px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '24px',
-                boxShadow: '0 20px 40px rgba(0, 0, 0, 0.25)',
+                gap: '18px',
+                boxShadow: '0 15px 35px rgba(0, 0, 0, 0.25)',
                 overflow: 'hidden',
                 cursor: 'default',
               }}
             >
-              {/* Dynamic Mouse Tracking Purple Radial Glow */}
+              {/* Dynamic Mouse/Touch Tracking Glow */}
               <div
                 style={{
                   position: 'absolute',
-                  top: mousePos.y - 60,
-                  left: mousePos.x - 60,
-                  width: '120px',
-                  height: '120px',
+                  top: mousePos.y - 50,
+                  left: mousePos.x - 50,
+                  width: '100px',
+                  height: '100px',
                   borderRadius: '50%',
-                  background: 'radial-gradient(circle, rgba(168, 85, 247, 0.7) 0%, transparent 70%)',
+                  background: 'radial-gradient(circle, rgba(168, 85, 247, 0.75) 0%, transparent 70%)',
                   pointerEvents: 'none',
-                  transition: 'opacity 0.2s',
                 }}
               />
 
               <span
                 style={{
                   fontFamily: 'var(--font-mono)',
-                  fontSize: '0.9rem',
+                  fontSize: '0.85rem',
                   fontWeight: 700,
-                  letterSpacing: '0.14em',
+                  letterSpacing: '0.12em',
                   textTransform: 'uppercase',
                   color: '#FFFFFF',
                   position: 'relative',
@@ -247,7 +246,7 @@ export default function Preloader({ onComplete }) {
                   alignItems: 'center',
                   gap: '4px',
                   fontFamily: 'var(--font-mono)',
-                  fontSize: '0.9rem',
+                  fontSize: '0.85rem',
                   fontWeight: 700,
                   color: '#4ADE9A',
                   position: 'relative',
@@ -259,10 +258,10 @@ export default function Preloader({ onComplete }) {
                   className="terminal-cursor"
                   style={{
                     display: 'inline-block',
-                    width: '8px',
-                    height: '15px',
+                    width: '7px',
+                    height: '14px',
                     background: '#4ADE9A',
-                    marginLeft: '4px',
+                    marginLeft: '3px',
                   }}
                 />
               </div>
@@ -278,10 +277,10 @@ export default function Preloader({ onComplete }) {
               width: '100%',
               zIndex: 2,
               fontFamily: 'var(--font-mono)',
-              fontSize: '0.75rem',
+              fontSize: '0.7rem',
               color: 'rgba(15, 20, 25, 0.6)',
               textTransform: 'uppercase',
-              letterSpacing: '0.08em',
+              letterSpacing: '0.06em',
             }}
           >
             <span>Initialising Portfolio...</span>
@@ -292,7 +291,7 @@ export default function Preloader({ onComplete }) {
           {progress === 100 && (
             <motion.div
               initial={{ scale: 0 }}
-              animate={{ scale: 45 }}
+              animate={{ scale: 50 }}
               transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
               style={{
                 position: 'absolute',
@@ -308,6 +307,18 @@ export default function Preloader({ onComplete }) {
               }}
             />
           )}
+
+          <style>{`
+            @media (max-width: 640px) {
+              .preloader-wrapper {
+                padding: 1.25rem 1rem !important;
+              }
+              .preloader-pill {
+                padding: 12px 24px !important;
+                gap: 12px !important;
+              }
+            }
+          `}</style>
         </motion.div>
       )}
     </AnimatePresence>

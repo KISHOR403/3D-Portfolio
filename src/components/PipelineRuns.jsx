@@ -248,8 +248,8 @@ function PipelineCard({ project, index, progress }) {
   const targetScale = 1 - ((TOTAL - index) * 0.04)
   const scale = useTransform(progress, [rangeStart, 1], [1, targetScale])
 
-  // Top offset for sticky stacking — each card peeks 28px below the previous
-  const stickyTop = 100 + index * 28
+  // Top offset for sticky stacking — each card peeks 24px below the previous
+  const stickyTop = 85 + index * 24
 
   return (
     <div
@@ -264,15 +264,15 @@ function PipelineCard({ project, index, progress }) {
       }}
     >
       <motion.div
-        className="corner-bracket-card"
+        className="corner-bracket-card pipeline-project-card"
         style={{
           scale,
           transformOrigin: 'top center',
           borderRadius: '16px',
-          padding: '2rem 2.25rem',
+          padding: '1.75rem 2rem',
           display: 'grid',
           gridTemplateColumns: 'auto 1fr',
-          gap: '2rem',
+          gap: '1.75rem',
           alignItems: 'start',
           width: '100%',
           maxWidth: '1000px',
@@ -287,19 +287,20 @@ function PipelineCard({ project, index, progress }) {
 
         {/* Left — Number Badge & Status area (Redoyanul Style) */}
         <div
+          className="project-badge-col"
           style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flex-start',
-            gap: '1rem',
-            minWidth: '130px',
+            gap: '0.85rem',
+            minWidth: '120px',
           }}
         >
           {/* Redoyanul Number Badge */}
           <span
             style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: '2.5rem',
+              fontSize: 'clamp(1.8rem, 5vw, 2.5rem)',
               fontWeight: 800,
               color: 'var(--color-accent-pass)',
               letterSpacing: '-0.04em',
@@ -312,9 +313,10 @@ function PipelineCard({ project, index, progress }) {
           <div
             style={{
               display: 'flex',
-              flexDirection: 'column',
-              gap: '0.5rem',
-              alignItems: 'flex-start',
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              gap: '0.4rem',
+              alignItems: 'center',
             }}
           >
             {/* Featured Tag */}
@@ -366,7 +368,7 @@ function PipelineCard({ project, index, progress }) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              gap: '1rem',
+              gap: '0.75rem',
               marginBottom: '0.5rem',
               flexWrap: 'wrap',
             }}
@@ -374,7 +376,7 @@ function PipelineCard({ project, index, progress }) {
             <h3
               style={{
                 fontFamily: 'var(--font-display)',
-                fontSize: '1.4rem',
+                fontSize: '1.3rem',
                 fontWeight: 700,
                 color: 'var(--color-text-primary)',
               }}
@@ -391,17 +393,18 @@ function PipelineCard({ project, index, progress }) {
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '6px',
+                  gap: '5px',
                   fontFamily: 'var(--font-mono)',
-                  fontSize: '0.75rem',
+                  fontSize: '0.72rem',
                   fontWeight: 600,
                   color: 'var(--color-accent-pass)',
                   textDecoration: 'none',
                   transition: 'all 0.25s ease',
-                  padding: '4px 12px',
+                  padding: '4px 10px',
                   borderRadius: '999px',
                   background: 'rgba(74, 222, 154, 0.08)',
                   border: '1px solid rgba(74, 222, 154, 0.2)',
+                  whiteSpace: 'nowrap',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = 'rgba(74, 222, 154, 0.18)'
@@ -412,7 +415,7 @@ function PipelineCard({ project, index, progress }) {
                   e.currentTarget.style.transform = 'translateX(0)'
                 }}
               >
-                <ExternalLink size={12} />
+                <ExternalLink size={11} />
                 {project.link.includes('github.com') ? 'REPOSITORY' : 'LIVE DEMO'}
               </a>
             )}
@@ -422,9 +425,9 @@ function PipelineCard({ project, index, progress }) {
             <p
               style={{
                 fontFamily: 'var(--font-mono)',
-                fontSize: '0.72rem',
+                fontSize: '0.7rem',
                 color: 'var(--color-text-muted)',
-                marginBottom: '0.6rem',
+                marginBottom: '0.5rem',
                 letterSpacing: '0.04em',
               }}
             >
@@ -435,10 +438,10 @@ function PipelineCard({ project, index, progress }) {
           <p
             style={{
               fontFamily: 'var(--font-sans)',
-              fontSize: '0.92rem',
-              lineHeight: 1.65,
+              fontSize: '0.88rem',
+              lineHeight: 1.6,
               color: 'var(--color-text-muted)',
-              marginBottom: '1.25rem',
+              marginBottom: '1.15rem',
             }}
           >
             {project.description}
@@ -449,8 +452,8 @@ function PipelineCard({ project, index, progress }) {
             style={{
               display: 'flex',
               flexWrap: 'wrap',
-              gap: '0.4rem',
-              marginBottom: '1.25rem',
+              gap: '0.35rem',
+              marginBottom: '1.15rem',
             }}
           >
             {project.stack.map((tech, j) => (
@@ -458,9 +461,9 @@ function PipelineCard({ project, index, progress }) {
                 key={j}
                 style={{
                   fontFamily: 'var(--font-mono)',
-                  fontSize: '0.7rem',
+                  fontSize: '0.68rem',
                   fontWeight: 500,
-                  padding: '4px 10px',
+                  padding: '3px 9px',
                   borderRadius: '999px',
                   background: 'rgba(35, 44, 53, 0.8)',
                   border: '1px solid var(--color-border-hairline)',
@@ -471,7 +474,7 @@ function PipelineCard({ project, index, progress }) {
                   gap: '0.35rem',
                 }}
               >
-                {renderProjectSkillIcon(tech, 11)}
+                {renderProjectSkillIcon(tech, 10)}
                 <span>{tech}</span>
               </span>
             ))}
@@ -484,7 +487,7 @@ function PipelineCard({ project, index, progress }) {
               padding: 0,
               display: 'flex',
               flexDirection: 'column',
-              gap: '0.4rem',
+              gap: '0.35rem',
             }}
           >
             {project.outcomes.map((outcome, j) => (
@@ -495,7 +498,7 @@ function PipelineCard({ project, index, progress }) {
                   alignItems: 'flex-start',
                   gap: '8px',
                   fontFamily: 'var(--font-sans)',
-                  fontSize: '0.84rem',
+                  fontSize: '0.82rem',
                   lineHeight: 1.5,
                   color: 'var(--color-text-primary)',
                 }}
@@ -503,7 +506,7 @@ function PipelineCard({ project, index, progress }) {
                 <span
                   style={{
                     color: 'var(--color-accent-pass)',
-                    fontSize: '0.7rem',
+                    fontSize: '0.65rem',
                     marginTop: '2px',
                     flexShrink: 0,
                   }}
@@ -518,8 +521,16 @@ function PipelineCard({ project, index, progress }) {
 
         <style>{`
           @media (max-width: 650px) {
-            [style*="grid-template-columns: auto 1fr"] {
+            .pipeline-project-card {
               grid-template-columns: 1fr !important;
+              padding: 1.25rem 1rem !important;
+              gap: 1rem !important;
+            }
+            .project-badge-col {
+              flex-direction: row !important;
+              align-items: center !important;
+              justify-content: space-between !important;
+              width: 100% !important;
             }
           }
         `}</style>
@@ -548,7 +559,7 @@ export default function PipelineRuns() {
           <h2
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: '2.2rem',
+              fontSize: 'clamp(1.8rem, 5vw, 2.4rem)',
               fontWeight: 700,
               letterSpacing: '-0.02em',
               color: 'var(--color-text-primary)',
@@ -562,7 +573,7 @@ export default function PipelineRuns() {
               fontFamily: 'var(--font-mono)',
               fontSize: '0.78rem',
               color: 'var(--color-text-muted)',
-              marginBottom: '3.5rem',
+              marginBottom: '3rem',
               letterSpacing: '0.03em',
             }}
           >
