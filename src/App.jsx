@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Preloader from './components/Preloader'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import StatusStrip from './components/StatusStrip'
@@ -13,6 +14,7 @@ import PipelineGridBg from './components/PipelineGridBg'
 import ResumeModal from './components/ResumeModal'
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState(true)
   const [isResumeModalOpen, setIsResumeModalOpen] = useState(false)
 
   const openResumeModal = () => setIsResumeModalOpen(true)
@@ -20,6 +22,7 @@ export default function App() {
 
   return (
     <>
+      {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
       <PipelineGridBg />
       <Navbar onOpenResume={openResumeModal} />
       <main style={{ position: 'relative', zIndex: 1 }}>
@@ -37,5 +40,3 @@ export default function App() {
     </>
   )
 }
-
-
