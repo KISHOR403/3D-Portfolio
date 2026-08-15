@@ -21,12 +21,14 @@ export default function Preloader({ onComplete }) {
 
       if (currentStep >= steps) {
         clearInterval(timer)
+        // Show WELCOME text briefly, then trigger circle mask reveal
         setTimeout(() => {
           setIsComplete(true)
+          // Allow circle mask expansion + exit animation to finish before unmounting
           setTimeout(() => {
             if (onComplete) onComplete()
-          }, 800)
-        }, 500)
+          }, 1200)
+        }, 400)
       }
     }, intervalTime)
 
@@ -61,7 +63,7 @@ export default function Preloader({ onComplete }) {
       {!isComplete && (
         <motion.div
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: 0.6, delay: 0.4 } }}
+          exit={{ opacity: 0, transition: { duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.3 } }}
           id="preloader-overlay"
           style={{
             position: 'fixed',
@@ -290,9 +292,9 @@ export default function Preloader({ onComplete }) {
           {/* Expanding Circle Mask for Smooth Reveal */}
           {progress === 100 && (
             <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 50 }}
-              transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
+              initial={{ scale: 0, opacity: 0.8 }}
+              animate={{ scale: 50, opacity: 1 }}
+              transition={{ duration: 1, ease: [0.65, 0, 0.35, 1] }}
               style={{
                 position: 'absolute',
                 top: '50%',
