@@ -4,6 +4,7 @@ import { Check, ExternalLink, Star, Lock, Box, Cpu } from 'lucide-react'
 
 const PROJECTS = [
   {
+    num: '01',
     title: 'Testnexa AI',
     featured: true,
     description: 'AI-powered SaaS tool that generates enterprise-grade QA test cases using Google Gemini API, structured for direct export into TMS platforms like TestRail, Jira Zephyr, and Azure DevOps.',
@@ -16,6 +17,7 @@ const PROJECTS = [
     ],
   },
   {
+    num: '02',
     title: 'RepoWiki AI',
     featured: true,
     description: 'AI-powered repository documentation & wiki generator that automatically analyzes codebase structures, extracts architecture insights, and produces comprehensive interactive markdown documentation.',
@@ -28,7 +30,8 @@ const PROJECTS = [
     ],
   },
   {
-    title: 'Doorkit',
+    num: '03',
+    title: 'Doorkit Marketplace',
     featured: true,
     description: 'A smart home security device marketplace web & mobile ecosystem, featuring a Node.js backend API and a React Native mobile application with state management, product catalogs, and cart checkout.',
     stack: ['React Native', 'Redux', 'Node.js', 'Express', 'MongoDB'],
@@ -40,6 +43,7 @@ const PROJECTS = [
     ],
   },
   {
+    num: '04',
     title: 'Asom Bazaar',
     featured: true,
     description: 'A localized e-commerce marketplace tailored for local sellers in Assam and Northeast India, featuring comprehensive multi-step seller onboarding, a seller dashboard with sales analytics, and automated testing.',
@@ -52,6 +56,7 @@ const PROJECTS = [
     ],
   },
   {
+    num: '05',
     title: 'AI-Powered MERN E-Commerce',
     featured: true,
     description: 'Full-featured e-commerce platform integrated with AI-driven product recommendations, secure Stripe payment gateway, and an administrative dashboard.',
@@ -64,7 +69,8 @@ const PROJECTS = [
     ],
   },
   {
-    title: 'ASTROTALK',
+    num: '06',
+    title: 'ASTROTALK Platform',
     featured: true,
     description: 'Astrology consultation web platform facilitating real-time planetary position calculations, birth chart reports, and consultant scheduling.',
     stack: ['React', 'Node.js', 'Express', 'MongoDB', 'Astro API', 'Tailwind CSS'],
@@ -76,9 +82,10 @@ const PROJECTS = [
     ],
   },
   {
+    num: '07',
     title: 'Mobile App Testing — Weather App',
     period: 'April 2026 – May 2026',
-    description: 'End-to-end scripted test execution of a Weather Forecast Android app.',
+    description: 'End-to-end scripted test execution of a Weather Forecast Android app using Appium & Page Object Model.',
     stack: ['Appium', 'Java', 'TestNG', 'POM'],
     outcomes: [
       'Page Object Model for clean screen separation',
@@ -87,6 +94,7 @@ const PROJECTS = [
     ],
   },
   {
+    num: '08',
     title: 'Web Automation Framework',
     period: 'January 2026 – February 2026',
     description: 'Scalable web automation framework aligned with POM design principles.',
@@ -98,6 +106,7 @@ const PROJECTS = [
     ],
   },
   {
+    num: '09',
     title: 'API Automation Testing',
     period: 'February 2026 – March 2026',
     description: 'Structured API test suite covering authentication, product discovery, cart, and order flows.',
@@ -132,8 +141,8 @@ const TestNGIcon = ({ size = 10 }) => (
     >
       Tn
     </text>
-    <path d="M70 20 L90 20 L90 40" stroke="white" stroke-width="5" fill="none" />
-    <path d="M30 80 L10 80 L10 60" stroke="white" stroke-width="5" fill="none" />
+    <path d="M70 20 L90 20 L90 40" stroke="white" strokeWidth="5" fill="none" />
+    <path d="M30 80 L10 80 L10 60" stroke="white" strokeWidth="5" fill="none" />
   </svg>
 )
 
@@ -163,7 +172,7 @@ const RestAssuredIcon = ({ size = 10 }) => (
     >
       RA
     </text>
-    <path d="M20 50 A 30 30 0 0 1 80 50" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" />
+    <path d="M20 50 A 30 30 0 0 1 80 50" stroke="white" strokeWidth="3" fill="none" strokeLinecap="round" />
   </svg>
 )
 
@@ -239,7 +248,7 @@ function PipelineCard({ project, index, progress }) {
   const targetScale = 1 - ((TOTAL - index) * 0.04)
   const scale = useTransform(progress, [rangeStart, 1], [1, targetScale])
 
-  // Top offset for the sticky stacking — each card peeks 28px below the previous
+  // Top offset for sticky stacking — each card peeks 28px below the previous
   const stickyTop = 100 + index * 28
 
   return (
@@ -255,101 +264,121 @@ function PipelineCard({ project, index, progress }) {
       }}
     >
       <motion.div
+        className="corner-bracket-card"
         style={{
           scale,
           transformOrigin: 'top center',
-          background: 'var(--color-bg-base)',
-          border: '1px solid var(--color-border-hairline)',
           borderRadius: '16px',
-          padding: '1.75rem',
+          padding: '2rem 2.25rem',
           display: 'grid',
           gridTemplateColumns: 'auto 1fr',
-          gap: '1.5rem',
+          gap: '2rem',
           alignItems: 'start',
-          transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
           width: '100%',
           maxWidth: '1000px',
-          boxShadow: '0 -4px 30px rgba(0, 0, 0, 0.35)',
+          boxShadow: '0 -4px 30px rgba(0, 0, 0, 0.45)',
         }}
         whileInView={{ opacity: 1 }}
         initial={{ opacity: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         onViewportEnter={() => { if (phase === 'idle') setPhase('running') }}
-        onMouseEnter={e => {
-          e.currentTarget.style.borderColor = 'rgba(74, 222, 154, 0.3)'
-          e.currentTarget.style.boxShadow = '0 4px 40px rgba(0,0,0,0.45)'
-        }}
-        onMouseLeave={e => {
-          e.currentTarget.style.borderColor = 'var(--color-border-hairline)'
-          e.currentTarget.style.boxShadow = '0 -4px 30px rgba(0, 0, 0, 0.35)'
-        }}
       >
-        {/* Left — Status badge area */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: '0.5rem',
-          flexWrap: 'wrap',
-          minWidth: '140px',
-          paddingTop: '4px',
-        }}>
-          {/* Featured tag */}
-          {project.featured && (
-            <span className="status-badge status-badge--featured">
-              <Star size={10} fill="currentColor" />
-              Featured
-            </span>
-          )}
+        <div className="corner-bracket-corners" />
 
-          {/* Status badge — animated transition */}
-          {phase === 'running' && (
-            <motion.span
-              className="status-badge status-badge--running"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.25 }}
-            >
-              <span className="pulse-dot" />
-              Running...
-            </motion.span>
-          )}
+        {/* Left — Number Badge & Status area (Redoyanul Style) */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            gap: '1rem',
+            minWidth: '130px',
+          }}
+        >
+          {/* Redoyanul Number Badge */}
+          <span
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '2.5rem',
+              fontWeight: 800,
+              color: 'var(--color-accent-pass)',
+              letterSpacing: '-0.04em',
+              lineHeight: 1,
+            }}
+          >
+            {project.num}
+          </span>
 
-          {phase === 'passed' && (
-            <motion.span
-              className="status-badge status-badge--passed"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <Check size={10} strokeWidth={3} />
-              Passed
-            </motion.span>
-          )}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.5rem',
+              alignItems: 'flex-start',
+            }}
+          >
+            {/* Featured Tag */}
+            {project.featured && (
+              <span className="status-badge status-badge--featured">
+                <Star size={10} fill="currentColor" />
+                Featured
+              </span>
+            )}
 
-          {phase === 'idle' && (
-            <span className="status-badge status-badge--passed" style={{ opacity: 0.3 }}>
-              <Check size={10} strokeWidth={3} />
-              Passed
-            </span>
-          )}
+            {/* Status badge — animated transition */}
+            {phase === 'running' && (
+              <motion.span
+                className="status-badge status-badge--running"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.25 }}
+              >
+                <span className="pulse-dot" />
+                Running...
+              </motion.span>
+            )}
+
+            {phase === 'passed' && (
+              <motion.span
+                className="status-badge status-badge--passed"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <Check size={10} strokeWidth={3} />
+                Passed
+              </motion.span>
+            )}
+
+            {phase === 'idle' && (
+              <span className="status-badge status-badge--passed" style={{ opacity: 0.3 }}>
+                <Check size={10} strokeWidth={3} />
+                Passed
+              </span>
+            )}
+          </div>
         </div>
 
-        {/* Right — Content */}
+        {/* Right — Project Details Content */}
         <div>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.75rem',
-            marginBottom: '0.5rem',
-            flexWrap: 'wrap',
-          }}>
-            <h3 style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '1.15rem',
-              fontWeight: 600,
-              color: 'var(--color-text-primary)',
-            }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '1rem',
+              marginBottom: '0.5rem',
+              flexWrap: 'wrap',
+            }}
+          >
+            <h3
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '1.4rem',
+                fontWeight: 700,
+                color: 'var(--color-text-primary)',
+              }}
+            >
               {project.title}
             </h3>
 
@@ -362,96 +391,125 @@ function PipelineCard({ project, index, progress }) {
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '4px',
+                  gap: '6px',
                   fontFamily: 'var(--font-mono)',
-                  fontSize: '0.65rem',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
                   color: 'var(--color-accent-pass)',
                   textDecoration: 'none',
-                  transition: 'opacity 0.2s',
+                  transition: 'all 0.25s ease',
+                  padding: '4px 12px',
+                  borderRadius: '999px',
+                  background: 'rgba(74, 222, 154, 0.08)',
+                  border: '1px solid rgba(74, 222, 154, 0.2)',
                 }}
-                onMouseEnter={e => e.currentTarget.style.opacity = '0.7'}
-                onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(74, 222, 154, 0.18)'
+                  e.currentTarget.style.transform = 'translateX(2px)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(74, 222, 154, 0.08)'
+                  e.currentTarget.style.transform = 'translateX(0)'
+                }}
               >
-                <ExternalLink size={10} />
-                {project.link.includes('github.com') ? 'REPOSITORY' : 'LIVE'}
+                <ExternalLink size={12} />
+                {project.link.includes('github.com') ? 'REPOSITORY' : 'LIVE DEMO'}
               </a>
             )}
           </div>
 
           {project.period && (
-            <p style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.7rem',
-              color: 'var(--color-text-muted)',
-              marginBottom: '0.5rem',
-              letterSpacing: '0.04em',
-            }}>
+            <p
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.72rem',
+                color: 'var(--color-text-muted)',
+                marginBottom: '0.6rem',
+                letterSpacing: '0.04em',
+              }}
+            >
               {project.period}
             </p>
           )}
 
-          <p style={{
-            fontFamily: 'var(--font-sans)',
-            fontSize: '0.875rem',
-            lineHeight: 1.6,
-            color: 'var(--color-text-muted)',
-            marginBottom: '1rem',
-          }}>
+          <p
+            style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: '0.92rem',
+              lineHeight: 1.65,
+              color: 'var(--color-text-muted)',
+              marginBottom: '1.25rem',
+            }}
+          >
             {project.description}
           </p>
 
           {/* Stack tags */}
-          <div style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '0.375rem',
-            marginBottom: '1rem',
-          }}>
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '0.4rem',
+              marginBottom: '1.25rem',
+            }}
+          >
             {project.stack.map((tech, j) => (
-              <span key={j} style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.65rem',
-                fontWeight: 500,
-                padding: '3px 8px',
-                borderRadius: '4px',
-                background: 'rgba(35, 44, 53, 0.8)',
-                border: '1px solid var(--color-border-hairline)',
-                color: 'var(--color-text-muted)',
-                letterSpacing: '0.03em',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.35rem',
-              }}>
-                {renderProjectSkillIcon(tech, 10)}
+              <span
+                key={j}
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.7rem',
+                  fontWeight: 500,
+                  padding: '4px 10px',
+                  borderRadius: '999px',
+                  background: 'rgba(35, 44, 53, 0.8)',
+                  border: '1px solid var(--color-border-hairline)',
+                  color: 'var(--color-text-primary)',
+                  letterSpacing: '0.03em',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                }}
+              >
+                {renderProjectSkillIcon(tech, 11)}
                 <span>{tech}</span>
               </span>
             ))}
           </div>
 
-          {/* Outcomes */}
-          <ul style={{
-            listStyle: 'none',
-            padding: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '0.375rem',
-          }}>
+          {/* Outcomes list with Redoyanul arrow markers */}
+          <ul
+            style={{
+              listStyle: 'none',
+              padding: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.4rem',
+            }}
+          >
             {project.outcomes.map((outcome, j) => (
-              <li key={j} style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '8px',
-                fontFamily: 'var(--font-sans)',
-                fontSize: '0.8rem',
-                lineHeight: 1.5,
-                color: 'var(--color-text-primary)',
-              }}>
-                <span style={{
-                  color: 'var(--color-accent-pass)',
-                  fontSize: '0.6rem',
-                  marginTop: '4px',
-                  flexShrink: 0,
-                }}>▸</span>
+              <li
+                key={j}
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '8px',
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '0.84rem',
+                  lineHeight: 1.5,
+                  color: 'var(--color-text-primary)',
+                }}
+              >
+                <span
+                  style={{
+                    color: 'var(--color-accent-pass)',
+                    fontSize: '0.7rem',
+                    marginTop: '2px',
+                    flexShrink: 0,
+                  }}
+                >
+                  ▸
+                </span>
                 {outcome}
               </li>
             ))}
@@ -459,7 +517,7 @@ function PipelineCard({ project, index, progress }) {
         </div>
 
         <style>{`
-          @media (max-width: 600px) {
+          @media (max-width: 650px) {
             [style*="grid-template-columns: auto 1fr"] {
               grid-template-columns: 1fr !important;
             }
@@ -486,26 +544,30 @@ export default function PipelineRuns() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.5 }}
         >
-          <p className="section-eyebrow">Pipeline Runs</p>
-          <p style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.75rem',
-            color: 'var(--color-text-muted)',
-            marginBottom: '3rem',
-            letterSpacing: '0.03em',
-          }}>
-            Scroll to explore — stacking case-study format
-          </p>
-          <h2 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: '2rem',
-            fontWeight: 600,
-            letterSpacing: '-0.02em',
-            color: 'var(--color-text-primary)',
-            marginBottom: '3rem',
-          }}>
-            Projects
+          <p className="section-eyebrow">// FEATURED WORK</p>
+          <h2
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '2.2rem',
+              fontWeight: 700,
+              letterSpacing: '-0.02em',
+              color: 'var(--color-text-primary)',
+              marginBottom: '0.5rem',
+            }}
+          >
+            Projects &amp; Case Studies
           </h2>
+          <p
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.78rem',
+              color: 'var(--color-text-muted)',
+              marginBottom: '3.5rem',
+              letterSpacing: '0.03em',
+            }}
+          >
+            Scroll to explore — Redoyanul-styled numbered project cards
+          </p>
         </motion.div>
 
         <div
