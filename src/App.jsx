@@ -13,6 +13,7 @@ import QualityGates from './components/QualityGates'
 import Deploy from './components/Deploy'
 import PipelineGridBg from './components/PipelineGridBg'
 import ResumeModal from './components/ResumeModal'
+import Sidebar from './components/Sidebar'
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -43,6 +44,7 @@ export default function App() {
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       >
         <PipelineGridBg />
+        <Sidebar />
         <Navbar onOpenResume={openResumeModal} />
         <motion.main
           style={{ position: 'relative', zIndex: 1 }}
