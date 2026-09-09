@@ -1,328 +1,441 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+
+/* ═══════════════════════════════════════════════════════════════
+   Swiss International Typographic Style — Loading Screen
+   ═══════════════════════════════════════════════════════════════
+   Grid-based ·  High contrast ·  Geometric precision
+   ─────────────────────────────────────────────────────────────── */
+
+const DURATION_MS = 2400 // Total simulated load time
+const TICK_MS = 20
+
+// Eased progress so the bar decelerates naturally
+function easeOutQuart(t) {
+  return 1 - Math.pow(1 - t, 4)
+}
 
 export default function Preloader({ onComplete }) {
   const [progress, setProgress] = useState(0)
-  const [isComplete, setIsComplete] = useState(false)
-  const [mousePos, setMousePos] = useState({ x: 50, y: 30 })
-  const [pongPos, setPongPos] = useState(20)
+  const [isExiting, setIsExiting] = useState(false)
+  const startRef = useRef(null)
+  const rafRef = useRef(null)
 
-  // Counter loop from 0 to 100
+  // Smooth RAF-driven progress counter
   useEffect(() => {
-    const duration = 2200 // 2.2s total loading time
-    const intervalTime = 25
-    const steps = duration / intervalTime
-    let currentStep = 0
+    startRef.current = performance.now()
 
-    const timer = setInterval(() => {
-      currentStep++
-      const nextProgress = Math.min(100, Math.floor((currentStep / steps) * 100))
-      setProgress(nextProgress)
+    const tick = () => {
+      const elapsed = performance.now() - startRef.current
+      const raw = Math.min(elapsed / DURATION_MS, 1)
+      const eased = easeOutQuart(raw)
+      setProgress(Math.min(100, Math.floor(eased * 100)))
 
-      if (currentStep >= steps) {
-        clearInterval(timer)
-        // Show WELCOME text briefly, then trigger circle mask reveal
+      if (raw < 1) {
+        rafRef.current = requestAnimationFrame(tick)
+      } else {
+        setProgress(100)
+        // Brief pause at 100% then begin exit
         setTimeout(() => {
-          setIsComplete(true)
-          // Allow circle mask expansion + exit animation to finish before unmounting
+          setIsExiting(true)
           setTimeout(() => {
             if (onComplete) onComplete()
-          }, 1200)
-        }, 400)
+          }, 900)
+        }, 350)
       }
-    }, intervalTime)
+    }
 
-    return () => clearInterval(timer)
+    rafRef.current = requestAnimationFrame(tick)
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+    }
   }, [onComplete])
 
-  // Mini pong game animation frame
-  useEffect(() => {
-    let dir = 1
-    const pongTimer = setInterval(() => {
-      setPongPos((prev) => {
-        if (prev > 70) dir = -1
-        if (prev < 15) dir = 1
-        return prev + dir * 3
-      })
-    }, 40)
-    return () => clearInterval(pongTimer)
-  }, [])
-
-  const handlePointerMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY
-    setMousePos({
-      x: clientX - rect.left,
-      y: clientY - rect.top,
-    })
-  }
+  const progressFraction = progress / 100
+  const displayNum = String(progress).padStart(3, '0')
 
   return (
     <AnimatePresence>
-      {!isComplete && (
+      {!isExiting && (
         <motion.div
+          key="swiss-preloader"
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.3 } }}
-          id="preloader-overlay"
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 9999,
-            background: '#EAE5EC',
-            color: '#0F1419',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            padding: '1.5rem 1.5rem',
-            overflow: 'hidden',
-            fontFamily: 'var(--font-sans)',
-            userSelect: 'none',
+          exit={{
+            opacity: 0,
+            transition: { duration: 0.7, ease: [0.65, 0, 0.35, 1] },
           }}
-          className="preloader-wrapper"
+          style={styles.overlay}
         >
-          {/* Top Bar Header */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              width: '100%',
-              zIndex: 2,
-            }}
-          >
-            {/* Top Left Brand Name */}
-            <div
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontWeight: 700,
-                fontSize: '1.1rem',
-                letterSpacing: '-0.02em',
-                color: '#0F1419',
-              }}
-            >
-              KishorGogoi
-            </div>
-
-            {/* Top Right Animated Pong Game */}
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                height: '28px',
-                width: '52px',
-                position: 'relative',
-              }}
-              title="Mini Pong Loader"
-            >
-              <div
+          {/* ── Background grid lines ── */}
+          <div style={styles.gridContainer} aria-hidden="true">
+            {/* Vertical grid lines */}
+            {[16.666, 33.333, 50, 66.666, 83.333].map((pos, i) => (
+              <motion.div
+                key={`v-${i}`}
+                initial={{ scaleY: 0 }}
+                animate={{ scaleY: 1 }}
+                transition={{ duration: 0.6, delay: 0.05 * i, ease: [0.22, 1, 0.36, 1] }}
                 style={{
-                  width: '3px',
-                  height: '16px',
-                  background: '#0F1419',
-                  borderRadius: '2px',
-                  transform: `translateY(${Math.sin(pongPos * 0.1) * 5}px)`,
+                  ...styles.gridLineV,
+                  left: `${pos}%`,
                 }}
               />
-              <div
+            ))}
+            {/* Horizontal grid lines */}
+            {[25, 50, 75].map((pos, i) => (
+              <motion.div
+                key={`h-${i}`}
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.6, delay: 0.08 * i + 0.1, ease: [0.22, 1, 0.36, 1] }}
                 style={{
-                  width: '5px',
-                  height: '5px',
-                  borderRadius: '50%',
-                  background: '#A855F7',
-                  position: 'absolute',
-                  left: `${pongPos}%`,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  boxShadow: '0 0 6px rgba(168, 85, 247, 0.8)',
+                  ...styles.gridLineH,
+                  top: `${pos}%`,
                 }}
               />
-              <div
-                style={{
-                  width: '3px',
-                  height: '16px',
-                  background: '#0F1419',
-                  borderRadius: '2px',
-                  position: 'absolute',
-                  right: 0,
-                  transform: `translateY(${Math.cos(pongPos * 0.1) * 5}px)`,
-                }}
-              />
-            </div>
+            ))}
           </div>
 
-          {/* Background Marquee Text */}
-          <div
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: 0,
-              right: 0,
-              transform: 'translateY(-50%)',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              pointerEvents: 'none',
-              zIndex: 1,
-              opacity: 0.12,
-            }}
-          >
+          {/* ── Geometric accents ── */}
+          <div style={styles.geoContainer} aria-hidden="true">
+            {/* Top-right rectangle block */}
             <motion.div
-              animate={{ x: ['0%', '-50%'] }}
-              transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
-              style={{
-                display: 'inline-block',
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(3rem, 10vw, 8rem)',
-                fontWeight: 900,
-                letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-                color: '#0F1419',
-              }}
-            >
-              FULL STACK DEVELOPER &nbsp;•&nbsp; QA AUTOMATION ENGINEER &nbsp;•&nbsp; CONTENT CREATOR &nbsp;•&nbsp; FULL STACK DEVELOPER &nbsp;•&nbsp; QA AUTOMATION ENGINEER &nbsp;•&nbsp;
-            </motion.div>
-          </div>
-
-          {/* Center Pill Button & Counter */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '100%',
-              zIndex: 3,
-              position: 'relative',
-            }}
-          >
-            <div
-              onMouseMove={handlePointerMove}
-              onTouchMove={handlePointerMove}
-              className="preloader-pill"
-              style={{
-                position: 'relative',
-                background: '#0F1419',
-                color: '#FFFFFF',
-                borderRadius: '999px',
-                padding: '14px 36px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '18px',
-                boxShadow: '0 15px 35px rgba(0, 0, 0, 0.25)',
-                overflow: 'hidden',
-                cursor: 'default',
-              }}
-            >
-              {/* Dynamic Mouse/Touch Tracking Glow */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: mousePos.y - 50,
-                  left: mousePos.x - 50,
-                  width: '100px',
-                  height: '100px',
-                  borderRadius: '50%',
-                  background: 'radial-gradient(circle, rgba(168, 85, 247, 0.75) 0%, transparent 70%)',
-                  pointerEvents: 'none',
-                }}
-              />
-
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.85rem',
-                  fontWeight: 700,
-                  letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
-                  color: '#FFFFFF',
-                  position: 'relative',
-                  zIndex: 2,
-                }}
-              >
-                {progress < 100 ? 'LOADING' : 'WELCOME'}
-              </span>
-
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.85rem',
-                  fontWeight: 700,
-                  color: '#4ADE9A',
-                  position: 'relative',
-                  zIndex: 2,
-                }}
-              >
-                <span>{progress}%</span>
-                <span
-                  className="terminal-cursor"
-                  style={{
-                    display: 'inline-block',
-                    width: '7px',
-                    height: '14px',
-                    background: '#4ADE9A',
-                    marginLeft: '3px',
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom Bar Info */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              width: '100%',
-              zIndex: 2,
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.7rem',
-              color: 'rgba(15, 20, 25, 0.6)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-            }}
-          >
-            <span>Initialising Portfolio...</span>
-            <span>2026 Portfolio</span>
-          </div>
-
-          {/* Expanding Circle Mask for Smooth Reveal */}
-          {progress === 100 && (
-            <motion.div
-              initial={{ scale: 0, opacity: 0.8 }}
-              animate={{ scale: 50, opacity: 1 }}
-              transition={{ duration: 1, ease: [0.65, 0, 0.35, 1] }}
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                width: '100px',
-                height: '100px',
-                borderRadius: '50%',
-                background: 'var(--color-bg-base)',
-                transform: 'translate(-50%, -50%)',
-                zIndex: 10,
-                pointerEvents: 'none',
-              }}
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.5, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              style={styles.rectBlock}
             />
-          )}
 
-          <style>{`
-            @media (max-width: 640px) {
-              .preloader-wrapper {
-                padding: 1.25rem 1rem !important;
-              }
-              .preloader-pill {
-                padding: 12px 24px !important;
-                gap: 12px !important;
-              }
-            }
-          `}</style>
+            {/* Bottom-left circle */}
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              style={styles.circle}
+            />
+
+            {/* Diagonal accent line */}
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.6, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              style={styles.diagonalLine}
+            />
+          </div>
+
+          {/* ── Main content area ── */}
+          <div style={styles.contentWrapper}>
+            {/* Top row: brand + year */}
+            <motion.div
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              style={styles.topRow}
+            >
+              <span style={styles.brandName}>Kishor Gogoi</span>
+              <span style={styles.yearLabel}>©2026</span>
+            </motion.div>
+
+            {/* Center: giant progress number */}
+            <div style={styles.centerBlock}>
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                style={styles.bigNumberWrapper}
+              >
+                <span style={styles.bigNumber}>{displayNum}</span>
+                <span style={styles.percentSign}>%</span>
+              </motion.div>
+
+              {/* Subtitle text */}
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                style={styles.subtitleRow}
+              >
+                <div style={styles.subtitleDash} />
+                <span style={styles.subtitleText}>
+                  {progress < 100 ? 'LOADING PORTFOLIO' : 'READY'}
+                </span>
+              </motion.div>
+            </div>
+
+            {/* Bottom section: progress bar + labels */}
+            <div style={styles.bottomSection}>
+              {/* Progress bar */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.25 }}
+                style={styles.progressTrack}
+              >
+                <motion.div
+                  style={{
+                    ...styles.progressFill,
+                    width: `${progress}%`,
+                  }}
+                  transition={{ duration: 0.05, ease: 'linear' }}
+                />
+                {/* Progress tick marks */}
+                <div style={styles.tickContainer} aria-hidden="true">
+                  {[0, 25, 50, 75, 100].map((tick) => (
+                    <div
+                      key={tick}
+                      style={{
+                        ...styles.tickMark,
+                        left: `${tick}%`,
+                        opacity: progress >= tick ? 1 : 0.25,
+                      }}
+                    />
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* Bottom labels */}
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                style={styles.bottomLabels}
+              >
+                <span style={styles.labelMono}>PORTFOLIO</span>
+                <span style={styles.labelMono}>FULL STACK DEVELOPER</span>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* ── Responsive overrides via <style> tag ── */}
+          <style>{responsiveCSS}</style>
         </motion.div>
       )}
     </AnimatePresence>
   )
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   STYLES — all inline for zero side-effects on the portfolio
+   ═══════════════════════════════════════════════════════════════ */
+
+const styles = {
+  overlay: {
+    position: 'fixed',
+    inset: 0,
+    zIndex: 9999,
+    background: '#FAFAFA',
+    color: '#0A0A0A',
+    overflow: 'hidden',
+    fontFamily: "'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+    userSelect: 'none',
+    WebkitFontSmoothing: 'antialiased',
+    MozOsxFontSmoothing: 'grayscale',
+  },
+
+  /* Grid */
+  gridContainer: {
+    position: 'absolute',
+    inset: 0,
+    pointerEvents: 'none',
+  },
+  gridLineV: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    width: '1px',
+    background: 'rgba(10, 10, 10, 0.06)',
+    transformOrigin: 'top',
+  },
+  gridLineH: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    height: '1px',
+    background: 'rgba(10, 10, 10, 0.06)',
+    transformOrigin: 'left',
+  },
+
+  /* Geometric accents */
+  geoContainer: {
+    position: 'absolute',
+    inset: 0,
+    pointerEvents: 'none',
+    overflow: 'hidden',
+  },
+  rectBlock: {
+    position: 'absolute',
+    top: '8%',
+    right: '6%',
+    width: 'clamp(60px, 8vw, 120px)',
+    height: 'clamp(30px, 4vw, 60px)',
+    background: '#0A0A0A',
+    transformOrigin: 'left',
+  },
+  circle: {
+    position: 'absolute',
+    bottom: '12%',
+    left: '8%',
+    width: 'clamp(40px, 5vw, 80px)',
+    height: 'clamp(40px, 5vw, 80px)',
+    borderRadius: '50%',
+    border: '2px solid #0A0A0A',
+  },
+  diagonalLine: {
+    position: 'absolute',
+    bottom: '28%',
+    right: '12%',
+    width: 'clamp(50px, 7vw, 110px)',
+    height: '2px',
+    background: '#0A0A0A',
+    transform: 'rotate(-30deg)',
+    transformOrigin: 'left center',
+  },
+
+  /* Content wrapper */
+  contentWrapper: {
+    position: 'relative',
+    zIndex: 2,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    height: '100%',
+    padding: 'clamp(24px, 4vw, 56px) clamp(24px, 5vw, 72px)',
+  },
+
+  /* Top row */
+  topRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
+  },
+  brandName: {
+    fontFamily: "'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+    fontWeight: 700,
+    fontSize: 'clamp(0.85rem, 1.2vw, 1.1rem)',
+    letterSpacing: '-0.01em',
+    textTransform: 'uppercase',
+    color: '#0A0A0A',
+  },
+  yearLabel: {
+    fontFamily: "'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+    fontWeight: 400,
+    fontSize: 'clamp(0.7rem, 0.9vw, 0.85rem)',
+    letterSpacing: '0.05em',
+    color: 'rgba(10, 10, 10, 0.45)',
+  },
+
+  /* Center number */
+  centerBlock: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    gap: 'clamp(8px, 1.5vw, 16px)',
+  },
+  bigNumberWrapper: {
+    display: 'flex',
+    alignItems: 'baseline',
+    gap: 'clamp(2px, 0.5vw, 8px)',
+    lineHeight: 1,
+  },
+  bigNumber: {
+    fontFamily: "'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+    fontWeight: 800,
+    fontSize: 'clamp(5rem, 16vw, 14rem)',
+    letterSpacing: '-0.04em',
+    color: '#0A0A0A',
+    lineHeight: 0.85,
+    fontVariantNumeric: 'tabular-nums',
+  },
+  percentSign: {
+    fontFamily: "'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+    fontWeight: 300,
+    fontSize: 'clamp(1.5rem, 4vw, 4rem)',
+    color: 'rgba(10, 10, 10, 0.3)',
+    lineHeight: 1,
+    alignSelf: 'flex-start',
+    marginTop: 'clamp(6px, 1.5vw, 18px)',
+  },
+  subtitleRow: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 'clamp(8px, 1vw, 14px)',
+  },
+  subtitleDash: {
+    width: 'clamp(20px, 3vw, 40px)',
+    height: '2px',
+    background: '#0A0A0A',
+  },
+  subtitleText: {
+    fontFamily: "'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+    fontWeight: 500,
+    fontSize: 'clamp(0.65rem, 0.85vw, 0.8rem)',
+    letterSpacing: '0.18em',
+    textTransform: 'uppercase',
+    color: 'rgba(10, 10, 10, 0.55)',
+  },
+
+  /* Bottom */
+  bottomSection: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 'clamp(10px, 1.5vw, 18px)',
+  },
+  progressTrack: {
+    position: 'relative',
+    width: '100%',
+    height: '3px',
+    background: 'rgba(10, 10, 10, 0.08)',
+    overflow: 'visible',
+  },
+  progressFill: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    height: '100%',
+    background: '#0A0A0A',
+    willChange: 'width',
+  },
+  tickContainer: {
+    position: 'absolute',
+    top: '-3px',
+    left: 0,
+    right: 0,
+    height: '9px',
+  },
+  tickMark: {
+    position: 'absolute',
+    top: 0,
+    width: '1px',
+    height: '9px',
+    background: '#0A0A0A',
+    transition: 'opacity 0.3s ease',
+  },
+  bottomLabels: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  labelMono: {
+    fontFamily: "'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+    fontWeight: 400,
+    fontSize: 'clamp(0.6rem, 0.75vw, 0.72rem)',
+    letterSpacing: '0.14em',
+    textTransform: 'uppercase',
+    color: 'rgba(10, 10, 10, 0.4)',
+  },
+}
+
+/* ─── Responsive CSS (injected once, removed on unmount) ─── */
+const responsiveCSS = `
+  @media (max-width: 640px) {
+    /* The grid and geometric elements are already responsive via clamp().
+       This block only fine-tunes spacing on very small screens. */
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-swiss-preloader] * {
+      animation-duration: 0.01s !important;
+      transition-duration: 0.01s !important;
+    }
+  }
+`
