@@ -106,14 +106,6 @@ export default function Preloader({ onComplete }) {
               style={styles.rectBlock}
             />
 
-            {/* Bottom-left circle */}
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              style={styles.circle}
-            />
-
             {/* Diagonal accent line */}
             <motion.div
               initial={{ scaleX: 0 }}
@@ -177,6 +169,18 @@ export default function Preloader({ onComplete }) {
                     width: `${progress}%`,
                   }}
                   transition={{ duration: 0.05, ease: 'linear' }}
+                />
+
+                {/* Running circle that travels left to right during loading */}
+                <motion.div
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1, left: `${progress}%` }}
+                  transition={{
+                    scale: { duration: 0.35, delay: 0.2, ease: [0.22, 1, 0.36, 1] },
+                    opacity: { duration: 0.35, delay: 0.2 },
+                    left: { duration: 0.05, ease: 'linear' },
+                  }}
+                  style={styles.runningCircle}
                 />
                 {/* Progress tick marks */}
                 <div style={styles.tickContainer} aria-hidden="true">
@@ -271,14 +275,16 @@ const styles = {
     background: '#0A0A0A',
     transformOrigin: 'left',
   },
-  circle: {
+  runningCircle: {
     position: 'absolute',
-    bottom: '12%',
-    left: '8%',
-    width: 'clamp(40px, 5vw, 80px)',
-    height: 'clamp(40px, 5vw, 80px)',
+    bottom: '0px',
+    width: 'clamp(36px, 4.5vw, 56px)',
+    height: 'clamp(36px, 4.5vw, 56px)',
     borderRadius: '50%',
     border: '2px solid #0A0A0A',
+    transform: 'translate(-50%, 0)',
+    pointerEvents: 'none',
+    zIndex: 5,
   },
   diagonalLine: {
     position: 'absolute',
