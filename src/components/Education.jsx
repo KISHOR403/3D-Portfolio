@@ -295,14 +295,10 @@ export default function Education() {
           transition={{ duration: 0.5 }}
         >
           <p className="section-eyebrow">ENVIRONMENT SETUP</p>
-          <h2 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: '2rem',
-            fontWeight: 600,
-            letterSpacing: '-0.02em',
-            color: 'var(--color-text-primary)',
-            marginBottom: '3.5rem',
-          }}>
+          <h2
+            className="section-headline-editorial"
+            style={{ marginBottom: '3.5rem' }}
+          >
             Education
           </h2>
         </motion.div>

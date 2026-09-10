@@ -344,16 +344,11 @@ export default function CoverageReport() {
             <div>
               <p className="section-eyebrow">Coverage Report</p>
               <h2
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: '2.2rem',
-                  fontWeight: 700,
-                  letterSpacing: '-0.02em',
-                  color: 'var(--color-text-primary)',
-                  marginTop: '0.25rem',
-                }}
+                className="section-headline-editorial"
+                style={{ marginTop: '0.25rem' }}
               >
-                Skills & Technologies
+                Skills &amp;<br />
+                <span className="section-headline-muted">Technologies</span>
               </h2>
             </div>
 

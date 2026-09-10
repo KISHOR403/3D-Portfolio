@@ -616,16 +616,11 @@ export default function PipelineRuns() {
         >
           <p className="section-eyebrow">// FEATURED WORK</p>
           <h2
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(1.8rem, 5vw, 2.4rem)',
-              fontWeight: 700,
-              letterSpacing: '-0.02em',
-              color: 'var(--color-text-primary)',
-              marginBottom: '0.5rem',
-            }}
+            className="section-headline-editorial"
+            style={{ marginBottom: '0.75rem' }}
           >
-            Projects &amp; Case Studies
+            Projects &amp;<br />
+            <span className="section-headline-muted">Case Studies</span>
           </h2>
           <p
             style={{

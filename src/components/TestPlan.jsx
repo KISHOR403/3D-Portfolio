@@ -99,9 +99,9 @@ export default function TestPlan({ onOpenResume }) {
               <span className="dossier-eyebrow-bullet">■</span>
               <span>PHILOSOPHY & DISCIPLINE</span>
             </div>
-            <h2 className="dossier-headline">
+            <h2 className="dossier-headline section-headline-editorial">
               I build quality<br />
-              <span className="dossier-headline-muted">into software.</span>
+              <span className="dossier-headline-muted section-headline-muted">into software.</span>
             </h2>
           </motion.div>
 

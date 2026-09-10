@@ -227,15 +227,12 @@ export default function Deploy() {
           transition={{ duration: 0.5 }}
         >
           <p className="section-eyebrow">Deploy</p>
-          <h2 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: '2rem',
-            fontWeight: 600,
-            letterSpacing: '-0.02em',
-            color: 'var(--color-text-primary)',
-            marginBottom: '1rem',
-          }}>
-            Let's connect
+          <h2
+            className="section-headline-editorial"
+            style={{ marginBottom: '1rem' }}
+          >
+            Let's<br />
+            <span className="section-headline-muted">connect</span>
           </h2>
           <p style={{
             fontFamily: 'var(--font-mono)',
