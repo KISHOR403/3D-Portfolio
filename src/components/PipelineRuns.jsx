@@ -619,8 +619,7 @@ export default function PipelineRuns() {
             className="section-headline-editorial"
             style={{ marginBottom: '0.75rem' }}
           >
-            Projects &amp;<br />
-            <span className="section-headline-muted">Case Studies</span>
+            Projects &amp; Case Studies
           </h2>
           <p
             style={{

@@ -231,8 +231,7 @@ export default function Deploy() {
             className="section-headline-editorial"
             style={{ marginBottom: '1rem' }}
           >
-            Let's<br />
-            <span className="section-headline-muted">connect</span>
+            Let's connect
           </h2>
           <p style={{
             fontFamily: 'var(--font-mono)',

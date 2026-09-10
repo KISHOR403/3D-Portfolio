@@ -110,8 +110,13 @@
   font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.035em;
-  color: var(--color-text-primary);
+  color: var(--color-text-muted);
+  max-width: 16ch;
   margin: 0;
+}
+
+.section-headline-editorial::first-line {
+  color: var(--color-text-primary);
 }
 
 .section-headline-muted {
