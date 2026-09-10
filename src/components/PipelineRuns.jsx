@@ -619,7 +619,10 @@ export default function PipelineRuns() {
             className="section-headline-editorial"
             style={{ marginBottom: '0.75rem' }}
           >
-            Projects &amp; Case Studies
+            <span className="shading-word">Projects</span>
+            <span className="shading-word">&amp;</span>
+            <span className="shading-word">Case</span>
+            <span className="shading-word">Studies</span>
           </h2>
           <p
             style={{

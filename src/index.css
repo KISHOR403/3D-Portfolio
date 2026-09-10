@@ -103,25 +103,37 @@
   margin-bottom: 0.5rem;
 }
 
-/* Swiss Editorial Section Title (Reference style: "I build quality into software.") */
+/* Swiss Editorial Section Title (Monochrome Split Shading Typography) */
 .section-headline-editorial {
   font-family: var(--font-display);
   font-size: clamp(2.4rem, 4.8vw, 4.2rem);
   font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.035em;
-  color: var(--color-text-muted);
-  max-width: 16ch;
+  color: var(--color-text-primary);
   margin: 0;
 }
 
-.section-headline-editorial::first-line {
-  color: var(--color-text-primary);
+/* Horizontal monochrome split shading inside letterforms (white → gray → dark gray / near black) */
+.shading-word {
+  display: inline-block;
+  margin-right: 0.28em;
+  background: linear-gradient(
+    90deg,
+    #FFFFFF 0%,
+    #E2E8F0 28%,
+    #8E9CAE 58%,
+    #4A5568 82%,
+    #202833 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
-.section-headline-muted {
-  color: var(--color-text-muted);
-  font-weight: 600;
+.shading-word:last-child {
+  margin-right: 0;
 }
 
 /* Section container */

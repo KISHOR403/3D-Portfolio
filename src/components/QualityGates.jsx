@@ -764,7 +764,7 @@ export default function QualityGates() {
             className="section-headline-editorial"
             style={{ marginBottom: '3rem' }}
           >
-            Certifications
+            <span className="shading-word">Certifications</span>
           </h2>
         </div>
 

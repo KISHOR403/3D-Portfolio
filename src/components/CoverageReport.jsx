@@ -347,7 +347,9 @@ export default function CoverageReport() {
                 className="section-headline-editorial"
                 style={{ marginTop: '0.25rem' }}
               >
-                Skills &amp; Technologies
+                <span className="shading-word">Skills</span>
+                <span className="shading-word">&amp;</span>
+                <span className="shading-word">Technologies</span>
               </h2>
             </div>
 

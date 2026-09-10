@@ -100,8 +100,11 @@ export default function TestPlan({ onOpenResume }) {
               <span>PHILOSOPHY & DISCIPLINE</span>
             </div>
             <h2 className="dossier-headline section-headline-editorial">
-              I build quality<br />
-              <span className="dossier-headline-muted section-headline-muted">into software.</span>
+              <span className="shading-word">I</span>
+              <span className="shading-word">build</span>
+              <span className="shading-word">quality</span><br />
+              <span className="shading-word">into</span>
+              <span className="shading-word">software.</span>
             </h2>
           </motion.div>
 

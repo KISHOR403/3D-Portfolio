@@ -299,7 +299,7 @@ export default function Education() {
             className="section-headline-editorial"
             style={{ marginBottom: '3.5rem' }}
           >
-            Education
+            <span className="shading-word">Education</span>
           </h2>
         </motion.div>
 
