@@ -97,7 +97,7 @@ export default function ConsoleFallback() {
       newLogs.push(
         { type: 'accent', text: '=== TECHNICAL SKILLS STACK ===' },
         { type: 'info', text: 'Frontend : React.js, Next.js, HTML5, CSS3, Tailwind CSS, JavaScript (ES6+)' },
-        { type: 'info', text: 'Backend  : Node.js, Express.js, REST APIs, MongoDB, PostgreSQL' },
+        { type: 'info', text: 'Backend  : Java, Spring Boot, Node.js, Express.js, REST APIs, PostgreSQL, MongoDB' },
         { type: 'info', text: 'QA & Test: Playwright, Cypress, CI/CD Workflows, Automation Testing' },
         { type: 'info', text: 'Tools    : Git, GitHub, Docker, Postman, Vercel' }
       )
@@ -106,6 +106,7 @@ export default function ConsoleFallback() {
         { type: 'accent', text: '=== RECENT PIPELINE PROJECTS ===' },
         { type: 'success', text: '✓ Testnexa AI       [React + Node.js + Gemini AI]' },
         { type: 'success', text: '✓ RepoWiki AI       [React + Node.js + Gemini AI]' },
+        { type: 'success', text: '✓ LogiConnect       [Spring Boot + Next.js + WebSocket]' },
         { type: 'success', text: '✓ Doorkit           [React Native + Redux + Node.js]' },
         { type: 'success', text: '✓ Asom Bazaar       [React + Node.js + Express]' }
       )

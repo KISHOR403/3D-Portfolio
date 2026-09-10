@@ -14,11 +14,11 @@ const ACCENT_RGBS = ['74, 222, 154', '242, 169, 59', '232, 97, 92']
 const SKILL_CATEGORIES = [
   {
     title: 'Languages & Querying',
-    skills: ['Java', 'JavaScript', 'HTML', 'CSS', 'SQL'],
+    skills: ['Java', 'JavaScript', 'SQL', 'PostgreSQL', 'HTML', 'CSS'],
   },
   {
     title: 'Full Stack Development',
-    skills: ['React', 'Node.js', 'Express.js', 'MongoDB', 'Redux', 'Tailwind CSS', 'REST APIs'],
+    skills: ['Spring Boot', 'Next.js', 'React', 'Node.js', 'Express.js', 'MongoDB', 'Redux', 'Tailwind CSS', 'REST APIs'],
   },
   {
     title: 'Automation Tools & Frameworks',

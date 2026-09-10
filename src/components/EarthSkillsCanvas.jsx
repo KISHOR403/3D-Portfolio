@@ -12,13 +12,23 @@ const TestNGIcon = ({ size }) => (<svg width={size} height={size} viewBox="0 0 1
 const RestAssuredIcon = ({ size }) => (<svg width={size} height={size} viewBox="0 0 100 100" style={{display:'inline-block',verticalAlign:'middle',flexShrink:0}}><circle cx="50" cy="50" r="45" fill="#16a34a"/><text x="50" y="65" fontFamily="Arial" fontWeight="bold" fontSize="40" fill="white" textAnchor="middle">RA</text></svg>)
 const TestRailIcon = ({ size }) => (<svg width={size} height={size} viewBox="0 0 100 100" style={{display:'inline-block',verticalAlign:'middle',flexShrink:0}}><rect width="100" height="100" rx="20" fill="#0052CC"/><path d="M30 50 L45 65 L70 35" stroke="white" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" fill="none"/></svg>)
 const JUnitIcon = ({ size }) => (<svg width={size} height={size} viewBox="0 0 100 100" style={{display:'inline-block',verticalAlign:'middle',flexShrink:0}}><rect width="100" height="100" rx="20" fill="#2563eb"/><text x="40" y="70" fontFamily="Arial" fontWeight="bold" fontSize="60" fill="white" textAnchor="middle">J</text></svg>)
+const JavaIcon = ({ size }) => (
+  <svg width={size} height={size} viewBox="0 0 128 128" style={{display:'inline-block',verticalAlign:'middle',flexShrink:0}}>
+    <path fill="#0074BD" d="M47.617 98.12s-4.767 2.774 3.397 3.71c9.892 1.13 14.947.968 25.845-1.092 0 0 2.871 1.795 6.873 3.351-24.439 10.47-55.308-.607-36.115-5.969zm-2.988-13.665s-5.348 3.959 2.823 4.805c10.567 1.091 18.91 1.18 33.354-1.6 0 0 1.993 2.025 5.132 3.131-29.542 8.64-62.446.68-41.309-6.336z"/>
+    <path fill="#EA2D2E" d="M69.802 61.271c6.025 6.935-1.58 13.17-1.58 13.17s15.289-7.891 8.269-17.777c-6.559-9.215-11.587-13.792 15.635-29.58 0 .001-42.731 10.67-22.324 34.187z"/>
+    <path fill="#0074BD" d="M102.123 108.229s3.529 2.91-3.888 5.159c-14.102 4.272-58.706 5.56-71.094.171-4.451-1.938 3.899-4.625 6.526-5.192 2.739-.593 4.303-.485 4.303-.485-4.953-3.487-32.013 6.85-13.743 9.815 49.821 8.076 90.817-3.637 77.896-9.468zM49.912 70.294s-22.686 5.389-8.033 7.348c6.188.828 18.518.638 30.011-.326 9.39-.789 18.813-2.474 18.813-2.474s-3.308 1.419-5.704 3.053c-23.042 6.061-67.544 3.238-54.731-2.958 10.832-5.239 19.644-4.643 19.644-4.643zm40.697 22.747c23.421-12.167 12.591-23.86 5.032-22.285-1.848.385-2.677.72-2.677.72s.688-1.079 2-1.543c14.953-5.255 26.451 15.503-4.823 23.725 0-.002.359-.327.468-.617z"/>
+    <path fill="#EA2D2E" d="M76.491 1.587S89.459 14.563 64.188 34.51c-20.266 16.006-4.621 25.13-.007 35.559-11.831-10.673-20.509-20.07-14.688-28.815C58.041 28.42 81.722 22.195 76.491 1.587z"/>
+    <path fill="#0074BD" d="M52.214 126.021c22.476 1.437 57-.8 57.817-11.436 0 0-1.571 4.032-18.577 7.231-19.186 3.612-42.854 3.191-56.887.874 0 .001 2.875 2.381 17.647 3.331z"/>
+  </svg>
+)
 
 const SKILL_ICONS = { 'SQL':Database,'Manual Testing':Eye,'Agile':RotateCcw,'API Testing':Cpu,'Mobile Testing':Smartphone,'Bug Tracking':Bug,'Git':GitBranch,'Jenkins':Server,'POM Pattern':Box,'Data-Driven':Table,'CI/CD':InfinityIcon,'REST APIs':Cpu }
-const BRAND_SLUGS = { 'Java':'java/F89820','JavaScript':'javascript/F7DF1E','HTML':'html5/E34F26','CSS':'css3/1572B6','React':'react/61DAFB','Node.js':'nodedotjs/339933','Express.js':'express/E8EAED','MongoDB':'mongodb/47A248','Redux':'redux/764ABC','Tailwind CSS':'tailwindcss/06B6D4','Selenium':'selenium/43B02A','Appium':'appium/E42D42','Postman':'postman/FF6C37','Git':'git/F05032','GitHub':'github/E8EAED','Jira':'jira/0052CC','Jenkins':'jenkins/D24939','GitHub Actions':'githubactions/2088FF','Canva':'canva/00C4CC','Figma':'figma/F24E1E' }
+const BRAND_SLUGS = { 'JavaScript':'javascript/F7DF1E','HTML':'html5/E34F26','CSS':'css3/1572B6','React':'react/61DAFB','Spring Boot':'springboot/6DB33F','Next.js':'nextdotjs/FFFFFF','PostgreSQL':'postgresql/4169E1','Node.js':'nodedotjs/339933','Express.js':'express/E8EAED','MongoDB':'mongodb/47A248','Redux':'redux/764ABC','Tailwind CSS':'tailwindcss/06B6D4','Selenium':'selenium/43B02A','Appium':'appium/E42D42','Postman':'postman/FF6C37','Git':'git/F05032','GitHub':'github/E8EAED','Jira':'jira/0052CC','Jenkins':'jenkins/D24939','GitHub Actions':'githubactions/2088FF','Canva':'canva/00C4CC','Figma':'figma/F24E1E' }
 
 export function SmartSkillIcon({ name, size = 10 }) {
   const [f, setF] = useState(false)
   const n = name?.trim() || ''
+  if (n === 'Java') return <JavaIcon size={size}/>
   if (n === 'TestNG') return <TestNGIcon size={size}/>
   if (n === 'REST Assured') return <RestAssuredIcon size={size}/>
   if (n === 'TestRail') return <TestRailIcon size={size}/>
@@ -31,6 +41,8 @@ export function SmartSkillIcon({ name, size = 10 }) {
 
 export const RAW_SKILLS = [
   { id:'java', name:'Java', fullName:'Java Programming', category:'Languages & Querying', featured:true, color:'#F89820' },
+  { id:'springboot', name:'Spring Boot', fullName:'Spring Boot 3', category:'Full Stack Development', featured:true, color:'#6DB33F' },
+  { id:'nextjs', name:'Next.js', fullName:'Next.js App Router', category:'Full Stack Development', featured:true, color:'#38BDF8' },
   { id:'js', name:'JavaScript', fullName:'JavaScript (ES6+)', category:'Languages & Querying', featured:true, color:'#F7DF1E' },
   { id:'react', name:'React', fullName:'React.js', category:'Full Stack Development', featured:true, color:'#61DAFB' },
   { id:'node', name:'Node.js', fullName:'Node.js Runtime', category:'Full Stack Development', featured:true, color:'#339933' },
@@ -38,6 +50,7 @@ export const RAW_SKILLS = [
   { id:'css', name:'CSS', fullName:'CSS3 Styling', category:'Languages & Querying', featured:false, color:'#1572B6' },
 
   { id:'sql', name:'SQL', fullName:'SQL Queries', category:'Languages & Querying', featured:true, color:'#38BDF8' },
+  { id:'postgres', name:'PostgreSQL', fullName:'PostgreSQL RDBMS', category:'Languages & Querying', featured:false, color:'#4169E1' },
   { id:'mongo', name:'MongoDB', fullName:'MongoDB', category:'Full Stack Development', featured:true, color:'#47A248' },
   { id:'tailwind', name:'Tailwind CSS', fullName:'Tailwind CSS', category:'Full Stack Development', featured:true, color:'#06B6D4' },
   { id:'restapi', name:'REST APIs', fullName:'RESTful APIs', category:'Full Stack Development', featured:true, color:'#F2A93B' },

@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 
 const STATS = [
-  { label: '9 PROJECTS SHIPPED', icon: '●' },
+  { label: '10 PROJECTS SHIPPED', icon: '●' },
   { label: '95% AVG COVERAGE', icon: '●' },
   { label: '8 QUALITY GATES PASSED', icon: '●' },
   { label: 'CI/CD INTEGRATED', icon: '●' },

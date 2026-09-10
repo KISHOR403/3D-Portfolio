@@ -7,9 +7,9 @@ import { useRef, useEffect, useState } from 'react'
    ─────────────────────────────────────────────────────────────── */
 
 const ENTRIES = [
-  { num: 'A', label: 'Full-Stack Builder', value: 'MERN, React, Node.js, MongoDB' },
+  { num: 'A', label: 'Full-Stack Builder', value: 'Spring Boot, Next.js, React, Node.js' },
   { num: 'B', label: 'Content Creator', value: 'Technical writing, video editing & social media' },
-  { num: 'C', label: 'Founder Mindset', value: 'Testnexa AI, RepoWiki AI, Asom Bazaar' },
+  { num: 'C', label: 'Founder Mindset', value: 'LogiConnect, Testnexa AI, RepoWiki AI' },
 ]
 
 export default function BeyondTheConsole() {
