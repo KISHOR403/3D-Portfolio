@@ -252,7 +252,7 @@ function PipelineGridScene({ reducedMotion }) {
 }
 
 /* ─── Exported PipelineGridBg with Fallback and Optimizations ─── */
-export default function PipelineGridBg() {
+export default function PipelineGridBg({ active = true }) {
   const [isMobile, setIsMobile] = useState(() => {
     if (typeof window === 'undefined') return false
     return window.innerWidth < 768
@@ -313,10 +313,10 @@ export default function PipelineGridBg() {
     }}>
       <Canvas
         camera={{ position: [0, 6, 25], fov: 50, near: 0.1, far: 100 }}
-        gl={{ antialias: true, alpha: true }}
+        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
         dpr={[1, 1.5]}
         style={{ background: 'transparent' }}
-        frameloop={isTabVisible ? 'always' : 'never'}
+        frameloop={active && isTabVisible ? 'always' : 'never'}
       >
         <PipelineGridScene reducedMotion={reducedMotion} />
       </Canvas>

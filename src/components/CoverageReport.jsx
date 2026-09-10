@@ -306,9 +306,27 @@ export default function CoverageReport() {
   const [viewStyle, setViewStyle] = useState('sphere') // 'sphere', 'grid'
   const [orbitDensity, setOrbitDensity] = useState('core')
   const [hoveredSkillId, setHoveredSkillId] = useState(null)
+  const sectionRef = useRef(null)
+  const [isSectionVisible, setIsSectionVisible] = useState(false)
+
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsSectionVisible(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '350px' }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   return (
-    <section id="coverage-report" style={{ background: 'rgba(22, 29, 36, 0.75)', backdropFilter: 'blur(10px)', padding: '5rem 0' }}>
+    <section ref={sectionRef} id="coverage-report" style={{ background: 'rgba(22, 29, 36, 0.75)', backdropFilter: 'blur(10px)', padding: '5rem 0' }}>
       <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -505,14 +523,19 @@ export default function CoverageReport() {
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
+            style={{ minHeight: '520px' }}
           >
-            <EarthSkillsCanvas
-              activeCategory={activeCategory}
-              hoveredSkillId={hoveredSkillId}
-              setHoveredSkillId={setHoveredSkillId}
-              orbitDensity={orbitDensity}
-              viewStyle="sphere"
-            />
+            {isSectionVisible ? (
+              <EarthSkillsCanvas
+                activeCategory={activeCategory}
+                hoveredSkillId={hoveredSkillId}
+                setHoveredSkillId={setHoveredSkillId}
+                orbitDensity={orbitDensity}
+                viewStyle="sphere"
+              />
+            ) : (
+              <div style={{ height: '520px' }} />
+            )}
           </motion.div>
         )}
 

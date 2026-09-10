@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
    Grid-based ·  High contrast ·  Geometric precision
    ─────────────────────────────────────────────────────────────── */
 
-const DURATION_MS = 2400 // Total simulated load time
+const DURATION_MS = 1000 // Fast, smooth simulated load time
 const TICK_MS = 20
 
 // Eased progress so the bar decelerates naturally
@@ -35,13 +35,13 @@ export default function Preloader({ onComplete }) {
         rafRef.current = requestAnimationFrame(tick)
       } else {
         setProgress(100)
-        // Brief pause at 100% then begin exit
+        // Brief 120ms snap at 100% then smooth exit
         setTimeout(() => {
           setIsExiting(true)
           setTimeout(() => {
             if (onComplete) onComplete()
-          }, 900)
-        }, 350)
+          }, 400)
+        }, 120)
       }
     }
 
@@ -62,7 +62,9 @@ export default function Preloader({ onComplete }) {
           initial={{ opacity: 1 }}
           exit={{
             opacity: 0,
-            transition: { duration: 0.7, ease: [0.65, 0, 0.35, 1] },
+            y: -20,
+            scale: 0.99,
+            transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
           }}
           style={styles.overlay}
         >
@@ -98,13 +100,16 @@ export default function Preloader({ onComplete }) {
 
           {/* ── Geometric accents ── */}
           <div style={styles.geoContainer} aria-hidden="true">
-            {/* Top-right rectangle block */}
+            {/* Top-right accent badge */}
             <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 0.5, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
               style={styles.rectBlock}
-            />
+            >
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#16a34a', flexShrink: 0 }} />
+              <span>QA ARCHITECTURE</span>
+            </motion.div>
 
             {/* Diagonal accent line */}
             <motion.div
@@ -270,10 +275,19 @@ const styles = {
     position: 'absolute',
     top: '8%',
     right: '6%',
-    width: 'clamp(60px, 8vw, 120px)',
-    height: 'clamp(30px, 4vw, 60px)',
-    background: '#0A0A0A',
-    transformOrigin: 'left',
+    padding: '6px 14px',
+    border: '1px solid rgba(10, 10, 10, 0.15)',
+    borderRadius: '999px',
+    background: 'rgba(10, 10, 10, 0.03)',
+    fontFamily: "'Inter', sans-serif",
+    fontSize: '0.65rem',
+    fontWeight: 700,
+    letterSpacing: '0.1em',
+    color: '#0A0A0A',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    pointerEvents: 'none',
   },
   runningCircle: {
     position: 'absolute',

@@ -25,13 +25,12 @@ export default function App() {
 
   const handlePreloaderComplete = () => {
     setIsLoading(false)
-    // Small delay so AnimatePresence exit animation plays before content enters
-    setTimeout(() => setShowContent(true), 100)
+    setShowContent(true)
   }
 
   return (
     <>
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {isLoading && (
           <Preloader key="preloader" onComplete={handlePreloaderComplete} />
         )}
@@ -41,16 +40,16 @@ export default function App() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={showContent ? { opacity: 1 } : { opacity: 0 }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       >
-        <PipelineGridBg />
+        <PipelineGridBg active={showContent} />
         <Sidebar />
         <Navbar onOpenResume={openResumeModal} />
         <motion.main
           style={{ position: 'relative', zIndex: 1 }}
-          initial={{ opacity: 0, y: 40 }}
-          animate={showContent ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={showContent ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
           <Hero onOpenResume={openResumeModal} />
           <StatusStrip />

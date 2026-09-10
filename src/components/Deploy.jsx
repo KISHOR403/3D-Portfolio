@@ -184,6 +184,24 @@ export default function Deploy() {
   const [hoveredLink, setHoveredLink] = useState(null)
   const [isFlying, setIsFlying] = useState(false)
   const [sent, setSent] = useState(false)
+  const canvasRef = useRef(null)
+  const [isCanvasInView, setIsCanvasInView] = useState(false)
+
+  useEffect(() => {
+    const el = canvasRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsCanvasInView(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '300px' }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   const handleSendPing = () => {
     if (isFlying || sent) return
@@ -427,6 +445,7 @@ export default function Deploy() {
 
               {/* 3D Canvas Box inside the card */}
               <div
+                ref={canvasRef}
                 onClick={handleSendPing}
                 style={{
                   width: '100%',
@@ -451,16 +470,18 @@ export default function Deploy() {
                 }}
               >
                 {/* 3D Canvas */}
-                <Canvas camera={{ position: [0, 0, 2.2], fov: 45 }}>
-                  <ambientLight intensity={0.9} />
-                  <directionalLight position={[2, 3, 4]} intensity={1.5} color="#fff" />
-                  <pointLight position={[-2, -2, -2]} intensity={0.5} color="#4ade80" />
-                  
-                  <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.4}>
-                    <PaperPlane isFlying={isFlying} onFlightEnd={handleFlightEnd} />
-                  </Float>
-                  <ParticleTrail isFlying={isFlying} />
-                </Canvas>
+                {isCanvasInView && (
+                  <Canvas camera={{ position: [0, 0, 2.2], fov: 45 }}>
+                    <ambientLight intensity={0.9} />
+                    <directionalLight position={[2, 3, 4]} intensity={1.5} color="#fff" />
+                    <pointLight position={[-2, -2, -2]} intensity={0.5} color="#4ade80" />
+                    
+                    <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.4}>
+                      <PaperPlane isFlying={isFlying} onFlightEnd={handleFlightEnd} />
+                    </Float>
+                    <ParticleTrail isFlying={isFlying} />
+                  </Canvas>
+                )}
 
                 {/* Status Overlay */}
                 <div style={{
