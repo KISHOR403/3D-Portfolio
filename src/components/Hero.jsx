@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowDown, Download } from 'lucide-react'
+import { ArrowDown, Download, ArrowUpRight } from 'lucide-react'
 import ConsoleFallback from './ConsoleFallback'
 
-// Synchronous mobile check to avoid layout flash on refresh
-const getIsMobile = () => typeof window !== 'undefined' && window.innerWidth < 768
+const getIsMobile = () => typeof window !== 'undefined' && window.innerWidth < 1024
 
 export default function Hero({ onOpenResume }) {
   const [isMobile, setIsMobile] = useState(getIsMobile)
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768)
+    const handleResize = () => setIsMobile(window.innerWidth < 1024)
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
@@ -19,110 +18,162 @@ export default function Hero({ onOpenResume }) {
     <section
       id="hero"
       style={{
-        minHeight: '100vh',
+        minHeight: 'calc(100vh - 72px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '100px 1.5rem 3rem',
+        padding: isMobile ? '120px 1.5rem 4rem' : '130px 2.5rem 5rem',
         position: 'relative',
-        overflow: 'visible',
+        overflow: 'hidden',
       }}
     >
-      {/* Subtle background gradient */}
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        background: 'radial-gradient(ellipse 60% 50% at 70% 40%, rgba(74, 222, 154, 0.04), transparent)',
-        pointerEvents: 'none',
-      }} />
+      {/* Subtle atmospheric ambient glow */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '20%',
+          left: '10%',
+          width: '500px',
+          height: '500px',
+          background: 'radial-gradient(circle, rgba(74, 222, 154, 0.05) 0%, transparent 70%)',
+          filter: 'blur(60px)',
+          pointerEvents: 'none',
+        }}
+      />
 
-      <div style={{
-        maxWidth: '1200px',
-        width: '100%',
-        display: 'grid',
-        gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-        gap: isMobile ? '3rem' : '3rem',
-        alignItems: 'center',
-      }}>
-        {/* Left — Text content */}
+      <div
+        style={{
+          maxWidth: '1240px',
+          width: '100%',
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : '1.2fr 0.8fr',
+          gap: isMobile ? '3.5rem' : '4rem',
+          alignItems: 'center',
+        }}
+      >
+        {/* Left Column — Dominated by Massive H1 */}
         <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 28 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          style={{ order: isMobile ? 1 : 0 }}
+          style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
         >
-          {/* Status chip */}
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.7rem',
-            fontWeight: 500,
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
-            color: 'var(--color-accent-pass)',
-            background: 'rgba(74, 222, 154, 0.08)',
-            border: '1px solid rgba(74, 222, 154, 0.2)',
-            borderRadius: '999px',
-            padding: '6px 14px',
-            marginBottom: '1.5rem',
-          }}>
-            <span style={{
-              width: '6px',
-              height: '6px',
-              borderRadius: '50%',
-              background: 'var(--color-accent-pass)',
-              boxShadow: '0 0 6px rgba(74, 222, 154, 0.5)',
-            }} />
-            Open to opportunities
+          {/* Exactly 2 Badges Above Headline */}
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '10px',
+              alignItems: 'center',
+              marginBottom: '1.75rem',
+            }}
+          >
+            {/* Badge 1: Status */}
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.68rem',
+                fontWeight: 600,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                color: '#4ADE9A',
+                background: 'rgba(74, 222, 154, 0.08)',
+                border: '1px solid rgba(74, 222, 154, 0.22)',
+                borderRadius: '999px',
+                padding: '6px 14px',
+              }}
+            >
+              <span
+                style={{
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: '50%',
+                  background: '#4ADE9A',
+                  boxShadow: '0 0 8px rgba(74, 222, 154, 0.8)',
+                }}
+              />
+              Available for Roles
+            </div>
+
+            {/* Badge 2: Location / Discipline */}
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.68rem',
+                fontWeight: 500,
+                letterSpacing: '0.04em',
+                color: 'var(--color-text-muted)',
+                background: 'rgba(255, 255, 255, 0.03)',
+                border: '1px solid var(--color-border-hairline)',
+                borderRadius: '999px',
+                padding: '6px 14px',
+              }}
+            >
+              Bengaluru, IN · Full-Stack & QA
+            </div>
           </div>
 
-          <p className="section-eyebrow" style={{ marginBottom: '0.75rem', fontSize: '0.75rem' }}>
-            Full Stack Developer · Content Developer · QA Engineer
-          </p>
-
-          <h1 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: isMobile ? '2.2rem' : '3.2rem',
-            fontWeight: 700,
-            lineHeight: 1.1,
-            letterSpacing: '-0.03em',
-            color: 'var(--color-text-primary)',
-            marginBottom: '1rem',
-          }}>
+          {/* Dominate H1 — Singular Focal Point */}
+          <h1
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: isMobile ? 'clamp(3rem, 10vw, 4.25rem)' : 'clamp(4.25rem, 7.5vw, 6.5rem)',
+              fontWeight: 800,
+              lineHeight: 0.94,
+              letterSpacing: '-0.04em',
+              color: '#F8FAFC',
+              marginBottom: '1.25rem',
+              textWrap: 'balance',
+            }}
+          >
             Kishor Gogoi
           </h1>
 
-          <p style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.85rem',
-            fontWeight: 500,
-            letterSpacing: '0.04em',
-            color: 'var(--color-text-muted)',
-            marginBottom: '1.25rem',
-          }}>
-            MERN Stack Developer · Content Creator · QA Automation
+          {/* Clean Subtitle Line */}
+          <p
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: isMobile ? '0.95rem' : '1.15rem',
+              fontWeight: 500,
+              letterSpacing: '0.02em',
+              color: '#4ADE9A',
+              marginBottom: '1.25rem',
+            }}
+          >
+            Full Stack Developer &amp; QA Automation Engineer
           </p>
 
-          <p style={{
-            fontFamily: 'var(--font-sans)',
-            fontSize: '1rem',
-            lineHeight: 1.7,
-            color: 'var(--color-text-muted)',
-            marginBottom: '2rem',
-            maxWidth: '480px',
-          }}>
-            Building full-stack web applications, crafting engaging digital content, and ensuring software quality through automation frameworks and CI/CD pipelines. Based in Bengaluru.
+          {/* Disciplined Editorial Body */}
+          <p
+            style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: isMobile ? '0.95rem' : '1.05rem',
+              lineHeight: 1.75,
+              letterSpacing: '0.01em',
+              color: '#94A3B8',
+              maxWidth: '520px',
+              marginBottom: '2.5rem',
+            }}
+          >
+            Designing resilient full-stack architectures and enterprise test frameworks — eliminating regression cycles and shipping bug-free web applications.
           </p>
 
-          {/* CTAs */}
-          <div style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '1rem',
-            alignItems: 'center',
-          }}>
+          {/* Action CTAs — Disciplined Focal Point Hierarchy */}
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '1rem',
+              alignItems: 'center',
+            }}
+          >
+            {/* Primary Action — Sole Bright Teal Accent on Screen */}
             <a
               href="#pipeline-runs"
               id="hero-cta-projects"
@@ -131,78 +182,104 @@ export default function Hero({ onOpenResume }) {
                 alignItems: 'center',
                 gap: '8px',
                 fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
+                fontSize: '0.78rem',
                 fontWeight: 600,
                 letterSpacing: '0.06em',
                 textTransform: 'uppercase',
-                color: 'var(--color-bg-base)',
-                background: 'var(--color-accent-pass)',
+                color: '#0A0E13',
+                background: '#4ADE9A',
                 textDecoration: 'none',
-                padding: '12px 24px',
+                padding: '14px 28px',
                 borderRadius: '999px',
-                transition: 'all 0.25s ease',
-                boxShadow: '0 0 20px rgba(74, 222, 154, 0.2)',
+                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                boxShadow: '0 0 25px rgba(74, 222, 154, 0.25)',
               }}
-              onMouseEnter={e => {
-                e.currentTarget.style.boxShadow = '0 0 30px rgba(74, 222, 154, 0.35)'
-                e.currentTarget.style.transform = 'translateY(-1px)'
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 35px rgba(74, 222, 154, 0.45)'
+                e.currentTarget.style.transform = 'translateY(-2px)'
               }}
-              onMouseLeave={e => {
-                e.currentTarget.style.boxShadow = '0 0 20px rgba(74, 222, 154, 0.2)'
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 25px rgba(74, 222, 154, 0.25)'
                 e.currentTarget.style.transform = 'translateY(0)'
               }}
             >
-              <ArrowDown size={13} />
-              View Pipeline Runs
+              <span>Explore Projects</span>
+              <ArrowDown size={14} />
             </a>
 
+            {/* Secondary Action — Subtle Translucent Glass */}
             <button
               onClick={onOpenResume}
               id="hero-cta-resume"
+              type="button"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '8px',
                 fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
+                fontSize: '0.78rem',
                 fontWeight: 600,
                 letterSpacing: '0.06em',
                 textTransform: 'uppercase',
                 color: 'var(--color-text-primary)',
-                background: 'transparent',
-                padding: '12px 24px',
+                background: 'rgba(255, 255, 255, 0.03)',
+                padding: '14px 26px',
                 borderRadius: '999px',
-                border: '1px solid var(--color-border-hairline)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
                 transition: 'all 0.25s ease',
                 cursor: 'pointer',
               }}
-              onMouseEnter={e => {
-                e.currentTarget.style.borderColor = 'var(--color-text-muted)'
-                e.currentTarget.style.transform = 'translateY(-1px)'
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)'
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)'
+                e.currentTarget.style.transform = 'translateY(-2px)'
               }}
-              onMouseLeave={e => {
-                e.currentTarget.style.borderColor = 'var(--color-border-hairline)'
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)'
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)'
                 e.currentTarget.style.transform = 'translateY(0)'
               }}
             >
-              <Download size={13} />
-              Download Resume
+              <Download size={14} />
+              <span>Resume Library</span>
             </button>
+
+            {/* Tertiary Link */}
+            <a
+              href="#deploy"
+              id="hero-cta-contact"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.75rem',
+                fontWeight: 500,
+                letterSpacing: '0.04em',
+                color: 'var(--color-text-muted)',
+                textDecoration: 'none',
+                padding: '12px 14px',
+                transition: 'color 0.2s ease',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#F8FAFC')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--color-text-muted)')}
+            >
+              <span>Get in touch</span>
+              <ArrowUpRight size={13} />
+            </a>
           </div>
         </motion.div>
 
-        {/* Right — Console Fallback */}
+        {/* Right Column — Sleek, Non-competing Typewriter Terminal */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
           style={{
-            height: isMobile ? '400px' : '560px',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            order: isMobile ? 2 : 1,
-            overflow: 'visible',
+            justifyContent: isMobile ? 'flex-start' : 'center',
+            width: '100%',
           }}
         >
           <ConsoleFallback />

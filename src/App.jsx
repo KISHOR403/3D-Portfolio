@@ -4,24 +4,36 @@ import Preloader from './components/Preloader'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import StatusStrip from './components/StatusStrip'
+import Experience from './components/Experience'
 import TestPlan from './components/TestPlan'
 import BeyondTheConsole from './components/BeyondTheConsole'
 import Education from './components/Education'
 import CoverageReport from './components/CoverageReport'
 import PipelineRuns from './components/PipelineRuns'
+import QALab from './components/QALab'
 import QualityGates from './components/QualityGates'
 import Deploy from './components/Deploy'
 import PipelineGridBg from './components/PipelineGridBg'
 import ResumeModal from './components/ResumeModal'
+import TestSuiteModal from './components/TestSuiteModal'
+import RecruiterView from './components/RecruiterView'
 import Sidebar from './components/Sidebar'
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true)
   const [showContent, setShowContent] = useState(false)
   const [isResumeModalOpen, setIsResumeModalOpen] = useState(false)
+  const [isRecruiterViewOpen, setIsRecruiterViewOpen] = useState(false)
+  const [testSuiteProject, setTestSuiteProject] = useState(null)
 
   const openResumeModal = () => setIsResumeModalOpen(true)
   const closeResumeModal = () => setIsResumeModalOpen(false)
+
+  const openRecruiterView = () => setIsRecruiterViewOpen(true)
+  const closeRecruiterView = () => setIsRecruiterViewOpen(false)
+
+  const openTestSuite = (projectTitle) => setTestSuiteProject(projectTitle)
+  const closeTestSuite = () => setTestSuiteProject(null)
 
   const handlePreloaderComplete = () => {
     setIsLoading(false)
@@ -44,7 +56,10 @@ export default function App() {
       >
         <PipelineGridBg active={showContent} />
         <Sidebar />
-        <Navbar onOpenResume={openResumeModal} />
+        <Navbar
+          onOpenResume={openResumeModal}
+          onOpenRecruiterView={openRecruiterView}
+        />
         <motion.main
           style={{ position: 'relative', zIndex: 1 }}
           initial={{ opacity: 0, y: 20 }}
@@ -54,14 +69,26 @@ export default function App() {
           <Hero onOpenResume={openResumeModal} />
           <StatusStrip />
           <TestPlan onOpenResume={openResumeModal} />
+          <Experience />
           <BeyondTheConsole />
           <Education />
           <CoverageReport />
-          <PipelineRuns />
+          <PipelineRuns onViewTestSuite={openTestSuite} />
+          <QALab />
           <QualityGates />
           <Deploy />
         </motion.main>
         <ResumeModal isOpen={isResumeModalOpen} onClose={closeResumeModal} />
+        <TestSuiteModal
+          isOpen={!!testSuiteProject}
+          onClose={closeTestSuite}
+          projectTitle={testSuiteProject || ''}
+        />
+        <RecruiterView
+          isOpen={isRecruiterViewOpen}
+          onClose={closeRecruiterView}
+          onOpenResume={openResumeModal}
+        />
       </motion.div>
     </>
   )

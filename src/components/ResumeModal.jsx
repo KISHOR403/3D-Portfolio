@@ -1,91 +1,88 @@
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, FileText, Eye, Download, Sparkles, CheckCircle2 } from 'lucide-react'
+import { X, FileText, Eye, Download, ArrowLeft, ExternalLink } from 'lucide-react'
 
-// CV Data list with titles, descriptions, badges, and paths
+// CV Data list with human-crafted descriptions and focus areas
 const CV_LIST = [
   {
     id: 'qa',
     title: 'QA Engineer',
     subtitle: 'Quality Assurance & Test Automation Specialist',
-    badge: 'RECOMMENDED',
-    badgeColor: 'rgba(74, 222, 154, 0.15)',
-    badgeTextColor: '#4ade80',
-    badgeBorder: 'rgba(74, 222, 154, 0.3)',
-    description: 'Comprehensive QA resume highlighting manual STLC, test automation with Selenium, REST Assured, and CI/CD integration.',
+    isRecommended: true,
+    recommendationText: 'Recommended for QA roles',
+    description: 'Manual QA, API testing and test automation experience.',
+    focusAreas: 'Manual QA · API Testing · Automation · CI/CD',
     fileName: 'Kishor_Gogoi_QA.pdf',
     filePath: '/cv/Kishor_Gogoi_QA.pdf',
-    size: '18 KB',
-    updated: '2026',
-    tags: ['Selenium', 'REST Assured', 'Postman', 'STLC', 'SQL'],
+    metadata: 'PDF · 1 page · Updated Sep 2026',
   },
   {
     id: 'sdet',
-    title: 'SDET (Software Development Engineer in Test)',
-    subtitle: 'Automation Architecture & Code-Driven Testing',
-    badge: 'AUTOMATION',
-    badgeColor: 'rgba(56, 189, 248, 0.15)',
-    badgeTextColor: '#38bdf8',
-    badgeBorder: 'rgba(56, 189, 248, 0.3)',
-    description: 'Focused on test framework development, Page Object Model design, automated API testing, and continuous integration.',
+    title: 'SDET',
+    subtitle: 'Software Development Engineer in Test',
+    isRecommended: false,
+    description: 'Automation frameworks, API testing and CI/CD.',
+    focusAreas: 'POM Architecture · Java / JS · Jenkins · Appium · CI/CD',
     fileName: 'Kishor_Gogoi_SDET.pdf',
     filePath: '/cv/Kishor_Gogoi_SDET.pdf',
-    size: '18 KB',
-    updated: '2026',
-    tags: ['POM Architecture', 'Java / JS', 'Jenkins', 'Appium', 'CI/CD'],
+    metadata: 'PDF · 1 page · Updated Sep 2026',
   },
   {
     id: 'software-testing',
     title: 'Software Testing Engineer',
     subtitle: 'Full-Cycle Web & System Testing',
-    badge: 'CORE QA',
-    badgeColor: 'rgba(242, 169, 59, 0.15)',
-    badgeTextColor: '#F2A93B',
-    badgeBorder: 'rgba(242, 169, 59, 0.3)',
-    description: 'Covers end-to-end testing processes, defect tracking in Jira, regression testing, and functional/non-functional verification.',
+    isRecommended: false,
+    description: 'Core testing, defect management and quality processes.',
+    focusAreas: 'Functional Testing · Regression · Jira · Defect Tracking',
     fileName: 'Kishor_Gogoi_Software_Testing.pdf',
     filePath: '/cv/Kishor_Gogoi_Software_Testing.pdf',
-    size: '18 KB',
-    updated: '2026',
-    tags: ['Functional Testing', 'Regression', 'Jira', 'Bug Tracking', 'Test Cases'],
+    metadata: 'PDF · 1 page · Updated Sep 2026',
   },
   {
     id: 'manual-testing',
     title: 'Manual Testing Specialist',
     subtitle: 'Exploratory, Usability & Test Case Execution',
-    badge: 'MANUAL QA',
-    badgeColor: 'rgba(168, 85, 247, 0.15)',
-    badgeTextColor: '#a855f7',
-    badgeBorder: 'rgba(168, 85, 247, 0.3)',
-    description: 'Detail-oriented manual testing resume emphasizing test planning, boundary value analysis, exploratory testing, and QA documentation.',
+    isRecommended: false,
+    description: 'Exploratory testing, test planning and QA documentation.',
+    focusAreas: 'Exploratory Testing · Test Planning · UI/UX Verification · SDLC',
     fileName: 'Kishor_Gogoi_Manual_Testing.pdf',
     filePath: '/cv/Kishor_Gogoi_Manual_Testing.pdf',
-    size: '18 KB',
-    updated: '2026',
-    tags: ['Exploratory', 'Test Documentation', 'UI/UX Verification', 'SDLC'],
+    metadata: 'PDF · 1 page · Updated Sep 2026',
   },
   {
     id: 'game-tester',
     title: 'Game Tester / QA',
     subtitle: 'Gaming Mechanics, Performance & Compliance',
-    badge: 'GAMING',
-    badgeColor: 'rgba(244, 63, 94, 0.15)',
-    badgeTextColor: '#f43f5e',
-    badgeBorder: 'rgba(244, 63, 94, 0.3)',
-    description: 'Specialized for gaming quality assurance, mechanics testing, performance benchmarking, physics checks, and bug logging.',
+    isRecommended: false,
+    description: 'Gameplay mechanics, performance testing and bug logging.',
+    focusAreas: 'Gameplay QA · Mechanics Testing · Performance · Bug Logging',
     fileName: 'Kishor_Gogoi_Game_Tester.pdf',
     filePath: '/cv/Kishor_Gogoi_Game_Tester.pdf',
-    size: '18 KB',
-    updated: '2026',
-    tags: ['Gameplay QA', 'Performance Testing', 'Cross-Platform', 'Physics Checks'],
+    metadata: 'PDF · 1 page · Updated Sep 2026',
   },
 ]
 
 export default function ResumeModal({ isOpen, onClose }) {
-  // Listen for Escape key to close modal
+  const [previewCv, setPreviewCv] = useState(null)
+  const [hoveredCardId, setHoveredCardId] = useState(null)
+
+  // Reset preview when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      setPreviewCv(null)
+    }
+  }, [isOpen])
+
+  // Listen for Escape key to go back from preview or close modal
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape') {
+        if (previewCv) {
+          setPreviewCv(null)
+        } else {
+          onClose()
+        }
+      }
     }
     if (isOpen) {
       document.body.style.overflow = 'hidden'
@@ -95,7 +92,7 @@ export default function ResumeModal({ isOpen, onClose }) {
       document.body.style.overflow = ''
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [isOpen, onClose])
+  }, [isOpen, previewCv, onClose])
 
   return (
     <AnimatePresence>
@@ -108,7 +105,7 @@ export default function ResumeModal({ isOpen, onClose }) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '1.25rem',
+            padding: '1rem',
           }}
         >
           {/* Backdrop Blur Overlay */}
@@ -116,423 +113,578 @@ export default function ResumeModal({ isOpen, onClose }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            onClick={onClose}
+            transition={{ duration: 0.2 }}
+            onClick={() => {
+              if (previewCv) setPreviewCv(null)
+              onClose()
+            }}
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'rgba(10, 14, 18, 0.82)',
-              backdropFilter: 'blur(12px) saturate(160%)',
-              WebkitBackdropFilter: 'blur(12px) saturate(160%)',
+              background: 'rgba(0, 0, 0, 0.68)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
             }}
           />
 
-          {/* Modal Card Window */}
+          {/* Modal Container */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.94, y: 15 }}
+            initial={{ opacity: 0, scale: 0.96, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.94, y: 15 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            exit={{ opacity: 0, scale: 0.96, y: 10 }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
             style={{
               position: 'relative',
               width: '100%',
-              maxWidth: '820px',
-              maxHeight: '90vh',
+              maxWidth: previewCv ? '920px' : '760px',
+              maxHeight: '86vh',
               display: 'flex',
               flexDirection: 'column',
-              background: '#0F1419',
-              border: '1px solid #232C35',
-              borderRadius: '20px',
-              boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 30px rgba(74, 222, 154, 0.12)',
+              background: '#0D1117',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              borderRadius: '16px',
+              boxShadow: '0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.04)',
               overflow: 'hidden',
               zIndex: 1001,
+              transition: 'max-width 0.25s ease',
             }}
           >
-            {/* Ambient Background Accent */}
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                right: 0,
-                width: '350px',
-                height: '350px',
-                background: 'radial-gradient(circle, rgba(74, 222, 154, 0.07) 0%, transparent 70%)',
-                pointerEvents: 'none',
-              }}
-            />
-
-            {/* Modal Header */}
-            <div
-              style={{
-                padding: '1.5rem 1.75rem 1.25rem',
-                borderBottom: '1px solid rgba(35, 44, 53, 0.7)',
-                display: 'flex',
-                alignItems: 'flex-start',
-                justifyContent: 'space-between',
-                gap: '1rem',
-                background: 'rgba(15, 20, 25, 0.95)',
-              }}
-            >
-              <div>
-                <div
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.7rem',
-                    fontWeight: 600,
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    color: 'var(--color-accent-pass)',
-                    background: 'rgba(74, 222, 154, 0.1)',
-                    border: '1px solid rgba(74, 222, 154, 0.25)',
-                    borderRadius: '999px',
-                    padding: '4px 12px',
-                    marginBottom: '0.5rem',
-                  }}
-                >
-                  <Sparkles size={11} />
-                  Kishor Gogoi · CV Repository
-                </div>
-                <h3
-                  style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: '1.4rem',
-                    fontWeight: 700,
-                    color: 'var(--color-text-primary)',
-                    letterSpacing: '-0.02em',
-                    margin: 0,
-                  }}
-                >
-                  Select Resume Version
-                </h3>
-                <p
-                  style={{
-                    fontFamily: 'var(--font-sans)',
-                    fontSize: '0.85rem',
-                    color: 'var(--color-text-muted)',
-                    margin: '0.25rem 0 0',
-                  }}
-                >
-                  Choose a specialized CV tailored to your target engineering role to view or download.
-                </p>
-              </div>
-
-              {/* Close Button */}
-              <button
-                onClick={onClose}
-                aria-label="Close modal"
+            {/* VIEW 1: PDF PREVIEW INTERFACE */}
+            {previewCv ? (
+              <div
                 style={{
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  borderRadius: '50%',
-                  width: '36px',
-                  height: '36px',
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'var(--color-text-muted)',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  flexShrink: 0,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)'
-                  e.currentTarget.style.color = '#fff'
-                  e.currentTarget.style.transform = 'rotate(90deg)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'
-                  e.currentTarget.style.color = 'var(--color-text-muted)'
-                  e.currentTarget.style.transform = 'rotate(0deg)'
+                  flexDirection: 'column',
+                  height: '84vh',
+                  maxHeight: '84vh',
+                  background: '#0D1117',
                 }}
               >
-                <X size={18} />
-              </button>
-            </div>
-
-            {/* Modal Body / Scrollable Content */}
-            <div
-              style={{
-                padding: '1.25rem 1.75rem 1.75rem',
-                overflowY: 'auto',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '1rem',
-              }}
-            >
-              {CV_LIST.map((cv) => (
+                {/* Top Navigation / Action Bar */}
                 <div
-                  key={cv.id}
                   style={{
-                    background: 'rgba(22, 29, 36, 0.65)',
-                    border: '1px solid var(--color-border-hairline)',
-                    borderRadius: '14px',
-                    padding: '1.25rem',
+                    padding: '0.85rem 1.25rem',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '1rem',
+                    background: 'rgba(15, 20, 25, 0.95)',
+                    flexShrink: 0,
+                  }}
+                >
+                  {/* Back Button & Title */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
+                    <button
+                      onClick={() => setPreviewCv(null)}
+                      aria-label="Back to resume list"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        borderRadius: '8px',
+                        padding: '6px 12px',
+                        color: 'var(--color-text-primary)',
+                        fontFamily: 'var(--font-sans)',
+                        fontSize: '0.8rem',
+                        fontWeight: 500,
+                        cursor: 'pointer',
+                        transition: 'background 0.15s ease, border-color 0.15s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'
+                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)'
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'
+                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)'
+                      }}
+                    >
+                      <ArrowLeft size={15} />
+                      <span>Back</span>
+                    </button>
+
+                    <div style={{ minWidth: 0 }}>
+                      <div
+                        style={{
+                          fontFamily: 'var(--font-sans)',
+                          fontSize: '0.9rem',
+                          fontWeight: 600,
+                          color: 'var(--color-text-primary)',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}
+                      >
+                        Resume Preview
+                      </div>
+                      <div
+                        style={{
+                          fontFamily: 'var(--font-sans)',
+                          fontSize: '0.75rem',
+                          color: 'var(--color-text-muted)',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}
+                      >
+                        {previewCv.title} · Kishor Gogoi
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Actions: Download, Open in New Tab, Close */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                    {/* Open in New Tab */}
+                    <a
+                      href={previewCv.filePath}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="Open in new tab"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        fontFamily: 'var(--font-sans)',
+                        fontSize: '0.78rem',
+                        fontWeight: 500,
+                        color: 'var(--color-text-muted)',
+                        background: 'transparent',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        borderRadius: '8px',
+                        padding: '6px 12px',
+                        textDecoration: 'none',
+                        transition: 'color 0.15s ease, border-color 0.15s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = 'var(--color-text-primary)'
+                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.22)'
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = 'var(--color-text-muted)'
+                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)'
+                      }}
+                    >
+                      <ExternalLink size={13} />
+                      <span className="hidden sm:inline">Open in New Tab</span>
+                    </a>
+
+                    {/* Download PDF button */}
+                    <a
+                      href={previewCv.filePath}
+                      download={previewCv.fileName}
+                      id={`btn-download-preview-${previewCv.id}`}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        fontFamily: 'var(--font-sans)',
+                        fontSize: '0.78rem',
+                        fontWeight: 600,
+                        color: '#0F1419',
+                        background: 'var(--color-accent-pass)',
+                        borderRadius: '8px',
+                        padding: '6px 14px',
+                        textDecoration: 'none',
+                        transition: 'opacity 0.15s ease',
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.9')}
+                      onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+                    >
+                      <Download size={13} />
+                      <span className="hidden sm:inline">Download PDF</span>
+                      <span className="sm:hidden">PDF</span>
+                    </a>
+
+                    {/* Close button */}
+                    <button
+                      onClick={onClose}
+                      aria-label="Close modal"
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '6px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'var(--color-text-muted)',
+                        cursor: 'pointer',
+                        transition: 'color 0.15s ease, background 0.15s ease',
+                        marginLeft: '4px',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = '#FFFFFF'
+                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = 'var(--color-text-muted)'
+                        e.currentTarget.style.background = 'transparent'
+                      }}
+                    >
+                      <X size={18} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* PDF Viewer Canvas */}
+                <div
+                  style={{
+                    flex: 1,
+                    minHeight: 0,
+                    background: '#11161D',
+                    position: 'relative',
+                  }}
+                >
+                  <iframe
+                    src={`${previewCv.filePath}#toolbar=0&navpanes=0`}
+                    title={`Resume Preview - ${previewCv.title}`}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      border: 'none',
+                      display: 'block',
+                      background: '#11161D',
+                    }}
+                  />
+                </div>
+              </div>
+            ) : (
+              /* VIEW 2: RESUME LIBRARY LIST VIEW */
+              <>
+                {/* Clean Editorial Header */}
+                <div
+                  style={{
+                    padding: '1.5rem 1.75rem 1.15rem',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.07)',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between',
+                    gap: '1rem',
+                    background: '#0D1117',
+                    flexShrink: 0,
+                  }}
+                >
+                  <div>
+                    <h3
+                      style={{
+                        fontFamily: 'var(--font-sans)',
+                        fontSize: '1.25rem',
+                        fontWeight: 600,
+                        color: 'var(--color-text-primary)',
+                        letterSpacing: '-0.02em',
+                        margin: 0,
+                      }}
+                    >
+                      Resume Library
+                    </h3>
+                    <p
+                      style={{
+                        fontFamily: 'var(--font-sans)',
+                        fontSize: '0.85rem',
+                        color: 'var(--color-text-muted)',
+                        margin: '0.3rem 0 0',
+                        lineHeight: 1.45,
+                      }}
+                    >
+                      Choose the version that best matches the role you&apos;re applying for.
+                    </p>
+                    <div
+                      style={{
+                        marginTop: '0.35rem',
+                        fontFamily: 'var(--font-sans)',
+                        fontSize: '0.75rem',
+                        color: '#8492A6',
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      {CV_LIST.length} tailored versions · All resume versions are ATS-friendly PDF formats.
+                    </div>
+                  </div>
+
+                  {/* Close Button */}
+                  <button
+                    onClick={onClose}
+                    aria-label="Close modal"
+                    style={{
+                      background: 'transparent',
+                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                      borderRadius: '8px',
+                      width: '32px',
+                      height: '32px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'var(--color-text-muted)',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s ease',
+                      flexShrink: 0,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'
+                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.18)'
+                      e.currentTarget.style.color = '#FFFFFF'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'transparent'
+                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)'
+                      e.currentTarget.style.color = 'var(--color-text-muted)'
+                    }}
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+
+                {/* Resume Cards Container with Internal Scrolling */}
+                <div
+                  style={{
+                    padding: '1.25rem 1.75rem',
+                    overflowY: 'auto',
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '0.85rem',
-                    transition: 'all 0.25s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = cv.badgeTextColor
-                    e.currentTarget.style.background = 'rgba(22, 29, 36, 0.95)'
-                    e.currentTarget.style.boxShadow = `0 4px 20px -4px ${cv.badgeColor}`
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'var(--color-border-hairline)'
-                    e.currentTarget.style.background = 'rgba(22, 29, 36, 0.65)'
-                    e.currentTarget.style.boxShadow = 'none'
+                    flex: 1,
                   }}
                 >
-                  {/* Top Bar of CV Card */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      justifyContent: 'space-between',
-                      gap: '0.75rem',
-                      flexWrap: 'wrap',
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  {CV_LIST.map((cv) => {
+                    const isHovered = hoveredCardId === cv.id
+
+                    return (
                       <div
+                        key={cv.id}
+                        onMouseEnter={() => setHoveredCardId(cv.id)}
+                        onMouseLeave={() => setHoveredCardId(null)}
                         style={{
-                          width: '38px',
-                          height: '38px',
-                          borderRadius: '10px',
-                          background: cv.badgeColor,
-                          border: `1px solid ${cv.badgeBorder}`,
+                          background: isHovered
+                            ? 'rgba(255, 255, 255, 0.04)'
+                            : 'rgba(255, 255, 255, 0.02)',
+                          border: isHovered
+                            ? '1px solid rgba(255, 255, 255, 0.16)'
+                            : '1px solid rgba(255, 255, 255, 0.07)',
+                          borderRadius: '14px',
+                          padding: '1.15rem 1.35rem',
                           display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          color: cv.badgeTextColor,
-                          flexShrink: 0,
+                          flexDirection: 'column',
+                          gap: '0.7rem',
+                          transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
+                          transition:
+                            'transform 0.18s ease, background 0.18s ease, border-color 0.18s ease',
                         }}
                       >
-                        <FileText size={20} />
-                      </div>
-                      <div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <h4
+                        {/* Top: Minimal Document Icon + Title + Role + Subtle Recommendation */}
+                        <div
+                          style={{
+                            display: 'flex',
+                            alignItems: 'flex-start',
+                            gap: '12px',
+                          }}
+                        >
+                          {/* Consistent Minimal Document Icon */}
+                          <div
                             style={{
-                              fontFamily: 'var(--font-display)',
-                              fontSize: '1.05rem',
-                              fontWeight: 600,
-                              color: 'var(--color-text-primary)',
-                              margin: 0,
+                              width: '34px',
+                              height: '34px',
+                              borderRadius: '8px',
+                              background: 'rgba(255, 255, 255, 0.035)',
+                              border: '1px solid rgba(255, 255, 255, 0.08)',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              color: 'var(--color-accent-pass)',
+                              flexShrink: 0,
+                              marginTop: '2px',
                             }}
                           >
-                            {cv.title}
-                          </h4>
-                          <span
-                            style={{
-                              fontFamily: 'var(--font-mono)',
-                              fontSize: '0.625rem',
-                              fontWeight: 700,
-                              letterSpacing: '0.08em',
-                              padding: '2px 8px',
-                              borderRadius: '4px',
-                              background: cv.badgeColor,
-                              color: cv.badgeTextColor,
-                              border: `1px solid ${cv.badgeBorder}`,
-                            }}
-                          >
-                            {cv.badge}
-                          </span>
+                            <FileText size={17} />
+                          </div>
+
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                flexWrap: 'wrap',
+                              }}
+                            >
+                              <h4
+                                style={{
+                                  fontFamily: 'var(--font-sans)',
+                                  fontSize: '1rem',
+                                  fontWeight: 600,
+                                  color: 'var(--color-text-primary)',
+                                  letterSpacing: '-0.01em',
+                                  margin: 0,
+                                }}
+                              >
+                                {cv.title}
+                              </h4>
+
+                              {/* Subtle Understated Recommendation */}
+                              {cv.isRecommended && (
+                                <span
+                                  style={{
+                                    fontFamily: 'var(--font-sans)',
+                                    fontSize: '0.725rem',
+                                    fontWeight: 500,
+                                    color: 'var(--color-accent-pass)',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '4px',
+                                    opacity: 0.9,
+                                  }}
+                                >
+                                  <span>●</span> {cv.recommendationText}
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Subtitle */}
+                            <span
+                              style={{
+                                fontFamily: 'var(--font-sans)',
+                                fontSize: '0.8rem',
+                                color: 'var(--color-text-muted)',
+                                display: 'block',
+                                marginTop: '2px',
+                              }}
+                            >
+                              {cv.subtitle}
+                            </span>
+                          </div>
                         </div>
-                        <span
+
+                        {/* Short Natural Description */}
+                        <p
                           style={{
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '0.75rem',
-                            color: 'var(--color-text-muted)',
-                            display: 'block',
-                            marginTop: '2px',
+                            fontFamily: 'var(--font-sans)',
+                            fontSize: '0.825rem',
+                            color: '#CBD5E1',
+                            margin: 0,
+                            lineHeight: 1.5,
                           }}
                         >
-                          {cv.subtitle}
-                        </span>
+                          {cv.description}
+                        </p>
+
+                        {/* Focus Areas as Normal Typography */}
+                        <div
+                          style={{
+                            fontFamily: 'var(--font-sans)',
+                            fontSize: '0.76rem',
+                            color: '#94A3B8',
+                            letterSpacing: '0.01em',
+                          }}
+                        >
+                          {cv.focusAreas}
+                        </div>
+
+                        {/* Bottom Row: Clean Metadata + Action Buttons */}
+                        <div
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            gap: '1rem',
+                            paddingTop: '0.45rem',
+                            borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+                            flexWrap: 'wrap',
+                          }}
+                        >
+                          {/* Understated Metadata */}
+                          <div
+                            style={{
+                              fontFamily: 'var(--font-sans)',
+                              fontSize: '0.75rem',
+                              color: '#7E8B9B',
+                            }}
+                          >
+                            {cv.metadata}
+                          </div>
+
+                          {/* Action Buttons: Preview + Download PDF */}
+                          <div
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '8px',
+                            }}
+                          >
+                            {/* Preview Button (Secondary) */}
+                            <button
+                              type="button"
+                              onClick={() => setPreviewCv(cv)}
+                              id={`btn-view-cv-${cv.id}`}
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                fontFamily: 'var(--font-sans)',
+                                fontSize: '0.75rem',
+                                fontWeight: 500,
+                                color: '#E2E8F0',
+                                background: 'rgba(255, 255, 255, 0.04)',
+                                border: '1px solid rgba(255, 255, 255, 0.12)',
+                                borderRadius: '8px',
+                                padding: '6px 13px',
+                                cursor: 'pointer',
+                                transition: 'background 0.15s ease, border-color 0.15s ease',
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.09)'
+                                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.22)'
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)'
+                                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)'
+                              }}
+                            >
+                              <Eye size={13} />
+                              <span>Preview</span>
+                            </button>
+
+                            {/* Download PDF Button (Primary) */}
+                            <a
+                              href={cv.filePath}
+                              download={cv.fileName}
+                              id={`btn-download-cv-${cv.id}`}
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                fontFamily: 'var(--font-sans)',
+                                fontSize: '0.75rem',
+                                fontWeight: 600,
+                                color: '#0F1419',
+                                background: 'var(--color-accent-pass)',
+                                border: '1px solid var(--color-accent-pass)',
+                                borderRadius: '8px',
+                                padding: '6px 14px',
+                                textDecoration: 'none',
+                                cursor: 'pointer',
+                                transition: 'opacity 0.15s ease',
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.opacity = '0.9'
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.opacity = '1'
+                              }}
+                            >
+                              <Download size={13} />
+                              <span>Download PDF</span>
+                            </a>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-
-                    <div
-                      style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.7rem',
-                        color: 'var(--color-text-muted)',
-                        background: 'rgba(15, 20, 25, 0.6)',
-                        padding: '4px 10px',
-                        borderRadius: '6px',
-                        border: '1px solid rgba(255, 255, 255, 0.05)',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      PDF · {cv.size}
-                    </div>
-                  </div>
-
-                  {/* Description */}
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-sans)',
-                      fontSize: '0.85rem',
-                      lineHeight: 1.5,
-                      color: 'var(--color-text-muted)',
-                      margin: 0,
-                    }}
-                  >
-                    {cv.description}
-                  </p>
-
-                  {/* Tags & Action Buttons */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      gap: '1rem',
-                      flexWrap: 'wrap',
-                      paddingTop: '0.4rem',
-                      borderTop: '1px dashed rgba(255, 255, 255, 0.06)',
-                    }}
-                  >
-                    {/* Skill Tags */}
-                    <div
-                      style={{
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        gap: '6px',
-                      }}
-                    >
-                      {cv.tags.map((tag, idx) => (
-                        <span
-                          key={idx}
-                          style={{
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '0.65rem',
-                            color: '#94a3b8',
-                            background: 'rgba(255, 255, 255, 0.04)',
-                            padding: '2px 8px',
-                            borderRadius: '4px',
-                            border: '1px solid rgba(255, 255, 255, 0.06)',
-                          }}
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* Action Buttons: View & Download */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      {/* View PDF button */}
-                      <a
-                        href={cv.filePath}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        id={`btn-view-cv-${cv.id}`}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '6px',
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.725rem',
-                          fontWeight: 600,
-                          color: 'var(--color-text-primary)',
-                          background: 'rgba(255, 255, 255, 0.06)',
-                          border: '1px solid rgba(255, 255, 255, 0.15)',
-                          borderRadius: '8px',
-                          padding: '7px 14px',
-                          textDecoration: 'none',
-                          transition: 'all 0.2s ease',
-                          cursor: 'pointer',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.14)'
-                          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)'
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)'
-                          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)'
-                        }}
-                      >
-                        <Eye size={13} />
-                        View PDF
-                      </a>
-
-                      {/* Download PDF button */}
-                      <a
-                        href={cv.filePath}
-                        download={cv.fileName}
-                        id={`btn-download-cv-${cv.id}`}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '6px',
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.725rem',
-                          fontWeight: 600,
-                          color: 'var(--color-bg-base)',
-                          background: cv.badgeTextColor,
-                          border: `1px solid ${cv.badgeTextColor}`,
-                          borderRadius: '8px',
-                          padding: '7px 16px',
-                          textDecoration: 'none',
-                          transition: 'all 0.2s ease',
-                          cursor: 'pointer',
-                          boxShadow: `0 0 12px ${cv.badgeColor}`,
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.opacity = '0.9'
-                          e.currentTarget.style.transform = 'translateY(-1px)'
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.opacity = '1'
-                          e.currentTarget.style.transform = 'translateY(0)'
-                        }}
-                      >
-                        <Download size={13} />
-                        Download
-                      </a>
-                    </div>
-                  </div>
+                    )
+                  })}
                 </div>
-              ))}
-            </div>
-
-            {/* Modal Footer */}
-            <div
-              style={{
-                padding: '1rem 1.75rem',
-                borderTop: '1px solid rgba(35, 44, 53, 0.7)',
-                background: 'rgba(12, 16, 20, 0.95)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.7rem',
-                color: 'var(--color-text-muted)',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <CheckCircle2 size={13} color="var(--color-accent-pass)" />
-                All resumes formatted & verified for ATS compatibility
-              </div>
-              <button
-                onClick={onClose}
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  color: 'var(--color-text-muted)',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.75rem',
-                  cursor: 'pointer',
-                  textDecoration: 'underline',
-                }}
-              >
-                Close Window
-              </button>
-            </div>
+              </>
+            )}
           </motion.div>
         </div>
       )}

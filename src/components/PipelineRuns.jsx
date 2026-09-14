@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { Check, ExternalLink, Star, Lock, Box, Cpu } from 'lucide-react'
+import { Check, ExternalLink, Star, Lock, Box, Cpu, FlaskConical } from 'lucide-react'
 
 const PROJECTS = [
   {
@@ -292,7 +292,7 @@ const renderProjectSkillIcon = (tech, size = 10) => {
   return <Cpu size={size} style={{ opacity: 0.8 }} />
 }
 
-function PipelineCard({ project, index, progress }) {
+function PipelineCard({ project, index, progress, onViewTestSuite }) {
   const [phase, setPhase] = useState('idle') // 'idle' | 'running' | 'passed'
 
   useEffect(() => {
@@ -547,6 +547,7 @@ function PipelineCard({ project, index, progress }) {
               display: 'flex',
               flexDirection: 'column',
               gap: '0.35rem',
+              marginBottom: '1rem',
             }}
           >
             {project.outcomes.map((outcome, j) => (
@@ -576,6 +577,37 @@ function PipelineCard({ project, index, progress }) {
               </li>
             ))}
           </ul>
+
+          {/* View Test Suite action */}
+          <button
+            onClick={() => onViewTestSuite && onViewTestSuite(project.title)}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.72rem',
+              fontWeight: 600,
+              color: 'var(--color-text-muted)',
+              background: 'rgba(255, 255, 255, 0.04)',
+              border: '1px solid var(--color-border-hairline)',
+              borderRadius: '8px',
+              padding: '6px 14px',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.borderColor = 'rgba(74, 222, 154, 0.3)'
+              e.currentTarget.style.color = 'var(--color-accent-pass)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.borderColor = 'var(--color-border-hairline)'
+              e.currentTarget.style.color = 'var(--color-text-muted)'
+            }}
+          >
+            <FlaskConical size={12} />
+            View Test Suite
+          </button>
         </div>
 
         <style>{`
@@ -598,7 +630,7 @@ function PipelineCard({ project, index, progress }) {
   )
 }
 
-export default function PipelineRuns() {
+export default function PipelineRuns({ onViewTestSuite }) {
   const containerRef = useRef(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -652,6 +684,7 @@ export default function PipelineRuns() {
               project={project}
               index={i}
               progress={scrollYProgress}
+              onViewTestSuite={onViewTestSuite}
             />
           ))}
         </div>
