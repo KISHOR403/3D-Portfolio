@@ -5,6 +5,28 @@ import ConsoleFallback from './ConsoleFallback'
 
 const getIsMobile = () => typeof window !== 'undefined' && window.innerWidth < 1024
 
+const heroContainerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+}
+
+const heroChildVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: 'easeOut',
+    },
+  },
+}
+
 export default function Hero({ onOpenResume }) {
   const [isMobile, setIsMobile] = useState(getIsMobile)
 
@@ -51,15 +73,16 @@ export default function Hero({ onOpenResume }) {
           alignItems: 'center',
         }}
       >
-        {/* Left Column — Dominated by Massive H1 */}
+        {/* Left Column — Staggered Entrance on Mount */}
         <motion.div
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          variants={heroContainerVariants}
+          initial="hidden"
+          animate="visible"
           style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
         >
           {/* Exactly 2 Badges Above Headline */}
-          <div
+          <motion.div
+            variants={heroChildVariants}
             style={{
               display: 'flex',
               flexWrap: 'wrap',
@@ -117,10 +140,11 @@ export default function Hero({ onOpenResume }) {
             >
               Bengaluru, IN · Full-Stack & QA
             </div>
-          </div>
+          </motion.div>
 
           {/* Dominate H1 — Strict 96-120px Scale (48px mobile, line-height 0.95, weight 800) */}
-          <h1
+          <motion.h1
+            variants={heroChildVariants}
             style={{
               fontFamily: 'var(--font-display)',
               fontSize: isMobile ? '48px' : 'clamp(96px, 7.8vw, 118px)',
@@ -133,10 +157,11 @@ export default function Hero({ onOpenResume }) {
             }}
           >
             Kishor Gogoi
-          </h1>
+          </motion.h1>
 
           {/* Clean Subtitle Line */}
-          <p
+          <motion.p
+            variants={heroChildVariants}
             style={{
               fontFamily: 'var(--font-mono)',
               fontSize: isMobile ? '1rem' : '1.25rem',
@@ -147,10 +172,11 @@ export default function Hero({ onOpenResume }) {
             }}
           >
             Full Stack Developer &amp; QA Automation Engineer
-          </p>
+          </motion.p>
 
           {/* Disciplined Editorial Body — Strict 16px, line-height 1.65 */}
-          <p
+          <motion.p
+            variants={heroChildVariants}
             style={{
               fontFamily: 'var(--font-sans)',
               fontSize: 'var(--font-size-body)',
@@ -162,10 +188,11 @@ export default function Hero({ onOpenResume }) {
             }}
           >
             Designing resilient full-stack architectures and enterprise test frameworks — eliminating regression cycles and shipping bug-free web applications.
-          </p>
+          </motion.p>
 
-          {/* Action CTAs — Disciplined Focal Point Hierarchy */}
-          <div
+          {/* Action CTAs — Staggered & Micro-Interactions */}
+          <motion.div
+            variants={heroChildVariants}
             style={{
               display: 'flex',
               flexWrap: 'wrap',
@@ -173,10 +200,13 @@ export default function Hero({ onOpenResume }) {
               alignItems: 'center',
             }}
           >
-            {/* Primary Action — Sole Bright Teal Accent on Screen */}
-            <a
+            {/* Primary Action */}
+            <motion.a
               href="#pipeline-runs"
               id="hero-cta-projects"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -191,27 +221,21 @@ export default function Hero({ onOpenResume }) {
                 textDecoration: 'none',
                 padding: '14px 28px',
                 borderRadius: '999px',
-                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
                 boxShadow: '0 0 25px rgba(74, 222, 154, 0.25)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 35px rgba(74, 222, 154, 0.45)'
-                e.currentTarget.style.transform = 'translateY(-2px)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 25px rgba(74, 222, 154, 0.25)'
-                e.currentTarget.style.transform = 'translateY(0)'
               }}
             >
               <span>Explore Projects</span>
               <ArrowDown size={14} />
-            </a>
+            </motion.a>
 
-            {/* Secondary Action — Subtle Translucent Glass */}
-            <button
+            {/* Secondary Action */}
+            <motion.button
               onClick={onOpenResume}
               id="hero-cta-resume"
               type="button"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -226,28 +250,20 @@ export default function Hero({ onOpenResume }) {
                 padding: '14px 26px',
                 borderRadius: '999px',
                 border: '1px solid rgba(255, 255, 255, 0.12)',
-                transition: 'all 0.25s ease',
                 cursor: 'pointer',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)'
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)'
-                e.currentTarget.style.transform = 'translateY(-2px)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)'
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)'
-                e.currentTarget.style.transform = 'translateY(0)'
               }}
             >
               <Download size={14} />
               <span>Resume Library</span>
-            </button>
+            </motion.button>
 
             {/* Tertiary Link */}
-            <a
+            <motion.a
               href="#deploy"
               id="hero-cta-contact"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -259,22 +275,19 @@ export default function Hero({ onOpenResume }) {
                 color: 'var(--color-text-muted)',
                 textDecoration: 'none',
                 padding: '12px 14px',
-                transition: 'color 0.2s ease',
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#F8FAFC')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--color-text-muted)')}
             >
               <span>Get in touch</span>
               <ArrowUpRight size={13} />
-            </a>
-          </div>
+            </motion.a>
+          </motion.div>
         </motion.div>
 
-        {/* Right Column — Sleek, Non-competing Typewriter Terminal */}
+        {/* Right Column — Typewriter Terminal */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
           style={{
             display: 'flex',
             alignItems: 'center',

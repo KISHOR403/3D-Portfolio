@@ -292,7 +292,27 @@ const renderProjectSkillIcon = (tech, size = 10) => {
   return <Cpu size={size} style={{ opacity: 0.8 }} />
 }
 
+const projectsContainerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+}
+
+const projectCardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: 'easeOut' },
+  },
+}
+
 function PipelineCard({ project, index, progress, onViewTestSuite }) {
+  const cardRef = useRef(null)
   const [phase, setPhase] = useState('idle') // 'idle' | 'running' | 'passed'
 
   useEffect(() => {
@@ -311,7 +331,8 @@ function PipelineCard({ project, index, progress, onViewTestSuite }) {
   const stickyTop = 85 + index * 24
 
   return (
-    <div
+    <motion.div
+      variants={projectCardVariants}
       style={{
         height: '100%',
         display: 'flex',
@@ -324,6 +345,8 @@ function PipelineCard({ project, index, progress, onViewTestSuite }) {
     >
       <motion.div
         className="corner-bracket-card pipeline-project-card"
+        whileHover={{ y: -6 }}
+        transition={{ duration: 0.25, ease: 'easeOut' }}
         style={{
           scale,
           transformOrigin: 'top center',
@@ -337,9 +360,6 @@ function PipelineCard({ project, index, progress, onViewTestSuite }) {
           maxWidth: '1000px',
           boxShadow: '0 -4px 30px rgba(0, 0, 0, 0.45)',
         }}
-        whileInView={{ opacity: 1 }}
-        initial={{ opacity: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
         onViewportEnter={() => { if (phase === 'idle') setPhase('running') }}
       >
         <div className="corner-bracket-corners" />
@@ -444,11 +464,14 @@ function PipelineCard({ project, index, progress, onViewTestSuite }) {
             </h3>
 
             {project.link && (
-              <a
+              <motion.a
                 href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"
                 id={`project-link-${index}`}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -458,25 +481,16 @@ function PipelineCard({ project, index, progress, onViewTestSuite }) {
                   fontWeight: 600,
                   color: 'var(--color-accent-pass)',
                   textDecoration: 'none',
-                  transition: 'all 0.25s ease',
                   padding: '4px 10px',
                   borderRadius: '999px',
                   background: 'rgba(74, 222, 154, 0.08)',
                   border: '1px solid rgba(74, 222, 154, 0.2)',
                   whiteSpace: 'nowrap',
                 }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(74, 222, 154, 0.18)'
-                  e.currentTarget.style.transform = 'translateX(2px)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(74, 222, 154, 0.08)'
-                  e.currentTarget.style.transform = 'translateX(0)'
-                }}
               >
                 <ExternalLink size={11} />
                 {project.link.includes('github.com') ? 'REPOSITORY' : 'LIVE DEMO'}
-              </a>
+              </motion.a>
             )}
           </div>
 
@@ -579,8 +593,11 @@ function PipelineCard({ project, index, progress, onViewTestSuite }) {
           </ul>
 
           {/* View Test Suite action */}
-          <button
+          <motion.button
             onClick={() => onViewTestSuite && onViewTestSuite(project.title)}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -607,7 +624,7 @@ function PipelineCard({ project, index, progress, onViewTestSuite }) {
           >
             <FlaskConical size={12} />
             View Test Suite
-          </button>
+          </motion.button>
         </div>
 
         <style>{`
@@ -626,7 +643,7 @@ function PipelineCard({ project, index, progress, onViewTestSuite }) {
           }
         `}</style>
       </motion.div>
-    </div>
+    </motion.div>
   )
 }
 
@@ -638,14 +655,16 @@ export default function PipelineRuns({ onViewTestSuite }) {
   })
 
   return (
-    <section id="pipeline-runs" style={{ background: 'transparent' }}>
+    <motion.section
+      id="pipeline-runs"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.05 }}
+      transition={{ duration: 0.7, ease: 'easeOut' }}
+      style={{ background: 'transparent' }}
+    >
       <div className="section-container">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.5 }}
-        >
+        <div>
           <p className="section-eyebrow">// FEATURED WORK</p>
           <h2
             className="section-headline-editorial"
@@ -667,10 +686,14 @@ export default function PipelineRuns({ onViewTestSuite }) {
           >
             Scroll to explore — Redoyanul-styled numbered project cards
           </p>
-        </motion.div>
+        </div>
 
-        <div
+        <motion.div
           ref={containerRef}
+          variants={projectsContainerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.05 }}
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -687,8 +710,8 @@ export default function PipelineRuns({ onViewTestSuite }) {
               onViewTestSuite={onViewTestSuite}
             />
           ))}
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   )
 }
