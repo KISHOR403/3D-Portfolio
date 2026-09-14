@@ -16,6 +16,49 @@
   --font-display: 'Space Grotesk', sans-serif;
   --font-sans: 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+
+  /* Strict Typography Scale Tokens */
+  --font-size-h1: clamp(48px, 7.8vw, 112px);
+  --line-height-h1: 0.95;
+  --font-weight-h1: 800;
+
+  --font-size-h2: clamp(38px, 4.5vw, 54px);
+  --line-height-h2: 1.05;
+  --font-weight-h2: 700;
+
+  --font-size-h3: clamp(22px, 2.2vw, 28px);
+  --line-height-h3: 1.25;
+  --font-weight-h3: 600;
+
+  --font-size-body: 16px;
+  --line-height-body: 1.65;
+  --font-weight-body: 400;
+
+  --font-size-small: 12.5px;
+  --font-weight-small: 500;
+  --letter-spacing-small: 0.08em;
+}
+
+:root {
+  --font-size-h1: clamp(48px, 7.8vw, 112px);
+  --line-height-h1: 0.95;
+  --font-weight-h1: 800;
+
+  --font-size-h2: clamp(38px, 4.5vw, 54px);
+  --line-height-h2: 1.05;
+  --font-weight-h2: 700;
+
+  --font-size-h3: clamp(22px, 2.2vw, 28px);
+  --line-height-h3: 1.25;
+  --font-weight-h3: 600;
+
+  --font-size-body: 16px;
+  --line-height-body: 1.65;
+  --font-weight-body: 400;
+
+  --font-size-small: 12.5px;
+  --font-weight-small: 500;
+  --letter-spacing-small: 0.08em;
 }
 
 /* ═══════════════════════════════════════════
@@ -92,26 +135,67 @@
    UTILITY CLASSES
    ═══════════════════════════════════════════ */
 
-/* Section eyebrow — mono caps label */
+/* Section eyebrow — strict small/label token (12-13px, 500 weight, 0.08em tracking) */
 .section-eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-small);
+  letter-spacing: var(--letter-spacing-small);
   text-transform: uppercase;
   color: var(--color-accent-pass);
   margin-bottom: 0.5rem;
 }
 
-/* Swiss Editorial Section Title (Monochrome Split Shading Typography) */
+/* Swiss Editorial Section Title — strict H2 token (48-54px desktop / 38px mobile, 700 weight, 1.05 line-height) */
 .section-headline-editorial {
   font-family: var(--font-display);
-  font-size: clamp(2.4rem, 4.8vw, 4.2rem);
-  font-weight: 700;
-  line-height: 1.05;
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-h2);
+  line-height: var(--line-height-h2);
   letter-spacing: -0.035em;
   color: var(--color-text-primary);
   margin: 0;
+}
+
+/* Strict Typography Scale Utilities */
+.type-h1 {
+  font-family: var(--font-display);
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-h1);
+  line-height: var(--line-height-h1);
+  letter-spacing: -0.04em;
+}
+
+.type-h2 {
+  font-family: var(--font-display);
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-h2);
+  line-height: var(--line-height-h2);
+  letter-spacing: -0.035em;
+}
+
+.type-h3 {
+  font-family: var(--font-display);
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-h3);
+  line-height: var(--line-height-h3);
+  letter-spacing: -0.02em;
+}
+
+.type-body {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-body);
+  line-height: var(--line-height-body);
+  letter-spacing: 0.01em;
+}
+
+.type-small {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-small);
+  letter-spacing: var(--letter-spacing-small);
+  text-transform: uppercase;
 }
 
 /* Horizontal monochrome split shading inside letterforms (white → gray → dark gray / near black) */

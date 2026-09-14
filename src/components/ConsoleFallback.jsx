@@ -16,7 +16,7 @@ const SCENARIOS = [
     cmd: 'curl -s https://api.testnexa.ai/health',
     output: [
       { text: 'HTTP/2 200 OK · latency: 24ms', color: '#4ADE9A' },
-      { text: '{"status":"operational","database":"connected"}', color: 'var(--color-text-muted)' },
+      { text: '{"status":"operational", "database":"connected"}', color: 'var(--color-text-muted)' },
       { text: '✔ All CI/CD quality gates verified green', color: 'var(--color-text-primary)' },
     ],
   },
@@ -44,12 +44,12 @@ export default function ConsoleFallback() {
       if (displayedCmd.length < fullCmd.length) {
         timer = setTimeout(() => {
           setDisplayedCmd(fullCmd.slice(0, displayedCmd.length + 1))
-        }, 40 + Math.random() * 20)
+        }, 35 + Math.random() * 20)
       } else {
         timer = setTimeout(() => {
           setIsTyping(false)
           setShowOutput(true)
-        }, 300)
+        }, 280)
       }
     } else {
       timer = setTimeout(() => {
@@ -69,14 +69,14 @@ export default function ConsoleFallback() {
     <div
       style={{
         width: '100%',
-        maxWidth: '460px',
-        background: 'rgba(15, 20, 25, 0.75)',
+        maxWidth: '490px',
+        background: 'rgba(15, 20, 25, 0.85)',
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
         borderRadius: '12px',
         overflow: 'hidden',
-        boxShadow: '0 20px 50px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.03)',
+        boxShadow: '0 24px 48px -12px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.04)',
       }}
     >
       {/* Terminal Title Bar */}
@@ -85,15 +85,15 @@ export default function ConsoleFallback() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '10px 14px',
-          background: 'rgba(255, 255, 255, 0.02)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+          padding: '10px 16px',
+          background: 'rgba(255, 255, 255, 0.03)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#EF4444', opacity: 0.75 }} />
-          <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#F59E0B', opacity: 0.75 }} />
-          <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#10B981', opacity: 0.75 }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
+          <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#EF4444', opacity: 0.8 }} />
+          <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#F59E0B', opacity: 0.8 }} />
+          <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10B981', opacity: 0.8 }} />
         </div>
 
         <div
@@ -102,12 +102,12 @@ export default function ConsoleFallback() {
             alignItems: 'center',
             gap: '6px',
             fontFamily: 'var(--font-mono)',
-            fontSize: '0.68rem',
+            fontSize: '0.72rem',
             color: 'var(--color-text-muted)',
             letterSpacing: '0.04em',
           }}
         >
-          <TerminalIcon size={11} style={{ opacity: 0.6 }} />
+          <TerminalIcon size={12} style={{ opacity: 0.7 }} />
           <span>kishor@macbook: ~/qa-suite</span>
         </div>
 
@@ -124,7 +124,7 @@ export default function ConsoleFallback() {
           <span
             style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: '0.6rem',
+              fontSize: '0.65rem',
               color: '#4ADE9A',
               fontWeight: 600,
               letterSpacing: '0.06em',
@@ -138,19 +138,19 @@ export default function ConsoleFallback() {
       {/* Terminal Console Content */}
       <div
         style={{
-          padding: '18px 20px',
+          padding: '18px 22px',
           fontFamily: 'var(--font-mono)',
-          fontSize: '0.78rem',
-          lineHeight: 1.65,
-          minHeight: '185px',
+          fontSize: '0.82rem',
+          lineHeight: 1.7,
+          minHeight: '190px',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'flex-start',
         }}
       >
         {/* Environment line */}
-        <div style={{ color: 'rgba(255, 255, 255, 0.35)', fontSize: '0.7rem', marginBottom: '8px' }}>
-          node v20.12.0 · chromium headless · playwright v1.42
+        <div style={{ color: 'rgba(255, 255, 255, 0.38)', fontSize: '0.7rem', marginBottom: '8px' }}>
+          node v20.12 · chromium headless · playwright v1.42
         </div>
 
         {/* Command line */}
@@ -179,10 +179,10 @@ export default function ConsoleFallback() {
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.25 }}
-            style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}
+            style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}
           >
             {current.output.map((line, idx) => (
-              <div key={idx} style={{ color: line.color, fontSize: '0.74rem' }}>
+              <div key={idx} style={{ color: line.color, fontSize: '0.78rem' }}>
                 {line.text}
               </div>
             ))}
@@ -193,15 +193,15 @@ export default function ConsoleFallback() {
       {/* Terminal Footer Bar */}
       <div
         style={{
-          padding: '6px 14px',
-          background: 'rgba(0, 0, 0, 0.2)',
-          borderTop: '1px solid rgba(255, 255, 255, 0.04)',
+          padding: '8px 16px',
+          background: 'rgba(0, 0, 0, 0.25)',
+          borderTop: '1px solid rgba(255, 255, 255, 0.05)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          fontSize: '0.65rem',
+          fontSize: '0.68rem',
           fontFamily: 'var(--font-mono)',
-          color: 'rgba(255, 255, 255, 0.35)',
+          color: 'rgba(255, 255, 255, 0.4)',
         }}
       >
         <span>UTF-8</span>

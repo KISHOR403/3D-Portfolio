@@ -46,8 +46,8 @@ export default function Hero({ onOpenResume }) {
           maxWidth: '1240px',
           width: '100%',
           display: 'grid',
-          gridTemplateColumns: isMobile ? '1fr' : '1.2fr 0.8fr',
-          gap: isMobile ? '3.5rem' : '4rem',
+          gridTemplateColumns: isMobile ? '1fr' : '1.15fr 0.85fr',
+          gap: isMobile ? '3.5rem' : '3.5rem',
           alignItems: 'center',
         }}
       >
@@ -75,9 +75,9 @@ export default function Hero({ onOpenResume }) {
                 alignItems: 'center',
                 gap: '8px',
                 fontFamily: 'var(--font-mono)',
-                fontSize: '0.68rem',
-                fontWeight: 600,
-                letterSpacing: '0.08em',
+                fontSize: 'var(--font-size-small)',
+                fontWeight: 'var(--font-weight-small)',
+                letterSpacing: 'var(--letter-spacing-small)',
                 textTransform: 'uppercase',
                 color: '#4ADE9A',
                 background: 'rgba(74, 222, 154, 0.08)',
@@ -105,8 +105,8 @@ export default function Hero({ onOpenResume }) {
                 alignItems: 'center',
                 gap: '6px',
                 fontFamily: 'var(--font-mono)',
-                fontSize: '0.68rem',
-                fontWeight: 500,
+                fontSize: 'var(--font-size-small)',
+                fontWeight: 'var(--font-weight-small)',
                 letterSpacing: '0.04em',
                 color: 'var(--color-text-muted)',
                 background: 'rgba(255, 255, 255, 0.03)',
@@ -119,14 +119,14 @@ export default function Hero({ onOpenResume }) {
             </div>
           </div>
 
-          {/* Dominate H1 — Singular Focal Point */}
+          {/* Dominate H1 — Strict 96-120px Scale (48px mobile, line-height 0.95, weight 800) */}
           <h1
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: isMobile ? 'clamp(3rem, 10vw, 4.25rem)' : 'clamp(4.25rem, 7.5vw, 6.5rem)',
+              fontSize: isMobile ? '48px' : 'clamp(96px, 7.8vw, 118px)',
               fontWeight: 800,
-              lineHeight: 0.94,
-              letterSpacing: '-0.04em',
+              lineHeight: 0.95,
+              letterSpacing: '-0.045em',
               color: '#F8FAFC',
               marginBottom: '1.25rem',
               textWrap: 'balance',
@@ -139,7 +139,7 @@ export default function Hero({ onOpenResume }) {
           <p
             style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: isMobile ? '0.95rem' : '1.15rem',
+              fontSize: isMobile ? '1rem' : '1.25rem',
               fontWeight: 500,
               letterSpacing: '0.02em',
               color: '#4ADE9A',
@@ -149,12 +149,12 @@ export default function Hero({ onOpenResume }) {
             Full Stack Developer &amp; QA Automation Engineer
           </p>
 
-          {/* Disciplined Editorial Body */}
+          {/* Disciplined Editorial Body — Strict 16px, line-height 1.65 */}
           <p
             style={{
               fontFamily: 'var(--font-sans)',
-              fontSize: isMobile ? '0.95rem' : '1.05rem',
-              lineHeight: 1.75,
+              fontSize: 'var(--font-size-body)',
+              lineHeight: 'var(--line-height-body)',
               letterSpacing: '0.01em',
               color: '#94A3B8',
               maxWidth: '520px',

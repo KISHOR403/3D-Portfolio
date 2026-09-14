@@ -4,7 +4,6 @@ import Preloader from './components/Preloader'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import StatusStrip from './components/StatusStrip'
-import Experience from './components/Experience'
 import TestPlan from './components/TestPlan'
 import BeyondTheConsole from './components/BeyondTheConsole'
 import Education from './components/Education'
@@ -69,7 +68,6 @@ export default function App() {
           <Hero onOpenResume={openResumeModal} />
           <StatusStrip />
           <TestPlan onOpenResume={openResumeModal} />
-          <Experience />
           <BeyondTheConsole />
           <Education />
           <CoverageReport />
