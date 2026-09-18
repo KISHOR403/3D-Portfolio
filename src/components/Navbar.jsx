@@ -87,7 +87,9 @@ export default function Navbar({ onOpenResume, onOpenRecruiterView }) {
           boxShadow: '0 0 8px rgba(74, 222, 154, 0.4)',
           flexShrink: 0,
         }} />
-        Kishor Gogoi
+        <span className="t-shimmer" data-text="Kishor Gogoi">
+          Kishor Gogoi
+        </span>
       </a>
 
       {/* Desktop nav links */}

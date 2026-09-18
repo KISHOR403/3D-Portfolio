@@ -156,7 +156,9 @@ export default function Hero({ onOpenResume }) {
               textWrap: 'balance',
             }}
           >
-            Kishor Gogoi
+            <span className="t-shimmer" data-text="Kishor Gogoi">
+              Kishor Gogoi
+            </span>
           </motion.h1>
 
           {/* Clean Subtitle Line */}
