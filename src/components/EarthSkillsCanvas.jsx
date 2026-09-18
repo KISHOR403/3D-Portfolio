@@ -82,12 +82,12 @@ export const RAW_SKILLS = [
   { id:'mobile', name:'Mobile Testing', fullName:'Mobile Testing', category:'Testing Skills & Methodologies', featured:false, color:'#A78BFA' },
 ]
 
-function FibonacciSphereCluster({ activeCategory, hoveredSkillId, setHoveredSkillId, deviceTier, orbitDensity }) {
+function FibonacciSphereCluster({ activeCategory, hoveredSkillId, setHoveredSkillId, deviceTier, orbitDensity, showLabels = true }) {
   const groupRef = useRef()
 
   useFrame((_, delta) => {
-    if (groupRef.current && !hoveredSkillId) {
-      groupRef.current.rotation.y += delta * 0.10
+    if (groupRef.current && (!hoveredSkillId || !showLabels)) {
+      groupRef.current.rotation.y += delta * 0.12
     }
   })
 
@@ -98,9 +98,10 @@ function FibonacciSphereCluster({ activeCategory, hoveredSkillId, setHoveredSkil
   const N = visibleSkills.length
   const phi = Math.PI * (3 - Math.sqrt(5)) // Golden ratio angle
 
-  const R = deviceTier === 'mobile' ? 2.1 : (deviceTier === 'tablet' ? 2.9 : 3.4)
+  const R = deviceTier === 'mobile' ? 2.35 : (deviceTier === 'tablet' ? 2.9 : 3.4)
 
   const nodes = useMemo(() => {
+    if (!showLabels) return []
     return visibleSkills.map((skill, i) => {
       const y = N > 1 ? 1 - (i / (N - 1)) * 2 : 0
       const radiusAtY = Math.sqrt(Math.max(0, 1 - y * y))
@@ -109,22 +110,32 @@ function FibonacciSphereCluster({ activeCategory, hoveredSkillId, setHoveredSkil
       const z = Math.sin(theta) * radiusAtY * R
       return { skill, pos: [x, y * R, z] }
     })
-  }, [visibleSkills, N, R])
+  }, [visibleSkills, N, R, showLabels])
 
   return (
     <group ref={groupRef}>
       {/* Holographic Mesh Globe matching cluster radius */}
       <mesh>
-        <sphereGeometry args={[R * 0.88, 32, 32]} />
-        <meshBasicMaterial color="#38BDF8" wireframe transparent opacity={0.10} />
+        <sphereGeometry args={[R * 0.92, 28, 28]} />
+        <meshBasicMaterial color="#38BDF8" wireframe transparent opacity={0.24} />
+      </mesh>
+      {/* Equatorial latitude ring */}
+      <mesh rotation={[Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[R * 0.90, R * 0.93, 48]} />
+        <meshBasicMaterial color="#38BDF8" transparent opacity={0.35} side={THREE.DoubleSide} />
+      </mesh>
+      {/* Tilted orbital ring */}
+      <mesh rotation={[Math.PI / 3.2, Math.PI / 6, 0]}>
+        <ringGeometry args={[R * 1.04, R * 1.07, 48]} />
+        <meshBasicMaterial color="#4ADE9A" transparent opacity={0.3} side={THREE.DoubleSide} />
       </mesh>
       {/* Inner Glowing Reactor Core */}
       <mesh>
-        <sphereGeometry args={[deviceTier === 'mobile' ? 0.85 : 1.1, 24, 24]} />
-        <meshStandardMaterial color="#081524" emissive="#4ADE9A" emissiveIntensity={0.4} wireframe />
+        <sphereGeometry args={[deviceTier === 'mobile' ? 0.9 : 1.15, 24, 24]} />
+        <meshStandardMaterial color="#081524" emissive="#4ADE9A" emissiveIntensity={0.6} wireframe />
       </mesh>
 
-      {nodes.map(({ skill, pos }) => {
+      {showLabels && nodes.map(({ skill, pos }) => {
         const isMatch = !activeCategory || activeCategory === 'All' || skill.category === activeCategory
         const isHov = hoveredSkillId === skill.id
         const df = deviceTier === 'mobile' ? 14 : (deviceTier === 'tablet' ? 18 : 15)
@@ -170,12 +181,12 @@ function FibonacciSphereCluster({ activeCategory, hoveredSkillId, setHoveredSkil
 function getDeviceTier() {
   if (typeof window === 'undefined') return 'desktop'
   const w = window.innerWidth
-  if (w < 640) return 'mobile'
+  if (w < 768) return 'mobile'
   if (w < 1024) return 'tablet'
   return 'desktop'
 }
 
-export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setHoveredSkillId, orbitDensity = 'core' }) {
+export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setHoveredSkillId, orbitDensity = 'core', showLabels = true }) {
   const [deviceTier, setDeviceTier] = useState(getDeviceTier)
 
   useEffect(() => {
@@ -184,9 +195,9 @@ export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setH
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const camZ = deviceTier === 'mobile' ? 15 : (deviceTier === 'tablet' ? 18 : 15)
-  const fov = deviceTier === 'mobile' ? 38 : (deviceTier === 'tablet' ? 40 : 36)
-  const containerHeight = deviceTier === 'mobile' ? '360px' : (deviceTier === 'tablet' ? '500px' : '580px')
+  const camZ = deviceTier === 'mobile' ? 14 : (deviceTier === 'tablet' ? 18 : 15)
+  const fov = deviceTier === 'mobile' ? 40 : (deviceTier === 'tablet' ? 40 : 36)
+  const containerHeight = deviceTier === 'mobile' ? '420px' : (deviceTier === 'tablet' ? '500px' : '580px')
 
   return (
     <div style={{
@@ -202,7 +213,7 @@ export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setH
         <directionalLight position={[10,10,10]} intensity={2.0} color="#FFFFFF"/>
         <directionalLight position={[-10,-10,-10]} intensity={0.8} color="#38BDF8"/>
         <pointLight position={[0,0,8]} intensity={1.2} color="#4ADE9A"/>
-        <OrbitControls enableZoom={false} enablePan={false} rotateSpeed={0.6} autoRotate={!hoveredSkillId} autoRotateSpeed={0.4}/>
+        <OrbitControls enableZoom={false} enablePan={false} rotateSpeed={0.6} autoRotate={!hoveredSkillId || !showLabels} autoRotateSpeed={0.5}/>
 
         <FibonacciSphereCluster
           activeCategory={activeCategory}
@@ -210,6 +221,7 @@ export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setH
           setHoveredSkillId={setHoveredSkillId}
           deviceTier={deviceTier}
           orbitDensity={orbitDensity}
+          showLabels={showLabels}
         />
       </Canvas>
     </div>
