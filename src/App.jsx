@@ -17,6 +17,7 @@ import ResumeModal from './components/ResumeModal'
 import TestSuiteModal from './components/TestSuiteModal'
 import RecruiterView from './components/RecruiterView'
 import Sidebar from './components/Sidebar'
+import CloudMascot from './components/CloudMascot'
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -87,6 +88,7 @@ export default function App() {
           onClose={closeRecruiterView}
           onOpenResume={openResumeModal}
         />
+        <CloudMascot />
       </motion.div>
     </>
   )

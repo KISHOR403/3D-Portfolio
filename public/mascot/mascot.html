@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Puff — Cloud Mascot</title>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+  }
+}
+</script>
+<style>
+  html,body{margin:0;height:100%;background:transparent;overflow:hidden}
+  three-d-stage:not(:defined){visibility:hidden}
+</style>
+</head>
+<body>
+<three-d-stage name="puff-cloud-mascot" background="transparent" style="height:100vh"></three-d-stage>
+<script src="three-d-stage.js"></script>
+<script type="module">
+const stage = document.querySelector('three-d-stage');
+const { THREE } = await stage.ready;
+const V = (x,y,z)=>new THREE.Vector3(x,y,z);
+
+const std = (name, color, roughness, extra={}) =>
+  Object.assign(new THREE.MeshStandardMaterial({ color, roughness, metalness:0, ...extra }), { name });
+
+// Screen Canvas Texture — Glowing QA Terminal Matrix
+const screenCanvas = document.createElement('canvas');
+screenCanvas.width = 512; screenCanvas.height = 310;
+{
+  const sc = screenCanvas.getContext('2d');
+  sc.fillStyle = '#080C10';
+  sc.fillRect(0, 0, 512, 310);
+  sc.fillStyle = '#161D24';
+  sc.fillRect(0, 0, 512, 36);
+  // Window dots
+  sc.fillStyle = '#E8615C'; sc.beginPath(); sc.arc(20, 18, 5, 0, Math.PI*2); sc.fill();
+  sc.fillStyle = '#F2A93B'; sc.beginPath(); sc.arc(38, 18, 5, 0, Math.PI*2); sc.fill();
+  sc.fillStyle = '#4ADE9A'; sc.beginPath(); sc.arc(56, 18, 5, 0, Math.PI*2); sc.fill();
+  // Window title
+  sc.fillStyle = '#9EABB8'; sc.font = '600 17px monospace';
+  sc.fillText('kishor-qa-terminal ~ v2.4', 80, 24);
+  // Command & test output
+  sc.fillStyle = '#4ADE9A'; sc.font = '700 22px monospace';
+  sc.fillText('> EXEC qa_pipeline.spec.ts', 24, 76);
+  sc.fillStyle = '#E8EAED'; sc.font = '500 19px monospace';
+  sc.fillText('  ✔ UI Components [PASS]', 24, 118);
+  sc.fillText('  ✔ E2E Test Suite [PASS]', 24, 158);
+  sc.fillText('  ✔ API Integration [PASS]', 24, 198);
+  sc.fillStyle = '#4ADE9A'; sc.font = '700 24px monospace';
+  sc.fillText('● 100% COVERAGE · ALL GREEN', 24, 258);
+}
+const screenTex = new THREE.CanvasTexture(screenCanvas);
+screenTex.colorSpace = THREE.SRGBColorSpace;
+
+const M = {
+  cloud: Object.assign(new THREE.MeshPhysicalMaterial({
+    color: '#F4F7FB',
+    roughness: 0.88,
+    sheen: 0.8,
+    sheenColor: new THREE.Color('#4ADE9A'), // Emerald rim sheen matching application
+    sheenRoughness: 0.5,
+    clearcoat: 0.05,
+    emissive: new THREE.Color('#EBF3F9'),
+    emissiveIntensity: 0.12
+  }), { name:'cloud' }),
+  ink:    std('ink', '#090D12', 0.15), // Deep obsidian eye color
+  mouth:  std('mouth', '#121820', 0.5, { side: THREE.DoubleSide }),
+  tongue: std('tongue', '#FF6B81', 0.6), // Friendly pink tongue
+  shine:  std('shine', '#FFFFFF', 0.2), // Crisp white eye reflection
+  brow:   std('brow', '#8B9DAE', 0.85), // Soft slate eyebrow matching text-muted
+  blush:  std('blush', '#F8A5A5', 0.9), // Soft friendly blush
+  shell:  std('laptop_shell', '#161D24', 0.35, { metalness: 0.35 }), // Sleek dark cyber chassis
+  deck:   std('laptop_deck', '#0F1419', 0.55), // Matches base background
+  screen: std('laptop_screen', '#080C10', 0.2, {
+    map: screenTex,
+    emissive: new THREE.Color('#4ADE9A'),
+    emissiveIntensity: 0.35
+  }),
+};
+
+const model = new THREE.Group(); model.name = 'puff';
+const rig = new THREE.Group(); rig.name = 'rig'; model.add(rig);
+const add = (name, geo, material, pos, parent=rig) => {
+  const m = new THREE.Mesh(geo, material); m.name = name;
+  if (pos) m.position.copy(pos);
+  parent.add(m); return m;
+};
+const grp = (name, parent=rig) => { const g = new THREE.Group(); g.name = name; parent.add(g); return g; };
+const sphere = r => new THREE.SphereGeometry(r, 48, 32);
+
+// ── Body: one soft, smooth-blended cloud mesh (smooth-min SDF of puffs) ──
+const C = V(0, 0.62, 0);
+const S = [
+  [0,0.62,0,0.38],
+  [-0.20,0.90,0.04,0.20], [0.14,0.94,0.00,0.21], [0.32,0.76,-0.03,0.17],
+  [-0.34,0.72,-0.03,0.17], [0.34,0.50,-0.01,0.18], [-0.33,0.46,0.00,0.19],
+  [0.00,0.30,0.10,0.22],  [-0.20,0.29,0.07,0.20], [0.21,0.31,0.07,0.20],
+  [0.00,0.72,-0.20,0.30], [-0.25,0.62,-0.18,0.22], [0.26,0.64,-0.16,0.22],
+  [0.02,0.40,-0.16,0.24], [-0.04,1.02,-0.12,0.16],
+];
+for (let i=0;i<9;i++){ const a=i/9*Math.PI*2+Math.PI/2; S.push([Math.cos(a)*0.4, 0.62+Math.sin(a)*0.41, -0.04, 0.19+0.015*Math.sin(i*1.7)]); }
+for (let i=0;i<9;i++){ const a=(i+0.5)/9*Math.PI*2+Math.PI/2; S.push([Math.cos(a)*0.33, 0.62+Math.sin(a)*0.34, 0.07, 0.19]); }
+for (let i=0;i<10;i++){ const a=i/10*Math.PI*2; S.push([Math.cos(a)*0.3, 0.62+Math.sin(a)*0.34, -0.26, 0.13]); }
+const K = 0.035;
+const sdf = (x,y,z) => {
+  let d = 1e9;
+  for (const [a,b,c,r] of S) {
+    const e = Math.hypot(x-a,y-b,z-c) - r;
+    const h = Math.max(K - Math.abs(d-e), 0) / K;
+    d = Math.min(d,e) - h*h*K*0.25;
+  }
+  return d;
+};
+const grad = (x,y,z,e=0.002) => V(
+  sdf(x+e,y,z)-sdf(x-e,y,z), sdf(x,y+e,z)-sdf(x,y-e,z), sdf(x,y,z+e)-sdf(x,y,z-e)).normalize();
+{
+  const g = new THREE.SphereGeometry(1, 160, 120);
+  const p = g.attributes.position, n = g.attributes.normal;
+  for (let i=0;i<p.count;i++){
+    const dx=p.getX(i), dy=p.getY(i), dz=p.getZ(i);
+    const at = t => sdf(C.x+dx*t, C.y+dy*t, C.z+dz*t);
+    let t = 0.8; while (t>0 && at(t)>0) t -= 0.01;
+    let lo=t, hi=t+0.01;
+    for (let k=0;k<10;k++){ const m=(lo+hi)/2; at(m)>0 ? hi=m : lo=m; }
+    const x=C.x+dx*lo, y=C.y+dy*lo, z=C.z+dz*lo;
+    p.setXYZ(i,x,y,z);
+    const nn = grad(x,y,z); n.setXYZ(i,nn.x,nn.y,nn.z);
+  }
+  g.computeBoundingSphere();
+  add('body', g, M.cloud);
+}
+
+// ── Legs ──
+const capsuleBetween = (name, a, b, r, material, parent=rig) => {
+  const dir = b.clone().sub(a), len = dir.length();
+  const m = add(name, new THREE.CapsuleGeometry(r, len, 12, 32), material, a.clone().add(b).multiplyScalar(0.5), parent);
+  m.quaternion.setFromUnitVectors(V(0,1,0), dir.normalize());
+  return m;
+};
+
+
+// ── Face (placed on the blended surface) ──
+const face = grp('face');
+const place = (obj, x, y, inset=0) => {
+  let z = 0.8; while (sdf(x,y,z) > 0) z -= 0.001;
+  const n = grad(x,y,z);
+  obj.position.set(x,y,z).addScaledVector(n, -inset);
+  obj.quaternion.setFromUnitVectors(V(0,0,1), n);
+  return obj;
+};
+const eyes = [], brows = [];
+[-1,1].forEach(s=>{
+  const side = s<0?'L':'R';
+  const eg = place(grp(`eye_${side}`, face), 0.14*s, 0.715, 0.014);
+  add(`eye_ball_${side}`, sphere(0.058), M.ink, null, eg).scale.set(1,1.1,0.55);
+  add(`eye_shine_${side}`, sphere(0.014), M.shine, V(0.018*s-0.008,0.026,0.03), eg);
+  eyes.push(eg);
+  const bg = place(grp(`brow_${side}`, face), 0.14*s, 0.785, 0.004);
+  const arc = Math.PI*0.55;
+  add(`brow_arc_${side}`, new THREE.TorusGeometry(0.04, 0.009, 12, 32, arc), M.brow, null, bg).rotation.z = Math.PI/2 - arc/2;
+  bg.userData.base = bg.position.clone();
+  brows.push(bg);
+  const ck = place(grp(`cheek_${side}`, face), 0.235*s, 0.625, 0.01);
+  add(`cheek_blush_${side}`, sphere(0.05), M.blush, null, ck).scale.set(1,0.62,0.25);
+});
+const mouth = place(grp('mouth', face), 0, 0.645, 0.002);
+add('mouth_open', new THREE.SphereGeometry(0.075,48,24,0,Math.PI*2,Math.PI/2,Math.PI/2), M.mouth, null, mouth).scale.set(1,0.85,0.35);
+add('tongue', sphere(0.032), M.tongue, V(0,-0.045,0.006), mouth).scale.set(1.3,0.6,0.4);
+
+// ── Laptop with logo ──
+const slab = (w,h,t,r) => {
+  const b = Math.min(0.004, t*0.3), W=w/2-b, H=h/2-b, rr=Math.max(r-b,0.001);
+  const sh = new THREE.Shape();
+  sh.moveTo(-W+rr,-H); sh.lineTo(W-rr,-H); sh.quadraticCurveTo(W,-H,W,-H+rr);
+  sh.lineTo(W,H-rr); sh.quadraticCurveTo(W,H,W-rr,H); sh.lineTo(-W+rr,H);
+  sh.quadraticCurveTo(-W,H,-W,H-rr); sh.lineTo(-W,-H+rr); sh.quadraticCurveTo(-W,-H,-W+rr,-H);
+  const g = new THREE.ExtrudeGeometry(sh, { depth:t-2*b, bevelEnabled:true, bevelThickness:b, bevelSize:b, bevelSegments:4, curveSegments:12 });
+  g.translate(0,0,-(t-2*b)/2); return g;
+};
+const laptop = grp('laptop'); laptop.position.set(0, 0.3, 0.46);
+const base = add('laptop_base', slab(0.36,0.24,0.018,0.022), M.shell, null, laptop); base.rotation.x = -Math.PI/2;
+const kb = add('laptop_keyboard', new THREE.PlaneGeometry(0.3,0.1), M.deck, V(0,0.0095,0.035), laptop); kb.rotation.x = -Math.PI/2;
+const tp = add('laptop_trackpad', new THREE.PlaneGeometry(0.1,0.055), M.deck, V(0,0.0095,-0.075), laptop); tp.rotation.x = -Math.PI/2;
+const lid = grp('laptop_lid', laptop); lid.position.set(0, 0.009, 0.115); lid.rotation.x = 0.2;
+add('laptop_lid_shell', slab(0.36,0.24,0.012,0.022), M.shell, V(0,0.12,0.006), lid);
+const scr = add('laptop_screen', new THREE.PlaneGeometry(0.33,0.2), M.screen, V(0,0.125,-0.0005), lid); scr.rotation.y = Math.PI;
+// High-tech emerald hexagon badge with <KG/>
+const logoCanvas = document.createElement('canvas');
+logoCanvas.width = 512; logoCanvas.height = 512;
+{
+  const lctx = logoCanvas.getContext('2d');
+  lctx.clearRect(0, 0, 512, 512);
+
+  const drawHex = (cx, cy, r) => {
+    lctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const angle = (Math.PI / 3) * i - Math.PI / 6;
+      const x = cx + r * Math.cos(angle);
+      const y = cy + r * Math.sin(angle);
+      if (i === 0) lctx.moveTo(x, y);
+      else lctx.lineTo(x, y);
+    }
+    lctx.closePath();
+  };
+
+  // Outer glowing emerald hex ring
+  lctx.shadowColor = '#4ADE9A';
+  lctx.shadowBlur = 24;
+  lctx.strokeStyle = '#4ADE9A';
+  lctx.lineWidth = 18;
+  drawHex(256, 256, 205);
+  lctx.stroke();
+
+  // Subtle glass fill
+  lctx.fillStyle = 'rgba(74, 222, 154, 0.1)';
+  drawHex(256, 256, 185);
+  lctx.fill();
+
+  // High-tech KG Monogram
+  lctx.shadowBlur = 18;
+  lctx.fillStyle = '#4ADE9A';
+  lctx.font = '800 135px monospace';
+  lctx.textAlign = 'center';
+  lctx.textBaseline = 'middle';
+  lctx.fillText('KG', 256, 240);
+
+  // QA badge
+  lctx.font = '700 48px monospace';
+  lctx.fillStyle = '#E8EAED';
+  lctx.fillText('<QA/>', 256, 335);
+}
+const logoTex = new THREE.CanvasTexture(logoCanvas);
+logoTex.colorSpace = THREE.SRGBColorSpace; logoTex.anisotropy = 8;
+M.logo = std('logo', '#FFFFFF', 0.25, { map: logoTex, transparent: true });
+add('laptop_logo', new THREE.PlaneGeometry(0.19,0.19), M.logo, V(0,0.12,0.0125), lid);
+
+// ── Arms (tube rebuilt per frame) + mitten hands ──
+const makeArm = (side) => {
+  const s = side==='L'?-1:1;
+  const hand = grp(`hand_${side}`);
+  add(`hand_puff_${side}`, sphere(0.064), M.cloud, null, hand).scale.set(1,1,0.85);
+  [[-0.035,0.04,0.034],[0.01,0.052,0.036],[0.045,0.03,0.032]].forEach(([x,y,r],i)=>add(`finger_puff_${side}_${i+1}`, sphere(r), M.cloud, V(x,y,0.004), hand));
+  add(`thumb_${side}`, sphere(0.03), M.cloud, V(-0.058*s,-0.01,0.012), hand);
+  return { s, hand };
+};
+const arms = { L: makeArm('L'), R: makeArm('R') };
+const setArm = (a, handPos, elbow, rx, rz) => {
+  a.hand.position.copy(handPos); a.hand.rotation.set(rx, 0, rz);
+
+};
+
+// ── Motion ──
+const clamp = (x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const lerp = (a,b,t)=>a+(b-a)*t;
+const MOTION = {
+  inOut: t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2,
+  back:  t=>{const c=1.9; return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2);},
+  seg:   (t,a,b)=>clamp((t-a)/(b-a)),
+};
+const LOOP = 8;
+const REST = { L: V(-0.2,0.34,0.45), R: V(0.2,0.34,0.45) }, ELB = { L: V(-0.3,0.34,0.32), R: V(0.3,0.34,0.32) };
+const WAVE = V(-0.5,0.82,0.16), WAVE_ELB = V(-0.52,0.6,0.16);
+const BLINKS = [1.2, 5.6, 5.85, 7.3];
+
+// "Hi!" bubble — lives in the scene, not the model, so it's not exported
+const cv = document.createElement('canvas'); cv.width = 512; cv.height = 320;
+{
+  const c = cv.getContext('2d');
+  c.fillStyle = '#121820'; // obsidian dark matching portfolio
+  c.strokeStyle = '#4ADE9A'; // emerald stroke
+  c.lineWidth = 10;
+  c.beginPath(); c.roundRect(16,16,480,230,110); c.fill(); c.stroke();
+  c.beginPath(); c.moveTo(330,230); c.lineTo(400,305); c.lineTo(250,238); c.fill(); c.stroke();
+  c.fillStyle = '#4ADE9A'; c.font = '700 135px monospace';
+  c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('Hi! 👋', 256, 138);
+}
+const bubbleTex = new THREE.CanvasTexture(cv); bubbleTex.colorSpace = THREE.SRGBColorSpace;
+const bubble = new THREE.Sprite(new THREE.SpriteMaterial({ map: bubbleTex, depthTest:false, transparent:true }));
+bubble.renderOrder = 10; bubble.center.set(0.78, 0.05);
+
+const update = (t) => {
+  const up = MOTION.back(MOTION.seg(t,2.2,2.85));
+  const down = MOTION.inOut(MOTION.seg(t,4.7,5.4));
+  const w = t < 4.7 ? up : 1-down;
+  const wc = clamp(w);
+  // body
+  rig.position.y = Math.sin(t/LOOP*Math.PI*4)*0.008;
+  rig.rotation.z = 0.05*wc; rig.rotation.y = -0.06*wc;
+  // typing jiggle
+  const type = k => Math.max(0, Math.sin(t*17 + k))*0.014*(1-wc);
+  // right arm always types
+  const rH = REST.R.clone(); rH.y += type(1.6);
+  setArm(arms.R, rH, ELB.R, Math.PI/2, 0);
+  // left arm: type → wave → type
+  const lH = REST.L.clone().lerp(WAVE, w); lH.y += type(0);
+  const wig = MOTION.seg(t,2.7,2.95)*(1-MOTION.seg(t,4.5,4.8));
+  const wv = Math.sin((t-2.7)*11)*0.5*wig;
+  lH.x += wv*0.03;
+  setArm(arms.L, lH, ELB.L.clone().lerp(WAVE_ELB, wc), lerp(Math.PI/2, 0, wc), wv - 0.2*wc);
+  // face
+  let blink = 1;
+  for (const b of BLINKS) { const d = Math.abs(t-b); if (d < 0.09) blink = Math.min(blink, 0.08 + 0.92*(d/0.09)); }
+  const squint = 1 - 0.28*wc;
+  eyes.forEach(e => e.scale.y = blink*squint);
+  brows.forEach(b => b.position.y = b.userData.base.y + 0.012*wc);
+  mouth.scale.setScalar(1 + 0.14*wc);
+  // bubble
+  const bin = MOTION.back(MOTION.seg(t,2.75,3.05)), bout = MOTION.inOut(MOTION.seg(t,4.5,4.75));
+  const bs = Math.max(0, bin*(1-bout));
+  arms.L.hand.getWorldPosition(bubble.position); bubble.position.add(V(-0.05,0.12,0));
+  bubble.scale.set(0.42*bs, 0.2625*bs, 1);
+  bubble.visible = bs > 0.001;
+};
+update(0);
+stage.setObject(model);
+
+// front-facing framing + softer studio
+{
+  const cam = stage._camera, tgt = stage._controls.target;
+  const dist = cam.position.distanceTo(tgt);
+  cam.position.copy(tgt).add(V(0.22,0.14,1).normalize().multiplyScalar(dist*0.9));
+  stage._controls.update();
+  stage._key.intensity = 1.6;
+  stage._scene.traverse(o => { if (o.isHemisphereLight) o.intensity = 1.35; });
+  stage._ground.material.opacity = 0.1;
+  stage._scene.add(bubble);
+  stage._controls.enabled = false;
+  stage.shadowRoot.querySelectorAll('.toolbar,.note').forEach(e=>e.remove());
+}
+const t0 = performance.now();
+const baseLoop = stage._loop;
+stage._loop = () => { update(window.__mascotT ?? ((performance.now()-t0)/1000) % LOOP); baseLoop(); };
+stage._renderer.setAnimationLoop(stage._loop);
+</script>
+</body>
+</html>
