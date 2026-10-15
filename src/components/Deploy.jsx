@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Mail, ArrowUpRight, Send, Check, Copy, CheckCheck,
-  Clock, MapPin, Feather, Sparkles, ChevronUp, RotateCcw
+  Clock, MapPin, Sparkles, ChevronUp, RotateCcw
 } from 'lucide-react'
 import Contact3DCanvas from './Contact3DCanvas'
 
 /* ─── Inline Brand SVG Icons ─── */
-function LinkedinIcon({ size = 18, style }) {
+function LinkedinIcon({ size = 17, style }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={style}>
       <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
@@ -17,7 +17,7 @@ function LinkedinIcon({ size = 18, style }) {
   )
 }
 
-function GithubIcon({ size = 18, style }) {
+function GithubIcon({ size = 17, style }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={style}>
       <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
@@ -26,7 +26,7 @@ function GithubIcon({ size = 18, style }) {
   )
 }
 
-function XIcon({ size = 17, style }) {
+function XIcon({ size = 16, style }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" style={style}>
       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
@@ -37,11 +37,11 @@ function XIcon({ size = 17, style }) {
 /* ─── Direct Communication Channels ─── */
 const CHANNELS = [
   {
-    name: 'Direct Email',
+    name: 'Email',
     label: 'kishorgogoi403@gmail.com',
     href: 'mailto:kishorgogoi403@gmail.com',
     icon: Mail,
-    color: '#D4AF37',
+    color: '#4ADE9A',
     isCopyable: true,
   },
   {
@@ -61,7 +61,7 @@ const CHANNELS = [
     isExternal: true,
   },
   {
-    name: 'X (Twitter)',
+    name: 'X',
     label: '@kishor_gogoi8',
     href: 'https://x.com/kishor_gogoi8',
     icon: XIcon,
@@ -70,12 +70,12 @@ const CHANNELS = [
   },
 ]
 
-/* ─── Topic Selector Stamps ─── */
+/* ─── Modern Topic Selector Pills ─── */
 const TOPIC_PRESETS = [
   { id: 'qa', label: 'QA Automation & SDET' },
-  { id: 'fullstack', label: 'Full-Stack Engineering' },
-  { id: 'cicd', label: 'CI/CD & Testing Strategy' },
-  { id: 'chat', label: 'Coffee & Technical Chat' },
+  { id: 'fullstack', label: 'Full-Stack Development' },
+  { id: 'cicd', label: 'CI/CD Architecture' },
+  { id: 'chat', label: 'Advisory / Say Hello' },
 ]
 
 export default function Deploy() {
@@ -86,9 +86,10 @@ export default function Deploy() {
     message: '',
   })
   const [activeTopic, setActiveTopic] = useState('qa')
-  const [isStamped, setIsStamped] = useState(false)
-  const [flightPhase, setFlightPhase] = useState('draft') // 'draft' | 'folding' | 'flying' | 'delivered'
+  const [status, setStatus] = useState('idle') // idle | sending | sent
   const [copiedChannel, setCopiedChannel] = useState(null)
+  const [orbMood, setOrbMood] = useState('emerald') // 'emerald' | 'azure' | 'lavender'
+  const [formFocused, setFormFocused] = useState(false)
 
   // Real-time IST Digital Clock
   const [currentTime, setCurrentTime] = useState('')
@@ -119,33 +120,18 @@ export default function Deploy() {
     setFormData((prev) => ({ ...prev, topic: preset.label }))
   }
 
-  const handleStamp = () => {
-    setIsStamped(true)
-  }
-
-  const handleFoldAndLaunch = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
     if (!formData.name || !formData.email || !formData.message) return
 
-    // Auto stamp if not yet stamped
-    setIsStamped(true)
-
-    // Phase 1: Fold paper into airplane (1.2 seconds)
-    setFlightPhase('folding')
-
-    // Phase 2: Launch into flight
+    setStatus('sending')
     setTimeout(() => {
-      setFlightPhase('flying')
-    }, 900)
-  }
-
-  const handleFlightComplete = () => {
-    setFlightPhase('delivered')
+      setStatus('sent')
+    }, 1200)
   }
 
   const handleReset = () => {
-    setFlightPhase('draft')
-    setIsStamped(false)
+    setStatus('idle')
     setFormData({
       name: '',
       email: '',
@@ -162,7 +148,7 @@ export default function Deploy() {
         position: 'relative',
         background: 'transparent',
         paddingTop: '6.5rem',
-        paddingBottom: '5rem',
+        paddingBottom: '4.5rem',
         overflow: 'hidden',
       }}
     >
@@ -176,7 +162,7 @@ export default function Deploy() {
           padding: '0 1.5rem',
         }}
       >
-        {/* ─── Artisanal Header ─── */}
+        {/* ─── Apple / Linear Style Header ─── */}
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -184,7 +170,7 @@ export default function Deploy() {
           transition={{ duration: 0.55 }}
           style={{ marginBottom: '3.2rem' }}
         >
-          {/* Eyebrow Status Badge */}
+          {/* Subtle status tag */}
           <div
             style={{
               display: 'inline-flex',
@@ -192,22 +178,31 @@ export default function Deploy() {
               gap: '8px',
               padding: '6px 14px',
               borderRadius: '9999px',
-              background: 'rgba(212, 175, 55, 0.08)',
-              border: '1px solid rgba(212, 175, 55, 0.25)',
+              background: 'rgba(74, 222, 154, 0.08)',
+              border: '1px solid rgba(74, 222, 154, 0.22)',
               marginBottom: '1.2rem',
             }}
           >
-            <Feather size={13} color="#D4AF37" />
+            <span
+              style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                background: '#4ADE9A',
+                boxShadow: '0 0 8px #4ADE9A',
+                display: 'inline-block',
+              }}
+            />
             <span
               style={{
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.74rem',
                 fontWeight: 600,
-                color: '#D4AF37',
+                color: '#4ADE9A',
                 letterSpacing: '0.04em',
               }}
             >
-              Interactive 3D Stationery Dispatch · 2026
+              Available for Contracts & Engineering Roles · 2026
             </span>
           </div>
 
@@ -232,15 +227,15 @@ export default function Deploy() {
                   color: '#FFFFFF',
                 }}
               >
-                Send a letter across the{' '}
+                Let’s create something{' '}
                 <span
                   style={{
-                    background: 'linear-gradient(135deg, #D4AF37 0%, #4ADE9A 50%, #38BDF8 100%)',
+                    background: 'linear-gradient(135deg, #4ADE9A 0%, #38BDF8 60%, #A78BFA 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                   }}
                 >
-                  wire.
+                  exceptional.
                 </span>
               </h2>
               <p
@@ -253,7 +248,7 @@ export default function Deploy() {
                   lineHeight: 1.65,
                 }}
               >
-                Write your note on the stationery, apply the QA wax seal, and watch it fold into a 3D origami plane that flies directly to my inbox.
+                Senior QA Automation & Full-Stack Engineer. Scaling high-velocity test architectures, robust quality gates, and resilient web applications.
               </p>
             </div>
 
@@ -285,7 +280,7 @@ export default function Deploy() {
           </div>
         </motion.div>
 
-        {/* ─── Two-Column Interactive Stage ─── */}
+        {/* ─── Two-Column Seamless Layout (No heavy enclosing boxes) ─── */}
         <div
           style={{
             display: 'grid',
@@ -295,7 +290,7 @@ export default function Deploy() {
           }}
         >
           {/* ══════════════════════════════════════════════
-              LEFT: Interactive 3D Origami Letter Canvas & Direct Links
+              LEFT: Fluid 3D Glass Orb Stage & Direct Channels
               ══════════════════════════════════════════════ */}
           <motion.div
             initial={{ opacity: 0, x: -25 }}
@@ -305,38 +300,79 @@ export default function Deploy() {
             style={{
               display: 'flex',
               flexDirection: 'column',
-              gap: '1.5rem',
+              gap: '1.25rem',
             }}
           >
-            {/* 3D Canvas - Completely Unboxed, Borderless & Natural */}
+            {/* 3D Fluid Glass Orb - Completely unboxed & borderless */}
             <div
               style={{
                 position: 'relative',
                 width: '100%',
-                height: '520px',
+                height: '420px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
               <Contact3DCanvas
-                senderName={formData.name}
-                senderEmail={formData.email}
-                message={formData.message}
-                topic={formData.topic}
-                flightPhase={flightPhase}
-                onFlightComplete={handleFlightComplete}
-                isStamped={isStamped}
-                onStamp={handleStamp}
+                mood={orbMood}
+                formActive={formFocused}
+                isSending={status === 'sending'}
               />
             </div>
 
-            {/* Direct Connect Row */}
+            {/* Interactive Color Mood Selector */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.68rem',
+                  color: 'var(--color-text-muted)',
+                  marginRight: '6px',
+                }}
+              >
+                Aura:
+              </span>
+              {[
+                { id: 'emerald', label: 'Emerald', color: '#4ADE9A' },
+                { id: 'azure', label: 'Azure', color: '#38BDF8' },
+                { id: 'lavender', label: 'Lavender', color: '#A78BFA' },
+              ].map((m) => (
+                <button
+                  key={m.id}
+                  onClick={() => setOrbMood(m.id)}
+                  style={{
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '0.72rem',
+                    fontWeight: orbMood === m.id ? 600 : 500,
+                    padding: '4px 10px',
+                    borderRadius: '6px',
+                    border: orbMood === m.id ? `1px solid ${m.color}` : '1px solid rgba(255, 255, 255, 0.08)',
+                    background: orbMood === m.id ? `${m.color}15` : 'rgba(255, 255, 255, 0.03)',
+                    color: orbMood === m.id ? m.color : '#9EABB8',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  {m.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Direct Connect Chips */}
             <div
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
                 gap: '0.75rem',
+                marginTop: '0.5rem',
               }}
             >
               {CHANNELS.map((ch) => {
@@ -441,7 +477,7 @@ export default function Deploy() {
           </motion.div>
 
           {/* ══════════════════════════════════════════════
-              RIGHT: Writer's Desk Message Form
+              RIGHT: Clean Modern Glass Form (Linear Style)
               ══════════════════════════════════════════════ */}
           <motion.div
             initial={{ opacity: 0, x: 25 }}
@@ -449,19 +485,19 @@ export default function Deploy() {
             viewport={{ once: true, margin: '-50px' }}
             transition={{ duration: 0.55, delay: 0.1 }}
             style={{
-              background: 'rgba(22, 29, 36, 0.65)',
+              background: 'rgba(22, 29, 36, 0.6)',
               backdropFilter: 'blur(20px)',
               border: '1px solid var(--color-border-hairline)',
               borderRadius: '20px',
-              padding: '2rem',
-              boxShadow: '0 24px 48px -18px rgba(0, 0, 0, 0.5)',
+              padding: '2.2rem',
+              boxShadow: '0 24px 48px -20px rgba(0, 0, 0, 0.5)',
             }}
           >
             <AnimatePresence mode="wait">
-              {flightPhase === 'delivered' ? (
-                /* ─── Delivered State ─── */
+              {status === 'sent' ? (
+                /* ─── Clean Sent Confirmation ─── */
                 <motion.div
-                  key="delivered-state"
+                  key="sent-state"
                   initial={{ opacity: 0, scale: 0.96 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.96 }}
@@ -472,31 +508,31 @@ export default function Deploy() {
                 >
                   <div
                     style={{
-                      width: '60px',
-                      height: '60px',
+                      width: '56px',
+                      height: '56px',
                       borderRadius: '50%',
-                      background: 'rgba(212, 175, 55, 0.12)',
-                      border: '1px solid rgba(212, 175, 55, 0.4)',
+                      background: 'rgba(74, 222, 154, 0.12)',
+                      border: '1px solid rgba(74, 222, 154, 0.3)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       margin: '0 auto 1.2rem',
-                      color: '#D4AF37',
+                      color: '#4ADE9A',
                     }}
                   >
-                    <Check size={30} />
+                    <Check size={28} />
                   </div>
 
                   <h3
                     style={{
                       fontFamily: 'var(--font-display)',
-                      fontSize: '1.5rem',
+                      fontSize: '1.4rem',
                       fontWeight: 700,
                       color: '#E8EAED',
                       marginBottom: '0.5rem',
                     }}
                   >
-                    Letter Delivered
+                    Message Received
                   </h3>
                   <p
                     style={{
@@ -508,7 +544,7 @@ export default function Deploy() {
                       lineHeight: 1.6,
                     }}
                   >
-                    Your letter was dispatched across the wire to Kishor’s desk. Expect a thoughtful reply to <span style={{ color: '#38BDF8' }}>{formData.email}</span> within 24 hours.
+                    Thank you, <strong style={{ color: '#E8EAED' }}>{formData.name}</strong>. Your note has landed in my inbox. I will reply directly to <span style={{ color: '#38BDF8' }}>{formData.email}</span> within 24 hours.
                   </p>
 
                   <button
@@ -517,7 +553,7 @@ export default function Deploy() {
                       fontFamily: 'var(--font-sans)',
                       fontSize: '0.82rem',
                       fontWeight: 600,
-                      padding: '10px 22px',
+                      padding: '10px 20px',
                       borderRadius: '8px',
                       background: 'rgba(255, 255, 255, 0.06)',
                       border: '1px solid var(--color-border-hairline)',
@@ -529,12 +565,12 @@ export default function Deploy() {
                       transition: 'all 0.2s',
                     }}
                   >
-                    <RotateCcw size={14} /> Write another letter
+                    <RotateCcw size={14} /> Send another note
                   </button>
                 </motion.div>
               ) : (
-                /* ─── Pen Your Letter Form ─── */
-                <form onSubmit={handleFoldAndLaunch} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                /* ─── Clean Form ─── */
+                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                   {/* Topic Selector */}
                   <div>
                     <label
@@ -547,7 +583,7 @@ export default function Deploy() {
                         marginBottom: '8px',
                       }}
                     >
-                      Subject Stamp
+                      Project Focus
                     </label>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                       {TOPIC_PRESETS.map((t) => {
@@ -564,12 +600,12 @@ export default function Deploy() {
                               padding: '6px 12px',
                               borderRadius: '8px',
                               border: isSelected
-                                ? '1px solid #D4AF37'
+                                ? '1px solid #4ADE9A'
                                 : '1px solid var(--color-border-hairline)',
                               background: isSelected
-                                ? 'rgba(212, 175, 55, 0.12)'
+                                ? 'rgba(74, 222, 154, 0.12)'
                                 : 'rgba(15, 20, 25, 0.5)',
-                              color: isSelected ? '#D4AF37' : '#9EABB8',
+                              color: isSelected ? '#4ADE9A' : '#9EABB8',
                               cursor: 'pointer',
                               transition: 'all 0.2s ease',
                             }}
@@ -606,9 +642,10 @@ export default function Deploy() {
                         type="text"
                         value={formData.name}
                         onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
-                        placeholder="e.g. Maya Lin"
+                        onFocus={() => setFormFocused(true)}
+                        onBlur={() => setFormFocused(false)}
+                        placeholder="e.g. Alex Morgan"
                         required
-                        disabled={flightPhase !== 'draft'}
                         style={{
                           width: '100%',
                           padding: '10px 14px',
@@ -621,7 +658,7 @@ export default function Deploy() {
                           outline: 'none',
                           transition: 'border-color 0.2s ease',
                         }}
-                        onFocusCapture={(e) => (e.target.style.borderColor = '#D4AF37')}
+                        onFocusCapture={(e) => (e.target.style.borderColor = '#4ADE9A')}
                         onBlurCapture={(e) => (e.target.style.borderColor = 'var(--color-border-hairline)')}
                       />
                     </div>
@@ -643,9 +680,10 @@ export default function Deploy() {
                         type="email"
                         value={formData.email}
                         onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))}
-                        placeholder="maya@company.com"
+                        onFocus={() => setFormFocused(true)}
+                        onBlur={() => setFormFocused(false)}
+                        placeholder="alex@company.com"
                         required
-                        disabled={flightPhase !== 'draft'}
                         style={{
                           width: '100%',
                           padding: '10px 14px',
@@ -658,7 +696,7 @@ export default function Deploy() {
                           outline: 'none',
                           transition: 'border-color 0.2s ease',
                         }}
-                        onFocusCapture={(e) => (e.target.style.borderColor = '#D4AF37')}
+                        onFocusCapture={(e) => (e.target.style.borderColor = '#4ADE9A')}
                         onBlurCapture={(e) => (e.target.style.borderColor = 'var(--color-border-hairline)')}
                       />
                     </div>
@@ -681,9 +719,10 @@ export default function Deploy() {
                     <textarea
                       value={formData.message}
                       onChange={(e) => setFormData((p) => ({ ...p, message: e.target.value }))}
-                      placeholder="Pen your message here... it will be inscribed onto the 3D paper sheet."
+                      onFocus={() => setFormFocused(true)}
+                      onBlur={() => setFormFocused(false)}
+                      placeholder="Share a bit about your project scope, tech stack, or team role..."
                       required
-                      disabled={flightPhase !== 'draft'}
                       rows={4}
                       style={{
                         width: '100%',
@@ -700,7 +739,7 @@ export default function Deploy() {
                         minHeight: '100px',
                         transition: 'border-color 0.2s ease',
                       }}
-                      onFocusCapture={(e) => (e.target.style.borderColor = '#D4AF37')}
+                      onFocusCapture={(e) => (e.target.style.borderColor = '#4ADE9A')}
                       onBlurCapture={(e) => (e.target.style.borderColor = 'var(--color-border-hairline)')}
                     />
                   </div>
@@ -709,37 +748,35 @@ export default function Deploy() {
                   <div style={{ marginTop: '0.4rem' }}>
                     <button
                       type="submit"
-                      disabled={flightPhase !== 'draft'}
+                      disabled={status === 'sending'}
                       style={{
                         width: '100%',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        gap: '10px',
+                        gap: '8px',
                         fontFamily: 'var(--font-sans)',
-                        fontSize: '0.88rem',
+                        fontSize: '0.86rem',
                         fontWeight: 600,
                         color: '#0F1419',
                         background:
-                          flightPhase !== 'draft'
-                            ? 'rgba(212, 175, 55, 0.5)'
-                            : 'linear-gradient(135deg, #D4AF37 0%, #E6C265 100%)',
+                          status === 'sending'
+                            ? 'rgba(74, 222, 154, 0.6)'
+                            : 'var(--color-accent-pass)',
                         border: 'none',
-                        padding: '14px 24px',
+                        padding: '13px 24px',
                         borderRadius: '10px',
-                        cursor: flightPhase !== 'draft' ? 'not-allowed' : 'pointer',
+                        cursor: status === 'sending' ? 'not-allowed' : 'pointer',
                         transition: 'all 0.2s ease',
-                        boxShadow: '0 4px 18px rgba(212, 175, 55, 0.3)',
+                        boxShadow: '0 4px 16px rgba(74, 222, 154, 0.25)',
                       }}
                     >
-                      {flightPhase === 'folding' ? (
-                        'Folding into origami airplane...'
-                      ) : flightPhase === 'flying' ? (
-                        'Flying to destination...'
+                      {status === 'sending' ? (
+                        'Sending note...'
                       ) : (
                         <>
-                          Fold & Launch Origami Plane
-                          <Send size={15} />
+                          Send Message
+                          <Send size={14} />
                         </>
                       )}
                     </button>
@@ -772,7 +809,7 @@ export default function Deploy() {
               margin: 0,
             }}
           >
-            © {new Date().getFullYear()} Kishor Gogoi · Crafted with React & Three.js
+            © {new Date().getFullYear()} Kishor Gogoi · Engineered with precision
           </p>
 
           <button
