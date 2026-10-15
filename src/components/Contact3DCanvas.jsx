@@ -1,397 +1,452 @@
 import { useRef, useState, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { RoundedBox, Html, Float } from '@react-three/drei'
+import { RoundedBox, Html } from '@react-three/drei'
 import * as THREE from 'three'
+import profileImg from '../assets/profile.jpg'
 
-/* ─── Web Audio Haptic Sound Synthesizer ─── */
-function playHapticSound(type = 'click') {
-  try {
-    const AudioContext = window.AudioContext || window.webkitAudioContext
-    if (!AudioContext) return
-    const ctx = new AudioContext()
-    const osc = ctx.createOscillator()
-    const gain = ctx.createGain()
+/* ─── Moving Woven Lanyard Band (Ribbon Straps) ─── */
+function LanyardBand({ clipPos }) {
+  const leftStrapRef = useRef()
+  const rightStrapRef = useRef()
 
-    if (type === 'click') {
-      osc.type = 'triangle'
-      osc.frequency.setValueAtTime(900, ctx.currentTime)
-      osc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.04)
-      gain.gain.setValueAtTime(0.15, ctx.currentTime)
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05)
-      osc.connect(gain)
-      gain.connect(ctx.destination)
-      osc.start()
-      osc.stop(ctx.currentTime + 0.05)
-    } else if (type === 'beep') {
-      osc.type = 'sine'
-      osc.frequency.setValueAtTime(1400, ctx.currentTime)
-      gain.gain.setValueAtTime(0.12, ctx.currentTime)
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.09)
-      osc.connect(gain)
-      gain.connect(ctx.destination)
-      osc.start()
-      osc.stop(ctx.currentTime + 0.09)
-    } else if (type === 'dial') {
-      osc.type = 'square'
-      osc.frequency.setValueAtTime(500, ctx.currentTime)
-      gain.gain.setValueAtTime(0.06, ctx.currentTime)
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.03)
-      osc.connect(gain)
-      gain.connect(ctx.destination)
-      osc.start()
-      osc.stop(ctx.currentTime + 0.03)
-    }
-  } catch (e) {
-    // Audio autoplay restrictions or silent mode
-  }
-}
+  // Top anchor points (hanging from neck/top of screen)
+  const topAnchorLeft = useMemo(() => new THREE.Vector3(-0.95, 3.4, -0.2), [])
+  const topAnchorRight = useMemo(() => new THREE.Vector3(0.95, 3.4, -0.2), [])
 
-/* ─── Mechanical Push Key ─── */
-function MechanicalKey({ position, label, sub, color = '#38BDF8', onClick }) {
-  const [pressed, setPressed] = useState(false)
-  const keyMeshRef = useRef()
+  useFrame(() => {
+    if (!leftStrapRef.current || !rightStrapRef.current) return
 
-  useFrame((_, delta) => {
-    if (!keyMeshRef.current) return
-    const targetY = pressed ? position[1] - 0.06 : position[1]
-    keyMeshRef.current.position.y = THREE.MathUtils.damp(
-      keyMeshRef.current.position.y,
-      targetY,
-      12,
-      delta
+    const bottomClip = new THREE.Vector3(clipPos.current.x, clipPos.current.y, clipPos.current.z)
+
+    // Left woven band curve
+    const leftCurve = new THREE.QuadraticBezierCurve3(
+      topAnchorLeft,
+      new THREE.Vector3(
+        (topAnchorLeft.x + bottomClip.x) * 0.5 - 0.15,
+        (topAnchorLeft.y + bottomClip.y) * 0.5,
+        (topAnchorLeft.z + bottomClip.z) * 0.5 + 0.1
+      ),
+      bottomClip
     )
+    leftStrapRef.current.geometry.dispose()
+    leftStrapRef.current.geometry = new THREE.TubeGeometry(leftCurve, 24, 0.07, 8, false)
+
+    // Right woven band curve
+    const rightCurve = new THREE.QuadraticBezierCurve3(
+      topAnchorRight,
+      new THREE.Vector3(
+        (topAnchorRight.x + bottomClip.x) * 0.5 + 0.15,
+        (topAnchorRight.y + bottomClip.y) * 0.5,
+        (topAnchorRight.z + bottomClip.z) * 0.5 + 0.1
+      ),
+      bottomClip
+    )
+    rightStrapRef.current.geometry.dispose()
+    rightStrapRef.current.geometry = new THREE.TubeGeometry(rightCurve, 24, 0.07, 8, false)
   })
 
-  const handleClick = (e) => {
-    e.stopPropagation()
-    playHapticSound('click')
-    setPressed(true)
-    setTimeout(() => setPressed(false), 140)
-    if (onClick) onClick()
-  }
-
   return (
-    <group position={[position[0], position[1], position[2]]}>
-      <mesh
-        ref={keyMeshRef}
-        onClick={handleClick}
-        onPointerOver={() => (document.body.style.cursor = 'pointer')}
-        onPointerOut={() => (document.body.style.cursor = 'auto')}
-      >
-        <boxGeometry args={[1.25, 0.55, 0.22]} />
+    <group>
+      {/* Left Woven Strap */}
+      <mesh ref={leftStrapRef}>
+        <tubeGeometry args={[new THREE.LineCurve3(topAnchorLeft, new THREE.Vector3(0, 1.3, 0)), 24, 0.07, 8, false]} />
         <meshStandardMaterial
-          color="#182029"
-          roughness={0.3}
-          metalness={0.7}
-          emissive={color}
-          emissiveIntensity={pressed ? 0.8 : 0.15}
+          color="#1E2836"
+          emissive="#38BDF8"
+          emissiveIntensity={0.35}
+          roughness={0.6}
+          metalness={0.25}
         />
       </mesh>
 
-      {/* Key Cap Label */}
-      <Html
-        transform
-        distanceFactor={3.6}
-        position={[0, 0, 0.14]}
-        style={{
-          pointerEvents: 'none',
-          userSelect: 'none',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '100px',
-        }}
-      >
-        <div
-          style={{
-            fontFamily: 'var(--font-mono, monospace)',
-            fontSize: '8.5px',
-            fontWeight: 700,
-            color: '#FFFFFF',
-            letterSpacing: '0.06em',
-            textAlign: 'center',
-            lineHeight: 1.1,
-          }}
-        >
-          {label}
-          {sub && (
-            <div style={{ fontSize: '7px', color, marginTop: '2px', fontWeight: 500 }}>
-              {sub}
-            </div>
-          )}
-        </div>
-      </Html>
-    </group>
-  )
-}
-
-/* ─── Rotary Selector Dial ─── */
-function RotaryDial({ position, channelIndex, onRotate }) {
-  const dialRef = useRef()
-
-  useFrame((_, delta) => {
-    if (!dialRef.current) return
-    const targetRotation = channelIndex * (Math.PI / 2.5)
-    dialRef.current.rotation.z = THREE.MathUtils.damp(
-      dialRef.current.rotation.z,
-      targetRotation,
-      8,
-      delta
-    )
-  })
-
-  const handleClick = (e) => {
-    e.stopPropagation()
-    playHapticSound('dial')
-    if (onRotate) onRotate()
-  }
-
-  return (
-    <group position={position} onClick={handleClick}>
-      <mesh
-        ref={dialRef}
-        onPointerOver={() => (document.body.style.cursor = 'pointer')}
-        onPointerOut={() => (document.body.style.cursor = 'auto')}
-      >
-        <cylinderGeometry args={[0.38, 0.42, 0.2, 32]} />
+      {/* Right Woven Strap */}
+      <mesh ref={rightStrapRef}>
+        <tubeGeometry args={[new THREE.LineCurve3(topAnchorRight, new THREE.Vector3(0, 1.3, 0)), 24, 0.07, 8, false]} />
         <meshStandardMaterial
-          color="#2C3744"
-          roughness={0.2}
-          metalness={0.9}
+          color="#1E2836"
+          emissive="#4ADE9A"
+          emissiveIntensity={0.35}
+          roughness={0.6}
+          metalness={0.25}
         />
-      </mesh>
-
-      {/* Knurled Notch Marker */}
-      <mesh position={[0, 0.28, 0.11]}>
-        <boxGeometry args={[0.06, 0.18, 0.05]} />
-        <meshBasicMaterial color="#4ADE9A" />
       </mesh>
     </group>
   )
 }
 
-/* ─── Main 3D Cyber Pager / Device ─── */
-function CyberCommunicator({
-  activeChannel,
-  onSelectChannel,
-  screenMessage,
-  onAction,
-}) {
-  const deviceRef = useRef()
+/* ─── Hanging 3D ID Card with Physics Pendulum ─── */
+function HangingIDCard({ isFlipped, onToggleFlip, clipPosRef, onCardAction }) {
+  const badgeRef = useRef()
+  const [hovered, setHovered] = useState(false)
+  const lastPointer = useRef({ x: 0, y: 0 })
 
-  // Gentle physical tilt tracking mouse
   useFrame((state, delta) => {
-    if (!deviceRef.current) return
+    if (!badgeRef.current) return
+
+    const t = state.clock.getElapsedTime()
     const pX = state.pointer.x
     const pY = state.pointer.y
 
-    deviceRef.current.rotation.x = THREE.MathUtils.damp(
-      deviceRef.current.rotation.x,
-      -pY * 0.35 + 0.15,
-      5,
-      delta
-    )
-    deviceRef.current.rotation.y = THREE.MathUtils.damp(
-      deviceRef.current.rotation.y,
-      pX * 0.45,
-      5,
-      delta
-    )
+    // Pointer velocity calculation for realistic swing momentum
+    const velX = (pX - lastPointer.current.x) / (delta || 0.016)
+    lastPointer.current = { x: pX, y: pY }
+
+    // Natural pendulum breathing swing
+    const idleSwingX = Math.sin(t * 1.5) * 0.05
+    const idleSwingZ = Math.cos(t * 1.2) * 0.03
+
+    // Target positions with spring physics
+    const targetX = pX * 0.85 + idleSwingX
+    const targetY = -0.25 + pY * 0.35
+    const targetRotZ = -velX * 0.035 + Math.sin(t * 2) * 0.025
+    const targetRotY = pX * 0.4 + (isFlipped ? Math.PI : 0)
+    const targetRotX = -pY * 0.3 + 0.06
+
+    // Smooth damp towards targets
+    badgeRef.current.position.x = THREE.MathUtils.damp(badgeRef.current.position.x, targetX, 5, delta)
+    badgeRef.current.position.y = THREE.MathUtils.damp(badgeRef.current.position.y, targetY, 5, delta)
+
+    badgeRef.current.rotation.x = THREE.MathUtils.damp(badgeRef.current.rotation.x, targetRotX, 6, delta)
+    badgeRef.current.rotation.y = THREE.MathUtils.damp(badgeRef.current.rotation.y, targetRotY, 6, delta)
+    badgeRef.current.rotation.z = THREE.MathUtils.damp(badgeRef.current.rotation.z, targetRotZ, 5, delta)
+
+    // Update clip position for the lanyard band connection
+    clipPosRef.current = {
+      x: badgeRef.current.position.x,
+      y: badgeRef.current.position.y + 2.15,
+      z: badgeRef.current.position.z,
+    }
   })
 
-  const channels = ['EMAIL', 'LINKEDIN', 'GITHUB', 'PING']
-
-  const handleNextChannel = () => {
-    const nextIdx = (channels.indexOf(activeChannel) + 1) % channels.length
-    onSelectChannel(channels[nextIdx])
-  }
-
   return (
-    <group ref={deviceRef}>
-      {/* ─── Chassis Body (Matte Slate & Anodized Aluminum) ─── */}
-      <RoundedBox args={[3.8, 5.4, 0.42]} radius={0.22} smoothness={8}>
+    <group ref={badgeRef} position={[0, -0.25, 0]}>
+      {/* ─── Titanium Swivel Clip Hardware ─── */}
+      <group position={[0, 2.15, 0]}>
+        {/* Metal ring connecting to lanyard band */}
+        <mesh position={[0, 0.22, 0]}>
+          <torusGeometry args={[0.2, 0.045, 16, 32]} />
+          <meshStandardMaterial color="#CBD5E1" metalness={0.95} roughness={0.15} />
+        </mesh>
+        {/* Swivel cylinder */}
+        <mesh position={[0, 0.06, 0]}>
+          <cylinderGeometry args={[0.11, 0.11, 0.2, 16]} />
+          <meshStandardMaterial color="#64748B" metalness={0.9} roughness={0.2} />
+        </mesh>
+        {/* Lobster claw clip through card punch hole */}
+        <mesh position={[0, -0.16, 0]}>
+          <torusGeometry args={[0.15, 0.035, 16, 32]} />
+          <meshStandardMaterial color="#CBD5E1" metalness={0.95} roughness={0.15} />
+        </mesh>
+      </group>
+
+      {/* ─── Solid Card Slab (Matte Obsidian) ─── */}
+      <RoundedBox
+        args={[3.3, 4.3, 0.08]}
+        radius={0.16}
+        smoothness={6}
+        onPointerOver={() => setHovered(true)}
+        onPointerOut={() => setHovered(false)}
+        onClick={onToggleFlip}
+      >
         <meshStandardMaterial
-          color="#11171E"
-          roughness={0.35}
+          color="#0B0F14"
+          roughness={0.25}
           metalness={0.8}
         />
       </RoundedBox>
 
-      {/* Decorative Metallic Corner Accents */}
-      <mesh position={[0, 2.58, 0]}>
-        <boxGeometry args={[3.2, 0.05, 0.44]} />
-        <meshStandardMaterial color="#222C38" metalness={0.95} roughness={0.2} />
-      </mesh>
-      <mesh position={[0, -2.58, 0]}>
-        <boxGeometry args={[3.2, 0.05, 0.44]} />
-        <meshStandardMaterial color="#222C38" metalness={0.95} roughness={0.2} />
+      {/* Card Top Punch Hole */}
+      <mesh position={[0, 1.9, 0]}>
+        <cylinderGeometry args={[0.16, 0.16, 0.1, 24]} rotation={[Math.PI / 2, 0, 0]} />
+        <meshBasicMaterial color="#000000" />
       </mesh>
 
-      {/* Antenna Stub (Top Right) */}
-      <group position={[1.4, 2.8, 0]}>
-        <mesh>
-          <cylinderGeometry args={[0.08, 0.08, 0.5, 16]} />
-          <meshStandardMaterial color="#2A3542" metalness={0.9} roughness={0.2} />
-        </mesh>
-        <mesh position={[0, 0.28, 0]}>
-          <sphereGeometry args={[0.1, 16, 16]} />
-          <meshStandardMaterial color="#E8615C" emissive="#E8615C" emissiveIntensity={0.6} />
-        </mesh>
-      </group>
-
-      {/* ─── Rotary Channel Selector Dial (Top Left) ─── */}
-      <RotaryDial
-        position={[-1.25, 2.1, 0.22]}
-        channelIndex={channels.indexOf(activeChannel)}
-        onRotate={handleNextChannel}
-      />
-
-      {/* Status LED (Top Center) */}
-      <mesh position={[0, 2.15, 0.22]}>
-        <sphereGeometry args={[0.07, 16, 16]} />
-        <meshBasicMaterial color="#4ADE9A" />
+      {/* Subtle Chamfer Highlight */}
+      <mesh position={[0, 0, 0]}>
+        <planeGeometry args={[3.32, 4.32]} />
+        <meshBasicMaterial
+          color={hovered ? '#4ADE9A' : '#38BDF8'}
+          wireframe
+          transparent
+          opacity={hovered ? 0.35 : 0.15}
+        />
       </mesh>
 
-      {/* ─── OLED Screen Frame ─── */}
-      <mesh position={[0, 0.8, 0.21]}>
-        <boxGeometry args={[3.2, 2.0, 0.04]} />
-        <meshStandardMaterial color="#0A0E13" roughness={0.2} metalness={0.9} />
-      </mesh>
+      {/* ─── FRONT FACE CONTENT (Only visible when NOT flipped) ─── */}
+      {!isFlipped && (
+        <group position={[0, 0, 0.045]}>
+          <Html
+            transform
+            distanceFactor={3.6}
+            position={[0, 0, 0.01]}
+            style={{
+              width: '310px',
+              height: '400px',
+              pointerEvents: 'auto',
+              userSelect: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              padding: '20px 18px',
+              boxSizing: 'border-box',
+              fontFamily: 'var(--font-sans, sans-serif)',
+            }}
+          >
+            {/* Header Status */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#4ADE9A', boxShadow: '0 0 8px #4ADE9A', display: 'inline-block' }} />
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '8.5px', fontWeight: 700, color: '#4ADE9A', letterSpacing: '0.12em' }}>
+                  VERIFIED QA ENGINEER
+                </span>
+              </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onToggleFlip()
+                }}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  borderRadius: '6px',
+                  padding: '3px 8px',
+                  color: '#9EABB8',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '8px',
+                  cursor: 'pointer',
+                }}
+              >
+                FLIP ↷
+              </button>
+            </div>
 
-      {/* OLED Screen Display (Embedded HTML with Scanlines & Telemetry) */}
-      <Html
-        transform
-        distanceFactor={3.6}
-        position={[0, 0.8, 0.24]}
-        style={{
-          width: '300px',
-          height: '185px',
-          pointerEvents: 'none',
-          userSelect: 'none',
-          background: '#04070B',
-          borderRadius: '4px',
-          padding: '14px',
-          boxSizing: 'border-box',
-          fontFamily: 'var(--font-mono, monospace)',
-          color: '#4ADE9A',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          border: '1px solid rgba(74, 222, 154, 0.3)',
-          boxShadow: 'inset 0 0 16px rgba(74, 222, 154, 0.15)',
-        }}
-      >
-        {/* Screen Top Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(74, 222, 154, 0.2)', paddingBottom: '4px' }}>
-          <span style={{ fontSize: '8.5px', letterSpacing: '0.12em', color: '#9EABB8' }}>
-            KG // UNIT-403
-          </span>
-          <span style={{ fontSize: '8.5px', color: '#4ADE9A', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#4ADE9A', display: 'inline-block' }} />
-            IST ONLINE
-          </span>
-        </div>
+            {/* Profile Photo & Name Section */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', margin: 'auto 0 10px 0' }}>
+              <div
+                style={{
+                  width: '68px',
+                  height: '68px',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  border: '2px solid rgba(74, 222, 154, 0.5)',
+                  boxShadow: '0 0 14px rgba(74, 222, 154, 0.25)',
+                  flexShrink: 0,
+                  background: '#1A222C',
+                }}
+              >
+                <img
+                  src={profileImg}
+                  alt="Kishor Gogoi"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
 
-        {/* Screen Central Channel Readout */}
-        <div style={{ margin: 'auto 0', textAlign: 'center' }}>
-          <div style={{ fontSize: '9px', color: '#38BDF8', letterSpacing: '0.1em', marginBottom: '2px' }}>
-            CHANNEL SELECTED
-          </div>
-          <div style={{ fontSize: '18px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '0.04em' }}>
-            {activeChannel === 'EMAIL' && '✉ kishorgogoi403'}
-            {activeChannel === 'LINKEDIN' && '💼 in/kishorgogoi'}
-            {activeChannel === 'GITHUB' && '🐙 /KISHOR403'}
-            {activeChannel === 'PING' && '⚡ QUICK CONNECT'}
-          </div>
-          <div style={{ fontSize: '9.5px', color: '#9EABB8', marginTop: '3px' }}>
-            {screenMessage || 'Tap mechanical key below to execute'}
-          </div>
-        </div>
+              <div>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: '19px', fontWeight: 800, color: '#FFFFFF', lineHeight: 1.1 }}>
+                  Kishor Gogoi
+                </div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: '#38BDF8', fontWeight: 600, marginTop: '3px' }}>
+                  SDET & Full-Stack QA
+                </div>
+                <div style={{ fontSize: '8.5px', color: '#9EABB8', marginTop: '2px' }}>
+                  Automation Architect · CI/CD
+                </div>
+              </div>
+            </div>
 
-        {/* Screen Footer Readout */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '8px', color: '#6A7885' }}>
-          <span>MODE: DIRECT DISPATCH</span>
-          <span style={{ color: '#4ADE9A' }}>SIGNAL 100%</span>
-        </div>
-      </Html>
+            {/* Skill Tags */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '8px' }}>
+              {['Selenium', 'Java', 'Playwright', 'React', 'CI/CD'].map((s) => (
+                <span
+                  key={s}
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '7.5px',
+                    padding: '2px 6px',
+                    borderRadius: '4px',
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    color: '#CBD5E1',
+                  }}
+                >
+                  {s}
+                </span>
+              ))}
+            </div>
 
-      {/* ─── Mechanical Keypad (4 Tactile 3D Keys) ─── */}
-      <group position={[0, -1.25, 0.15]}>
-        {/* Row 1 */}
-        <MechanicalKey
-          position={[-0.8, 0.38, 0]}
-          label="COPY MAIL"
-          sub="Preferred"
-          color="#4ADE9A"
-          onClick={() => onAction('copy-email')}
-        />
-        <MechanicalKey
-          position={[0.8, 0.38, 0]}
-          label="LINKEDIN"
-          sub="Network"
-          color="#38BDF8"
-          onClick={() => onAction('linkedin')}
-        />
+            {/* Bottom ID Barcode */}
+            <div
+              style={{
+                background: 'rgba(15, 20, 25, 0.85)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: '8px',
+                padding: '7px 10px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '7px', color: '#6A7885' }}>ID: KG-403-2026</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '7.5px', color: '#4ADE9A', fontWeight: 600 }}>
+                  Guwahati · IST Online
+                </div>
+              </div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '7.5px', color: '#9EABB8' }}>
+                TAP TO FLIP ↷
+              </div>
+            </div>
+          </Html>
+        </group>
+      )}
 
-        {/* Row 2 */}
-        <MechanicalKey
-          position={[-0.8, -0.38, 0]}
-          label="GITHUB"
-          sub="Projects"
-          color="#E8EAED"
-          onClick={() => onAction('github')}
-        />
-        <MechanicalKey
-          position={[0.8, -0.38, 0]}
-          label="QUICK PING"
-          sub="Say Hello"
-          color="#F2A93B"
-          onClick={() => onAction('quick-ping')}
-        />
-      </group>
+      {/* ─── BACK FACE CONTENT (Only visible when flipped) ─── */}
+      {isFlipped && (
+        <group position={[0, 0, -0.045]} rotation={[0, Math.PI, 0]}>
+          <Html
+            transform
+            distanceFactor={3.6}
+            position={[0, 0, 0.01]}
+            style={{
+              width: '310px',
+              height: '400px',
+              pointerEvents: 'auto',
+              userSelect: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              padding: '20px 18px',
+              boxSizing: 'border-box',
+              fontFamily: 'var(--font-sans, sans-serif)',
+            }}
+          >
+            {/* Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '8.5px', fontWeight: 700, color: '#38BDF8', letterSpacing: '0.1em' }}>
+                DIRECT CHANNELS
+              </span>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onToggleFlip()
+                }}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  borderRadius: '6px',
+                  padding: '3px 8px',
+                  color: '#9EABB8',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '8px',
+                  cursor: 'pointer',
+                }}
+              >
+                FRONT ↶
+              </button>
+            </div>
 
-      {/* Speaker Grille Slots (Bottom) */}
-      <group position={[0, -2.1, 0.22]}>
-        {[-0.8, -0.4, 0, 0.4, 0.8].map((x, i) => (
-          <mesh key={i} position={[x, 0, 0]}>
-            <boxGeometry args={[0.08, 0.25, 0.02]} />
-            <meshBasicMaterial color="#0A0E13" />
-          </mesh>
-        ))}
-      </group>
+            {/* Direct Contact Cards */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', margin: 'auto 0' }}>
+              <div
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onCardAction('copy-email')
+                }}
+                style={{
+                  background: 'rgba(15, 20, 25, 0.8)',
+                  border: '1px solid rgba(74, 222, 154, 0.35)',
+                  borderRadius: '8px',
+                  padding: '8px 10px',
+                  cursor: 'pointer',
+                }}
+              >
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '7px', color: '#6A7885' }}>PRIMARY EMAIL</div>
+                <div style={{ fontSize: '10.5px', fontWeight: 600, color: '#4ADE9A', marginTop: '2px' }}>
+                  kishorgogoi403@gmail.com
+                </div>
+              </div>
+
+              <div
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onCardAction('linkedin')
+                }}
+                style={{
+                  background: 'rgba(15, 20, 25, 0.8)',
+                  border: '1px solid rgba(56, 189, 248, 0.35)',
+                  borderRadius: '8px',
+                  padding: '8px 10px',
+                  cursor: 'pointer',
+                }}
+              >
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '7px', color: '#6A7885' }}>LINKEDIN PROFILE</div>
+                <div style={{ fontSize: '10.5px', fontWeight: 600, color: '#38BDF8', marginTop: '2px' }}>
+                  linkedin.com/in/kishorgogoi
+                </div>
+              </div>
+
+              <div
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onCardAction('github')
+                }}
+                style={{
+                  background: 'rgba(15, 20, 25, 0.8)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  borderRadius: '8px',
+                  padding: '8px 10px',
+                  cursor: 'pointer',
+                }}
+              >
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '7px', color: '#6A7885' }}>GITHUB REPOSITORIES</div>
+                <div style={{ fontSize: '10.5px', fontWeight: 600, color: '#E8EAED', marginTop: '2px' }}>
+                  github.com/KISHOR403
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Certification */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '7px', color: '#6A7885' }}>
+              <span>PASSPORT: #KG-8842</span>
+              <span style={{ color: '#4ADE9A' }}>100% QUALITY GATES PASS</span>
+            </div>
+          </Html>
+        </group>
+      )}
     </group>
   )
 }
 
-/* ─── Canvas Wrapper ─── */
-export default function Contact3DCanvas({
-  activeChannel = 'EMAIL',
-  onSelectChannel,
-  screenMessage = '',
-  onAction,
-}) {
+/* ─── Canvas Wrapper with Studio Lighting ─── */
+export default function Contact3DCanvas({ onCardAction }) {
+  const [isFlipped, setIsFlipped] = useState(false)
+  const clipPosRef = useRef({ x: 0, y: 1.45, z: 0 })
+
+  const toggleFlip = () => setIsFlipped((prev) => !prev)
+
   return (
-    <div style={{ width: '100%', height: '100%', position: 'relative', minHeight: '480px' }}>
+    <div style={{ width: '100%', height: '100%', position: 'relative', minHeight: '560px' }}>
       <Canvas
-        camera={{ position: [0, 0, 6.2], fov: 42 }}
+        camera={{ position: [0, 0.45, 6.4], fov: 44 }}
         gl={{ antialias: true, alpha: true }}
         dpr={[1, 2]}
       >
         {/* Studio Lighting */}
-        <ambientLight intensity={0.7} />
-        <directionalLight position={[5, 7, 5]} intensity={1.5} color="#FFFFFF" />
-        <pointLight position={[-5, -4, 3]} intensity={0.8} color="#38BDF8" />
-        <pointLight position={[0, -5, 2]} intensity={0.6} color="#4ADE9A" />
+        <ambientLight intensity={0.8} />
+        <directionalLight position={[4, 6, 4]} intensity={1.5} color="#FFFFFF" />
+        <pointLight position={[-4, -3, 2]} intensity={0.8} color="#38BDF8" />
+        <pointLight position={[0, -4, 2]} intensity={0.6} color="#4ADE9A" />
 
-        <Float speed={1.5} rotationIntensity={0.15} floatIntensity={0.3}>
-          <CyberCommunicator
-            activeChannel={activeChannel}
-            onSelectChannel={onSelectChannel}
-            screenMessage={screenMessage}
-            onAction={onAction}
-          />
-        </Float>
+        {/* Dynamic Moving Lanyard Band (Ribbon Straps) */}
+        <LanyardBand clipPos={clipPosRef} />
+
+        {/* 3D Hanging ID Card with Physics Pendulum Motion */}
+        <HangingIDCard
+          isFlipped={isFlipped}
+          onToggleFlip={toggleFlip}
+          clipPosRef={clipPosRef}
+          onCardAction={onCardAction}
+        />
       </Canvas>
     </div>
   )

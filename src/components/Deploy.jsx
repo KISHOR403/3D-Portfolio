@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import {
-  Mail, ArrowUpRight, Send, Check, Copy, CheckCheck,
-  Clock, MapPin, Sparkles, ChevronUp, Radio, Volume2, VolumeX
+  Mail, ArrowUpRight, Copy, CheckCheck,
+  Clock, MapPin, Sparkles, ChevronUp, Radio
 } from 'lucide-react'
 import Contact3DCanvas from './Contact3DCanvas'
 
@@ -26,32 +26,10 @@ function GithubIcon({ size = 17, style }) {
   )
 }
 
-function XIcon({ size = 16, style }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" style={style}>
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-    </svg>
-  )
-}
-
-/* ─── Fast Preset Pings ─── */
-const QUICK_PINGS = [
-  { id: 'qa', label: '🎯 QA Automation & SDET Role', text: 'Hi Kishor! We are looking for an experienced QA Automation / SDET engineer for our team.' },
-  { id: 'fullstack', label: '🚀 Full-Stack Engineering Project', text: 'Hi Kishor! I saw your portfolio and would like to discuss a full-stack development project.' },
-  { id: 'hello', label: '☕ Say Hello & Network', text: 'Hey Kishor! Just wanted to connect and talk engineering & testing architectures.' },
-]
-
 export default function Deploy() {
-  const [activeChannel, setActiveChannel] = useState('EMAIL')
-  const [screenMessage, setScreenMessage] = useState('')
   const [copied, setCopied] = useState(false)
-  const [showPingModal, setShowPingModal] = useState(false)
-  const [pingSent, setPingSent] = useState(false)
-  const [selectedPing, setSelectedPing] = useState(QUICK_PINGS[0])
-  const [senderName, setSenderName] = useState('')
-  const [senderEmail, setSenderEmail] = useState('')
 
-  // Live IST Digital Clock
+  // Real-time IST Digital Clock
   const [currentTime, setCurrentTime] = useState('')
   useEffect(() => {
     const updateTime = () => {
@@ -69,48 +47,20 @@ export default function Deploy() {
     return () => clearInterval(timer)
   }, [])
 
-  // Handle Action Triggered from 3D Device or UI Buttons
-  const handleDeviceAction = (actionKey) => {
-    if (actionKey === 'copy-email') {
-      navigator.clipboard.writeText('kishorgogoi403@gmail.com')
-      setCopied(true)
-      setActiveChannel('EMAIL')
-      setScreenMessage('✔ COPIED: kishorgogoi403@gmail.com')
-      setTimeout(() => {
-        setCopied(false)
-        setScreenMessage('')
-      }, 3500)
-    } else if (actionKey === 'linkedin') {
-      setActiveChannel('LINKEDIN')
-      setScreenMessage('OPENING: linkedin.com/in/kishorgogoi')
-      setTimeout(() => {
-        window.open('https://linkedin.com/in/kishorgogoi/', '_blank')
-        setScreenMessage('')
-      }, 500)
-    } else if (actionKey === 'github') {
-      setActiveChannel('GITHUB')
-      setScreenMessage('OPENING: github.com/KISHOR403')
-      setTimeout(() => {
-        window.open('https://github.com/KISHOR403', '_blank')
-        setScreenMessage('')
-      }, 500)
-    } else if (actionKey === 'quick-ping') {
-      setActiveChannel('PING')
-      setScreenMessage('TRANSMIT QUICK DISPATCH PING')
-      setShowPingModal(true)
-    }
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText('kishorgogoi403@gmail.com')
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2500)
   }
 
-  const handleSendPing = (e) => {
-    e.preventDefault()
-    setPingSent(true)
-    setScreenMessage(`✔ PING DISPATCHED FROM: ${senderName || 'Anonymous'}`)
-    setTimeout(() => {
-      setShowPingModal(false)
-      setPingSent(false)
-      setSenderName('')
-      setSenderEmail('')
-    }, 2200)
+  const handleCardAction = (action) => {
+    if (action === 'copy-email') {
+      handleCopyEmail()
+    } else if (action === 'linkedin') {
+      window.open('https://linkedin.com/in/kishorgogoi/', '_blank')
+    } else if (action === 'github') {
+      window.open('https://github.com/KISHOR403', '_blank')
+    }
   }
 
   return (
@@ -134,15 +84,15 @@ export default function Deploy() {
           padding: '0 1.5rem',
         }}
       >
-        {/* ─── Modern Cyber Headline ─── */}
+        {/* ─── Header ─── */}
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.55 }}
-          style={{ marginBottom: '2.5rem', textAlign: 'center' }}
+          style={{ marginBottom: '1.8rem', textAlign: 'center' }}
         >
-          {/* Status Badge */}
+          {/* Eyebrow Status Badge */}
           <div
             style={{
               display: 'inline-flex',
@@ -165,7 +115,7 @@ export default function Deploy() {
                 letterSpacing: '0.04em',
               }}
             >
-              Direct Line Available · IST (UTC+5:30) {currentTime || '5:00 PM'}
+              Open for Senior QA Roles & Contracts · 2026
             </span>
           </div>
 
@@ -178,10 +128,10 @@ export default function Deploy() {
               lineHeight: 1.08,
               margin: '0 auto',
               color: '#FFFFFF',
-              maxWidth: '700px',
+              maxWidth: '750px',
             }}
           >
-            Direct Line to{' '}
+            Connect with{' '}
             <span
               style={{
                 background: 'linear-gradient(135deg, #4ADE9A 0%, #38BDF8 60%, #F2A93B 100%)',
@@ -203,42 +153,37 @@ export default function Deploy() {
               lineHeight: 1.6,
             }}
           >
-            Tap the physical 3D communicator keys below to copy direct email, view repositories, or dispatch an instant message.
+            Interactive 3D ID Badge hanging on a dynamic woven lanyard band. Move your mouse to swing the badge, or tap to flip.
           </p>
         </motion.div>
 
-        {/* ─── 3D Tactile Communicator Stage (Borderless & Seamless) ─── */}
+        {/* ─── Seamless 3D ID Badge & Moving Lanyard Band (Unboxed & Borderless) ─── */}
         <div
           style={{
             position: 'relative',
             width: '100%',
-            height: '490px',
+            height: '570px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
-          <Contact3DCanvas
-            activeChannel={activeChannel}
-            onSelectChannel={setActiveChannel}
-            screenMessage={screenMessage}
-            onAction={handleDeviceAction}
-          />
+          <Contact3DCanvas onCardAction={handleCardAction} />
         </div>
 
-        {/* ─── Interactive Channel Action Strip ─── */}
+        {/* ─── Direct Channel Action Strip ─── */}
         <div
           style={{
-            maxWidth: '820px',
-            margin: '1.5rem auto 0',
+            maxWidth: '780px',
+            margin: '1.2rem auto 0',
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
             gap: '0.85rem',
           }}
         >
-          {/* Email Key Button */}
+          {/* Copy Email Button */}
           <button
-            onClick={() => handleDeviceAction('copy-email')}
+            onClick={handleCopyEmail}
             style={{
               background: copied ? 'rgba(74, 222, 154, 0.15)' : 'rgba(22, 29, 36, 0.65)',
               backdropFilter: 'blur(12px)',
@@ -253,19 +198,33 @@ export default function Deploy() {
               transition: 'all 0.2s ease',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Mail size={16} color="#4ADE9A" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '8px',
+                  background: 'rgba(74, 222, 154, 0.12)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Mail size={16} color="#4ADE9A" />
+              </div>
               <div style={{ textAlign: 'left' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#9EABB8' }}>DIRECT MAIL</div>
-                <div style={{ fontSize: '0.78rem', fontWeight: 600 }}>{copied ? 'Copied to Clipboard!' : 'Copy Email'}</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#9EABB8' }}>DIRECT EMAIL</div>
+                <div style={{ fontSize: '0.78rem', fontWeight: 600 }}>{copied ? 'Copied to Clipboard!' : 'kishorgogoi403@gmail.com'}</div>
               </div>
             </div>
             {copied ? <CheckCheck size={14} color="#4ADE9A" /> : <Copy size={13} color="#9EABB8" />}
           </button>
 
-          {/* LinkedIn Key Button */}
-          <button
-            onClick={() => handleDeviceAction('linkedin')}
+          {/* LinkedIn Button */}
+          <a
+            href="https://linkedin.com/in/kishorgogoi/"
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
               background: 'rgba(22, 29, 36, 0.65)',
               backdropFilter: 'blur(12px)',
@@ -276,23 +235,37 @@ export default function Deploy() {
               alignItems: 'center',
               justifyContent: 'space-between',
               color: '#E8EAED',
-              cursor: 'pointer',
+              textDecoration: 'none',
               transition: 'all 0.2s ease',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <LinkedinIcon size={16} style={{ color: '#38BDF8' }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '8px',
+                  background: 'rgba(56, 189, 248, 0.12)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <LinkedinIcon size={16} style={{ color: '#38BDF8' }} />
+              </div>
               <div style={{ textAlign: 'left' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#9EABB8' }}>PROFESSIONAL</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#9EABB8' }}>PROFESSIONAL NETWORK</div>
                 <div style={{ fontSize: '0.78rem', fontWeight: 600 }}>LinkedIn Profile</div>
               </div>
             </div>
-            <ArrowUpRight size={13} color="#9EABB8" />
-          </button>
+            <ArrowUpRight size={14} color="#9EABB8" />
+          </a>
 
-          {/* GitHub Key Button */}
-          <button
-            onClick={() => handleDeviceAction('github')}
+          {/* GitHub Button */}
+          <a
+            href="https://github.com/KISHOR403"
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
               background: 'rgba(22, 29, 36, 0.65)',
               backdropFilter: 'blur(12px)',
@@ -303,237 +276,32 @@ export default function Deploy() {
               alignItems: 'center',
               justifyContent: 'space-between',
               color: '#E8EAED',
-              cursor: 'pointer',
+              textDecoration: 'none',
               transition: 'all 0.2s ease',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <GithubIcon size={16} style={{ color: '#E8EAED' }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '8px',
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <GithubIcon size={16} style={{ color: '#E8EAED' }} />
+              </div>
               <div style={{ textAlign: 'left' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#9EABB8' }}>REPOSITORIES</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#9EABB8' }}>AUTOMATION REPOS</div>
                 <div style={{ fontSize: '0.78rem', fontWeight: 600 }}>GitHub Source</div>
               </div>
             </div>
-            <ArrowUpRight size={13} color="#9EABB8" />
-          </button>
-
-          {/* Quick Ping Button */}
-          <button
-            onClick={() => handleDeviceAction('quick-ping')}
-            style={{
-              background: 'rgba(242, 169, 59, 0.1)',
-              backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(242, 169, 59, 0.3)',
-              borderRadius: '12px',
-              padding: '12px 16px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              color: '#F2A93B',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Send size={15} color="#F2A93B" />
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#F2A93B', opacity: 0.8 }}>INSTANT DISPATCH</div>
-                <div style={{ fontSize: '0.78rem', fontWeight: 600, color: '#FFFFFF' }}>Quick Ping</div>
-              </div>
-            </div>
-            <Sparkles size={13} color="#F2A93B" />
-          </button>
+            <ArrowUpRight size={14} color="#9EABB8" />
+          </a>
         </div>
-
-        {/* ─── Quick Dispatch Modal Overlay ─── */}
-        <AnimatePresence>
-          {showPingModal && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background: 'rgba(7, 11, 16, 0.85)',
-                backdropFilter: 'blur(12px)',
-                zIndex: 200,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '1.5rem',
-              }}
-              onClick={() => setShowPingModal(false)}
-            >
-              <motion.div
-                initial={{ scale: 0.94, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.94, opacity: 0 }}
-                onClick={(e) => e.stopPropagation()}
-                style={{
-                  width: '100%',
-                  maxWidth: '480px',
-                  background: 'rgba(22, 29, 36, 0.95)',
-                  border: '1px solid var(--color-border-hairline)',
-                  borderRadius: '18px',
-                  padding: '1.8rem',
-                  boxShadow: '0 20px 40px -15px rgba(0,0,0,0.8)',
-                }}
-              >
-                {pingSent ? (
-                  <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
-                    <div
-                      style={{
-                        width: '52px',
-                        height: '52px',
-                        borderRadius: '50%',
-                        background: 'rgba(74, 222, 154, 0.15)',
-                        border: '1px solid #4ADE9A',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        margin: '0 auto 1rem',
-                        color: '#4ADE9A',
-                      }}
-                    >
-                      <Check size={26} />
-                    </div>
-                    <h3 style={{ fontSize: '1.3rem', fontWeight: 700, color: '#E8EAED', marginBottom: '0.4rem' }}>
-                      Ping Delivered
-                    </h3>
-                    <p style={{ fontSize: '0.88rem', color: 'var(--color-text-muted)' }}>
-                      Notification sent to Kishor’s receiver unit.
-                    </p>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSendPing} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#E8EAED', margin: 0 }}>
-                        Quick Dispatch Ping
-                      </h3>
-                      <button
-                        type="button"
-                        onClick={() => setShowPingModal(false)}
-                        style={{
-                          background: 'transparent',
-                          border: 'none',
-                          color: '#9EABB8',
-                          cursor: 'pointer',
-                          fontSize: '1.2rem',
-                        }}
-                      >
-                        ✕
-                      </button>
-                    </div>
-
-                    {/* Preset Buttons */}
-                    <div>
-                      <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: '#9EABB8', display: 'block', marginBottom: '6px' }}>
-                        SELECT PING TOPIC
-                      </label>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                        {QUICK_PINGS.map((p) => {
-                          const isSel = selectedPing.id === p.id
-                          return (
-                            <button
-                              key={p.id}
-                              type="button"
-                              onClick={() => setSelectedPing(p)}
-                              style={{
-                                fontFamily: 'var(--font-sans)',
-                                fontSize: '0.78rem',
-                                padding: '8px 12px',
-                                borderRadius: '8px',
-                                border: isSel ? '1px solid #F2A93B' : '1px solid var(--color-border-hairline)',
-                                background: isSel ? 'rgba(242, 169, 59, 0.12)' : 'rgba(15, 20, 25, 0.6)',
-                                color: isSel ? '#F2A93B' : '#E8EAED',
-                                textAlign: 'left',
-                                cursor: 'pointer',
-                              }}
-                            >
-                              {p.label}
-                            </button>
-                          )
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Sender Identity */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-                      <div>
-                        <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: '#9EABB8', display: 'block', marginBottom: '4px' }}>
-                          YOUR NAME
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={senderName}
-                          onChange={(e) => setSenderName(e.target.value)}
-                          placeholder="e.g. Maya"
-                          style={{
-                            width: '100%',
-                            padding: '8px 10px',
-                            background: 'rgba(15, 20, 25, 0.8)',
-                            border: '1px solid var(--color-border-hairline)',
-                            borderRadius: '8px',
-                            color: '#E8EAED',
-                            fontFamily: 'var(--font-sans)',
-                            fontSize: '0.82rem',
-                            outline: 'none',
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: '#9EABB8', display: 'block', marginBottom: '4px' }}>
-                          YOUR EMAIL
-                        </label>
-                        <input
-                          type="email"
-                          required
-                          value={senderEmail}
-                          onChange={(e) => setSenderEmail(e.target.value)}
-                          placeholder="maya@company.com"
-                          style={{
-                            width: '100%',
-                            padding: '8px 10px',
-                            background: 'rgba(15, 20, 25, 0.8)',
-                            border: '1px solid var(--color-border-hairline)',
-                            borderRadius: '8px',
-                            color: '#E8EAED',
-                            fontFamily: 'var(--font-sans)',
-                            fontSize: '0.82rem',
-                            outline: 'none',
-                          }}
-                        />
-                      </div>
-                    </div>
-
-                    <button
-                      type="submit"
-                      style={{
-                        marginTop: '0.5rem',
-                        padding: '12px',
-                        borderRadius: '10px',
-                        background: '#F2A93B',
-                        color: '#0F1419',
-                        fontWeight: 700,
-                        fontFamily: 'var(--font-sans)',
-                        fontSize: '0.86rem',
-                        border: 'none',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      Transmit Ping
-                    </button>
-                  </form>
-                )}
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         {/* ─── Minimalist Footer ─── */}
         <div
