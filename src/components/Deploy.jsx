@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Mail, ArrowUpRight, Send, Check, Copy, CheckCheck,
-  Clock, MapPin, Sparkles, ChevronUp, RotateCcw
+  Clock, MapPin, Sparkles, ChevronUp, Radio, Volume2, VolumeX
 } from 'lucide-react'
 import Contact3DCanvas from './Contact3DCanvas'
 
@@ -34,64 +34,24 @@ function XIcon({ size = 16, style }) {
   )
 }
 
-/* ─── Direct Communication Channels ─── */
-const CHANNELS = [
-  {
-    name: 'Email',
-    label: 'kishorgogoi403@gmail.com',
-    href: 'mailto:kishorgogoi403@gmail.com',
-    icon: Mail,
-    color: '#4ADE9A',
-    isCopyable: true,
-  },
-  {
-    name: 'LinkedIn',
-    label: 'linkedin.com/in/kishorgogoi',
-    href: 'https://linkedin.com/in/kishorgogoi/',
-    icon: LinkedinIcon,
-    color: '#38BDF8',
-    isExternal: true,
-  },
-  {
-    name: 'GitHub',
-    label: 'github.com/KISHOR403',
-    href: 'https://github.com/KISHOR403',
-    icon: GithubIcon,
-    color: '#E8EAED',
-    isExternal: true,
-  },
-  {
-    name: 'X',
-    label: '@kishor_gogoi8',
-    href: 'https://x.com/kishor_gogoi8',
-    icon: XIcon,
-    color: '#A78BFA',
-    isExternal: true,
-  },
-]
-
-/* ─── Modern Topic Selector Pills ─── */
-const TOPIC_PRESETS = [
-  { id: 'qa', label: 'QA Automation & SDET' },
-  { id: 'fullstack', label: 'Full-Stack Development' },
-  { id: 'cicd', label: 'CI/CD Architecture' },
-  { id: 'chat', label: 'Advisory / Say Hello' },
+/* ─── Fast Preset Pings ─── */
+const QUICK_PINGS = [
+  { id: 'qa', label: '🎯 QA Automation & SDET Role', text: 'Hi Kishor! We are looking for an experienced QA Automation / SDET engineer for our team.' },
+  { id: 'fullstack', label: '🚀 Full-Stack Engineering Project', text: 'Hi Kishor! I saw your portfolio and would like to discuss a full-stack development project.' },
+  { id: 'hello', label: '☕ Say Hello & Network', text: 'Hey Kishor! Just wanted to connect and talk engineering & testing architectures.' },
 ]
 
 export default function Deploy() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    topic: 'QA Automation & SDET',
-    message: '',
-  })
-  const [activeTopic, setActiveTopic] = useState('qa')
-  const [status, setStatus] = useState('idle') // idle | sending | sent
-  const [copiedChannel, setCopiedChannel] = useState(null)
-  const [orbMood, setOrbMood] = useState('emerald') // 'emerald' | 'azure' | 'lavender'
-  const [formFocused, setFormFocused] = useState(false)
+  const [activeChannel, setActiveChannel] = useState('EMAIL')
+  const [screenMessage, setScreenMessage] = useState('')
+  const [copied, setCopied] = useState(false)
+  const [showPingModal, setShowPingModal] = useState(false)
+  const [pingSent, setPingSent] = useState(false)
+  const [selectedPing, setSelectedPing] = useState(QUICK_PINGS[0])
+  const [senderName, setSenderName] = useState('')
+  const [senderEmail, setSenderEmail] = useState('')
 
-  // Real-time IST Digital Clock
+  // Live IST Digital Clock
   const [currentTime, setCurrentTime] = useState('')
   useEffect(() => {
     const updateTime = () => {
@@ -109,36 +69,48 @@ export default function Deploy() {
     return () => clearInterval(timer)
   }, [])
 
-  const handleCopy = (text, id) => {
-    navigator.clipboard.writeText(text)
-    setCopiedChannel(id)
-    setTimeout(() => setCopiedChannel(null), 2500)
+  // Handle Action Triggered from 3D Device or UI Buttons
+  const handleDeviceAction = (actionKey) => {
+    if (actionKey === 'copy-email') {
+      navigator.clipboard.writeText('kishorgogoi403@gmail.com')
+      setCopied(true)
+      setActiveChannel('EMAIL')
+      setScreenMessage('✔ COPIED: kishorgogoi403@gmail.com')
+      setTimeout(() => {
+        setCopied(false)
+        setScreenMessage('')
+      }, 3500)
+    } else if (actionKey === 'linkedin') {
+      setActiveChannel('LINKEDIN')
+      setScreenMessage('OPENING: linkedin.com/in/kishorgogoi')
+      setTimeout(() => {
+        window.open('https://linkedin.com/in/kishorgogoi/', '_blank')
+        setScreenMessage('')
+      }, 500)
+    } else if (actionKey === 'github') {
+      setActiveChannel('GITHUB')
+      setScreenMessage('OPENING: github.com/KISHOR403')
+      setTimeout(() => {
+        window.open('https://github.com/KISHOR403', '_blank')
+        setScreenMessage('')
+      }, 500)
+    } else if (actionKey === 'quick-ping') {
+      setActiveChannel('PING')
+      setScreenMessage('TRANSMIT QUICK DISPATCH PING')
+      setShowPingModal(true)
+    }
   }
 
-  const handleSelectTopic = (preset) => {
-    setActiveTopic(preset.id)
-    setFormData((prev) => ({ ...prev, topic: preset.label }))
-  }
-
-  const handleSubmit = (e) => {
+  const handleSendPing = (e) => {
     e.preventDefault()
-    if (!formData.name || !formData.email || !formData.message) return
-
-    setStatus('sending')
+    setPingSent(true)
+    setScreenMessage(`✔ PING DISPATCHED FROM: ${senderName || 'Anonymous'}`)
     setTimeout(() => {
-      setStatus('sent')
-    }, 1200)
-  }
-
-  const handleReset = () => {
-    setStatus('idle')
-    setFormData({
-      name: '',
-      email: '',
-      topic: 'QA Automation & SDET',
-      message: '',
-    })
-    setActiveTopic('qa')
+      setShowPingModal(false)
+      setPingSent(false)
+      setSenderName('')
+      setSenderEmail('')
+    }, 2200)
   }
 
   return (
@@ -147,7 +119,7 @@ export default function Deploy() {
       style={{
         position: 'relative',
         background: 'transparent',
-        paddingTop: '6.5rem',
+        paddingTop: '6rem',
         paddingBottom: '4.5rem',
         overflow: 'hidden',
       }}
@@ -157,20 +129,20 @@ export default function Deploy() {
         style={{
           position: 'relative',
           zIndex: 1,
-          maxWidth: '1220px',
+          maxWidth: '1180px',
           margin: '0 auto',
           padding: '0 1.5rem',
         }}
       >
-        {/* ─── Apple / Linear Style Header ─── */}
+        {/* ─── Modern Cyber Headline ─── */}
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.55 }}
-          style={{ marginBottom: '3.2rem' }}
+          style={{ marginBottom: '2.5rem', textAlign: 'center' }}
         >
-          {/* Subtle status tag */}
+          {/* Status Badge */}
           <div
             style={{
               display: 'inline-flex',
@@ -180,19 +152,10 @@ export default function Deploy() {
               borderRadius: '9999px',
               background: 'rgba(74, 222, 154, 0.08)',
               border: '1px solid rgba(74, 222, 154, 0.22)',
-              marginBottom: '1.2rem',
+              marginBottom: '1rem',
             }}
           >
-            <span
-              style={{
-                width: '6px',
-                height: '6px',
-                borderRadius: '50%',
-                background: '#4ADE9A',
-                boxShadow: '0 0 8px #4ADE9A',
-                display: 'inline-block',
-              }}
-            />
+            <Radio size={13} color="#4ADE9A" className="animate-pulse" />
             <span
               style={{
                 fontFamily: 'var(--font-mono)',
@@ -202,590 +165,375 @@ export default function Deploy() {
                 letterSpacing: '0.04em',
               }}
             >
-              Available for Contracts & Engineering Roles · 2026
+              Direct Line Available · IST (UTC+5:30) {currentTime || '5:00 PM'}
             </span>
           </div>
 
-          <div
+          <h2
+            className="section-headline-editorial"
             style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-end',
-              flexWrap: 'wrap',
-              gap: '1.5rem',
+              fontSize: 'clamp(2.4rem, 4.8vw, 3.8rem)',
+              fontWeight: 800,
+              letterSpacing: '-0.025em',
+              lineHeight: 1.08,
+              margin: '0 auto',
+              color: '#FFFFFF',
+              maxWidth: '700px',
             }}
           >
-            <div>
-              <h2
-                className="section-headline-editorial"
-                style={{
-                  fontSize: 'clamp(2.4rem, 4.8vw, 3.8rem)',
-                  fontWeight: 800,
-                  letterSpacing: '-0.025em',
-                  lineHeight: 1.08,
-                  margin: 0,
-                  color: '#FFFFFF',
-                }}
-              >
-                Let’s create something{' '}
-                <span
-                  style={{
-                    background: 'linear-gradient(135deg, #4ADE9A 0%, #38BDF8 60%, #A78BFA 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                  }}
-                >
-                  exceptional.
-                </span>
-              </h2>
-              <p
-                style={{
-                  fontFamily: 'var(--font-sans)',
-                  fontSize: '1rem',
-                  color: 'var(--color-text-muted)',
-                  marginTop: '0.9rem',
-                  maxWidth: '560px',
-                  lineHeight: 1.65,
-                }}
-              >
-                Senior QA Automation & Full-Stack Engineer. Scaling high-velocity test architectures, robust quality gates, and resilient web applications.
-              </p>
-            </div>
-
-            {/* Quick Context Pill */}
-            <div
+            Direct Line to{' '}
+            <span
               style={{
-                background: 'rgba(22, 29, 36, 0.65)',
-                backdropFilter: 'blur(16px)',
-                border: '1px solid var(--color-border-hairline)',
-                borderRadius: '12px',
-                padding: '10px 16px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '14px',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
+                background: 'linear-gradient(135deg, #4ADE9A 0%, #38BDF8 60%, #F2A93B 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#9EABB8' }}>
-                <Clock size={13} color="#38BDF8" />
-                <span>IST {currentTime || '2:30 PM'}</span>
-              </div>
-              <div style={{ width: '1px', height: '14px', background: 'var(--color-border-hairline)' }} />
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#9EABB8' }}>
-                <MapPin size={13} color="#4ADE9A" />
-                <span>Guwahati, India</span>
-              </div>
-            </div>
-          </div>
+              Kishor Gogoi.
+            </span>
+          </h2>
+          <p
+            style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: '0.98rem',
+              color: 'var(--color-text-muted)',
+              marginTop: '0.8rem',
+              maxWidth: '560px',
+              margin: '0.8rem auto 0',
+              lineHeight: 1.6,
+            }}
+          >
+            Tap the physical 3D communicator keys below to copy direct email, view repositories, or dispatch an instant message.
+          </p>
         </motion.div>
 
-        {/* ─── Two-Column Seamless Layout (No heavy enclosing boxes) ─── */}
+        {/* ─── 3D Tactile Communicator Stage (Borderless & Seamless) ─── */}
         <div
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-            gap: '2.5rem',
+            position: 'relative',
+            width: '100%',
+            height: '490px',
+            display: 'flex',
             alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
-          {/* ══════════════════════════════════════════════
-              LEFT: Fluid 3D Glass Orb Stage & Direct Channels
-              ══════════════════════════════════════════════ */}
-          <motion.div
-            initial={{ opacity: 0, x: -25 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.55 }}
+          <Contact3DCanvas
+            activeChannel={activeChannel}
+            onSelectChannel={setActiveChannel}
+            screenMessage={screenMessage}
+            onAction={handleDeviceAction}
+          />
+        </div>
+
+        {/* ─── Interactive Channel Action Strip ─── */}
+        <div
+          style={{
+            maxWidth: '820px',
+            margin: '1.5rem auto 0',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+            gap: '0.85rem',
+          }}
+        >
+          {/* Email Key Button */}
+          <button
+            onClick={() => handleDeviceAction('copy-email')}
             style={{
+              background: copied ? 'rgba(74, 222, 154, 0.15)' : 'rgba(22, 29, 36, 0.65)',
+              backdropFilter: 'blur(12px)',
+              border: `1px solid ${copied ? '#4ADE9A' : 'var(--color-border-hairline)'}`,
+              borderRadius: '12px',
+              padding: '12px 16px',
               display: 'flex',
-              flexDirection: 'column',
-              gap: '1.25rem',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              color: '#E8EAED',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
             }}
           >
-            {/* 3D Fluid Glass Orb - Completely unboxed & borderless */}
-            <div
-              style={{
-                position: 'relative',
-                width: '100%',
-                height: '420px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Contact3DCanvas
-                mood={orbMood}
-                formActive={formFocused}
-                isSending={status === 'sending'}
-              />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Mail size={16} color="#4ADE9A" />
+              <div style={{ textAlign: 'left' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#9EABB8' }}>DIRECT MAIL</div>
+                <div style={{ fontSize: '0.78rem', fontWeight: 600 }}>{copied ? 'Copied to Clipboard!' : 'Copy Email'}</div>
+              </div>
             </div>
+            {copied ? <CheckCheck size={14} color="#4ADE9A" /> : <Copy size={13} color="#9EABB8" />}
+          </button>
 
-            {/* Interactive Color Mood Selector */}
-            <div
+          {/* LinkedIn Key Button */}
+          <button
+            onClick={() => handleDeviceAction('linkedin')}
+            style={{
+              background: 'rgba(22, 29, 36, 0.65)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid var(--color-border-hairline)',
+              borderRadius: '12px',
+              padding: '12px 16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              color: '#E8EAED',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <LinkedinIcon size={16} style={{ color: '#38BDF8' }} />
+              <div style={{ textAlign: 'left' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#9EABB8' }}>PROFESSIONAL</div>
+                <div style={{ fontSize: '0.78rem', fontWeight: 600 }}>LinkedIn Profile</div>
+              </div>
+            </div>
+            <ArrowUpRight size={13} color="#9EABB8" />
+          </button>
+
+          {/* GitHub Key Button */}
+          <button
+            onClick={() => handleDeviceAction('github')}
+            style={{
+              background: 'rgba(22, 29, 36, 0.65)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid var(--color-border-hairline)',
+              borderRadius: '12px',
+              padding: '12px 16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              color: '#E8EAED',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <GithubIcon size={16} style={{ color: '#E8EAED' }} />
+              <div style={{ textAlign: 'left' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#9EABB8' }}>REPOSITORIES</div>
+                <div style={{ fontSize: '0.78rem', fontWeight: 600 }}>GitHub Source</div>
+              </div>
+            </div>
+            <ArrowUpRight size={13} color="#9EABB8" />
+          </button>
+
+          {/* Quick Ping Button */}
+          <button
+            onClick={() => handleDeviceAction('quick-ping')}
+            style={{
+              background: 'rgba(242, 169, 59, 0.1)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid rgba(242, 169, 59, 0.3)',
+              borderRadius: '12px',
+              padding: '12px 16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              color: '#F2A93B',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Send size={15} color="#F2A93B" />
+              <div style={{ textAlign: 'left' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#F2A93B', opacity: 0.8 }}>INSTANT DISPATCH</div>
+                <div style={{ fontSize: '0.78rem', fontWeight: 600, color: '#FFFFFF' }}>Quick Ping</div>
+              </div>
+            </div>
+            <Sparkles size={13} color="#F2A93B" />
+          </button>
+        </div>
+
+        {/* ─── Quick Dispatch Modal Overlay ─── */}
+        <AnimatePresence>
+          {showPingModal && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'rgba(7, 11, 16, 0.85)',
+                backdropFilter: 'blur(12px)',
+                zIndex: 200,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '8px',
+                padding: '1.5rem',
               }}
+              onClick={() => setShowPingModal(false)}
             >
-              <span
+              <motion.div
+                initial={{ scale: 0.94, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.94, opacity: 0 }}
+                onClick={(e) => e.stopPropagation()}
                 style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.68rem',
-                  color: 'var(--color-text-muted)',
-                  marginRight: '6px',
+                  width: '100%',
+                  maxWidth: '480px',
+                  background: 'rgba(22, 29, 36, 0.95)',
+                  border: '1px solid var(--color-border-hairline)',
+                  borderRadius: '18px',
+                  padding: '1.8rem',
+                  boxShadow: '0 20px 40px -15px rgba(0,0,0,0.8)',
                 }}
               >
-                Aura:
-              </span>
-              {[
-                { id: 'emerald', label: 'Emerald', color: '#4ADE9A' },
-                { id: 'azure', label: 'Azure', color: '#38BDF8' },
-                { id: 'lavender', label: 'Lavender', color: '#A78BFA' },
-              ].map((m) => (
-                <button
-                  key={m.id}
-                  onClick={() => setOrbMood(m.id)}
-                  style={{
-                    fontFamily: 'var(--font-sans)',
-                    fontSize: '0.72rem',
-                    fontWeight: orbMood === m.id ? 600 : 500,
-                    padding: '4px 10px',
-                    borderRadius: '6px',
-                    border: orbMood === m.id ? `1px solid ${m.color}` : '1px solid rgba(255, 255, 255, 0.08)',
-                    background: orbMood === m.id ? `${m.color}15` : 'rgba(255, 255, 255, 0.03)',
-                    color: orbMood === m.id ? m.color : '#9EABB8',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  {m.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Direct Connect Chips */}
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-                gap: '0.75rem',
-                marginTop: '0.5rem',
-              }}
-            >
-              {CHANNELS.map((ch) => {
-                const Icon = ch.icon
-                const isCopied = copiedChannel === ch.name
-
-                return (
-                  <div
-                    key={ch.name}
-                    style={{
-                      background: 'rgba(22, 29, 36, 0.6)',
-                      backdropFilter: 'blur(12px)',
-                      border: '1px solid var(--color-border-hairline)',
-                      borderRadius: '12px',
-                      padding: '12px 14px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      transition: 'border-color 0.2s ease',
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', overflow: 'hidden' }}>
-                      <div
-                        style={{
-                          width: '32px',
-                          height: '32px',
-                          borderRadius: '8px',
-                          background: `${ch.color}15`,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          flexShrink: 0,
-                        }}
-                      >
-                        <Icon size={16} style={{ color: ch.color }} />
-                      </div>
-                      <div style={{ overflow: 'hidden' }}>
-                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#9EABB8' }}>
-                          {ch.name}
-                        </div>
-                        <div
-                          style={{
-                            fontFamily: 'var(--font-sans)',
-                            fontSize: '0.78rem',
-                            fontWeight: 500,
-                            color: '#E8EAED',
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                          }}
-                        >
-                          {ch.label}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div style={{ display: 'flex', gap: '4px', flexShrink: 0 }}>
-                      {ch.isCopyable && (
-                        <button
-                          onClick={() => handleCopy(ch.label, ch.name)}
-                          title="Copy Email"
-                          style={{
-                            background: isCopied ? 'rgba(74, 222, 154, 0.15)' : 'rgba(255, 255, 255, 0.05)',
-                            border: `1px solid ${isCopied ? '#4ADE9A' : 'transparent'}`,
-                            borderRadius: '6px',
-                            padding: '6px',
-                            color: isCopied ? '#4ADE9A' : '#9EABB8',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            transition: 'all 0.2s',
-                          }}
-                        >
-                          {isCopied ? <CheckCheck size={13} /> : <Copy size={13} />}
-                        </button>
-                      )}
-
-                      <a
-                        href={ch.href}
-                        target={ch.href.startsWith('mailto') ? undefined : '_blank'}
-                        rel={ch.href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
-                        title={`Open ${ch.name}`}
-                        style={{
-                          background: 'rgba(255, 255, 255, 0.05)',
-                          borderRadius: '6px',
-                          padding: '6px',
-                          color: '#E8EAED',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          textDecoration: 'none',
-                          transition: 'all 0.2s',
-                        }}
-                      >
-                        <ArrowUpRight size={13} />
-                      </a>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </motion.div>
-
-          {/* ══════════════════════════════════════════════
-              RIGHT: Clean Modern Glass Form (Linear Style)
-              ══════════════════════════════════════════════ */}
-          <motion.div
-            initial={{ opacity: 0, x: 25 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.55, delay: 0.1 }}
-            style={{
-              background: 'rgba(22, 29, 36, 0.6)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid var(--color-border-hairline)',
-              borderRadius: '20px',
-              padding: '2.2rem',
-              boxShadow: '0 24px 48px -20px rgba(0, 0, 0, 0.5)',
-            }}
-          >
-            <AnimatePresence mode="wait">
-              {status === 'sent' ? (
-                /* ─── Clean Sent Confirmation ─── */
-                <motion.div
-                  key="sent-state"
-                  initial={{ opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.96 }}
-                  style={{
-                    textAlign: 'center',
-                    padding: '2.5rem 1rem',
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '56px',
-                      height: '56px',
-                      borderRadius: '50%',
-                      background: 'rgba(74, 222, 154, 0.12)',
-                      border: '1px solid rgba(74, 222, 154, 0.3)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      margin: '0 auto 1.2rem',
-                      color: '#4ADE9A',
-                    }}
-                  >
-                    <Check size={28} />
-                  </div>
-
-                  <h3
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: '1.4rem',
-                      fontWeight: 700,
-                      color: '#E8EAED',
-                      marginBottom: '0.5rem',
-                    }}
-                  >
-                    Message Received
-                  </h3>
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-sans)',
-                      fontSize: '0.92rem',
-                      color: 'var(--color-text-muted)',
-                      maxWidth: '380px',
-                      margin: '0 auto 1.8rem',
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    Thank you, <strong style={{ color: '#E8EAED' }}>{formData.name}</strong>. Your note has landed in my inbox. I will reply directly to <span style={{ color: '#38BDF8' }}>{formData.email}</span> within 24 hours.
-                  </p>
-
-                  <button
-                    onClick={handleReset}
-                    style={{
-                      fontFamily: 'var(--font-sans)',
-                      fontSize: '0.82rem',
-                      fontWeight: 600,
-                      padding: '10px 20px',
-                      borderRadius: '8px',
-                      background: 'rgba(255, 255, 255, 0.06)',
-                      border: '1px solid var(--color-border-hairline)',
-                      color: '#E8EAED',
-                      cursor: 'pointer',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      transition: 'all 0.2s',
-                    }}
-                  >
-                    <RotateCcw size={14} /> Send another note
-                  </button>
-                </motion.div>
-              ) : (
-                /* ─── Clean Form ─── */
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                  {/* Topic Selector */}
-                  <div>
-                    <label
+                {pingSent ? (
+                  <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
+                    <div
                       style={{
-                        fontFamily: 'var(--font-sans)',
-                        fontSize: '0.76rem',
-                        fontWeight: 600,
-                        color: '#9EABB8',
-                        display: 'block',
-                        marginBottom: '8px',
-                      }}
-                    >
-                      Project Focus
-                    </label>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                      {TOPIC_PRESETS.map((t) => {
-                        const isSelected = activeTopic === t.id
-                        return (
-                          <button
-                            key={t.id}
-                            type="button"
-                            onClick={() => handleSelectTopic(t)}
-                            style={{
-                              fontFamily: 'var(--font-sans)',
-                              fontSize: '0.74rem',
-                              fontWeight: isSelected ? 600 : 500,
-                              padding: '6px 12px',
-                              borderRadius: '8px',
-                              border: isSelected
-                                ? '1px solid #4ADE9A'
-                                : '1px solid var(--color-border-hairline)',
-                              background: isSelected
-                                ? 'rgba(74, 222, 154, 0.12)'
-                                : 'rgba(15, 20, 25, 0.5)',
-                              color: isSelected ? '#4ADE9A' : '#9EABB8',
-                              cursor: 'pointer',
-                              transition: 'all 0.2s ease',
-                            }}
-                          >
-                            {t.label}
-                          </button>
-                        )
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Name & Email Fields */}
-                  <div
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
-                      gap: '1rem',
-                    }}
-                  >
-                    <div>
-                      <label
-                        style={{
-                          fontFamily: 'var(--font-sans)',
-                          fontSize: '0.74rem',
-                          fontWeight: 500,
-                          color: '#9EABB8',
-                          display: 'block',
-                          marginBottom: '6px',
-                        }}
-                      >
-                        Your Name
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.name}
-                        onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
-                        onFocus={() => setFormFocused(true)}
-                        onBlur={() => setFormFocused(false)}
-                        placeholder="e.g. Alex Morgan"
-                        required
-                        style={{
-                          width: '100%',
-                          padding: '10px 14px',
-                          fontFamily: 'var(--font-sans)',
-                          fontSize: '0.84rem',
-                          background: 'rgba(15, 20, 25, 0.85)',
-                          border: '1px solid var(--color-border-hairline)',
-                          borderRadius: '10px',
-                          color: '#E8EAED',
-                          outline: 'none',
-                          transition: 'border-color 0.2s ease',
-                        }}
-                        onFocusCapture={(e) => (e.target.style.borderColor = '#4ADE9A')}
-                        onBlurCapture={(e) => (e.target.style.borderColor = 'var(--color-border-hairline)')}
-                      />
-                    </div>
-
-                    <div>
-                      <label
-                        style={{
-                          fontFamily: 'var(--font-sans)',
-                          fontSize: '0.74rem',
-                          fontWeight: 500,
-                          color: '#9EABB8',
-                          display: 'block',
-                          marginBottom: '6px',
-                        }}
-                      >
-                        Email Address
-                      </label>
-                      <input
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))}
-                        onFocus={() => setFormFocused(true)}
-                        onBlur={() => setFormFocused(false)}
-                        placeholder="alex@company.com"
-                        required
-                        style={{
-                          width: '100%',
-                          padding: '10px 14px',
-                          fontFamily: 'var(--font-sans)',
-                          fontSize: '0.84rem',
-                          background: 'rgba(15, 20, 25, 0.85)',
-                          border: '1px solid var(--color-border-hairline)',
-                          borderRadius: '10px',
-                          color: '#E8EAED',
-                          outline: 'none',
-                          transition: 'border-color 0.2s ease',
-                        }}
-                        onFocusCapture={(e) => (e.target.style.borderColor = '#4ADE9A')}
-                        onBlurCapture={(e) => (e.target.style.borderColor = 'var(--color-border-hairline)')}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Message Field */}
-                  <div>
-                    <label
-                      style={{
-                        fontFamily: 'var(--font-sans)',
-                        fontSize: '0.74rem',
-                        fontWeight: 500,
-                        color: '#9EABB8',
-                        display: 'block',
-                        marginBottom: '6px',
-                      }}
-                    >
-                      Message Note
-                    </label>
-                    <textarea
-                      value={formData.message}
-                      onChange={(e) => setFormData((p) => ({ ...p, message: e.target.value }))}
-                      onFocus={() => setFormFocused(true)}
-                      onBlur={() => setFormFocused(false)}
-                      placeholder="Share a bit about your project scope, tech stack, or team role..."
-                      required
-                      rows={4}
-                      style={{
-                        width: '100%',
-                        padding: '10px 14px',
-                        fontFamily: 'var(--font-sans)',
-                        fontSize: '0.84rem',
-                        lineHeight: 1.5,
-                        background: 'rgba(15, 20, 25, 0.85)',
-                        border: '1px solid var(--color-border-hairline)',
-                        borderRadius: '10px',
-                        color: '#E8EAED',
-                        outline: 'none',
-                        resize: 'vertical',
-                        minHeight: '100px',
-                        transition: 'border-color 0.2s ease',
-                      }}
-                      onFocusCapture={(e) => (e.target.style.borderColor = '#4ADE9A')}
-                      onBlurCapture={(e) => (e.target.style.borderColor = 'var(--color-border-hairline)')}
-                    />
-                  </div>
-
-                  {/* Submit Button */}
-                  <div style={{ marginTop: '0.4rem' }}>
-                    <button
-                      type="submit"
-                      disabled={status === 'sending'}
-                      style={{
-                        width: '100%',
+                        width: '52px',
+                        height: '52px',
+                        borderRadius: '50%',
+                        background: 'rgba(74, 222, 154, 0.15)',
+                        border: '1px solid #4ADE9A',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        gap: '8px',
-                        fontFamily: 'var(--font-sans)',
-                        fontSize: '0.86rem',
-                        fontWeight: 600,
-                        color: '#0F1419',
-                        background:
-                          status === 'sending'
-                            ? 'rgba(74, 222, 154, 0.6)'
-                            : 'var(--color-accent-pass)',
-                        border: 'none',
-                        padding: '13px 24px',
-                        borderRadius: '10px',
-                        cursor: status === 'sending' ? 'not-allowed' : 'pointer',
-                        transition: 'all 0.2s ease',
-                        boxShadow: '0 4px 16px rgba(74, 222, 154, 0.25)',
+                        margin: '0 auto 1rem',
+                        color: '#4ADE9A',
                       }}
                     >
-                      {status === 'sending' ? (
-                        'Sending note...'
-                      ) : (
-                        <>
-                          Send Message
-                          <Send size={14} />
-                        </>
-                      )}
-                    </button>
+                      <Check size={26} />
+                    </div>
+                    <h3 style={{ fontSize: '1.3rem', fontWeight: 700, color: '#E8EAED', marginBottom: '0.4rem' }}>
+                      Ping Delivered
+                    </h3>
+                    <p style={{ fontSize: '0.88rem', color: 'var(--color-text-muted)' }}>
+                      Notification sent to Kishor’s receiver unit.
+                    </p>
                   </div>
-                </form>
-              )}
-            </AnimatePresence>
-          </motion.div>
-        </div>
+                ) : (
+                  <form onSubmit={handleSendPing} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#E8EAED', margin: 0 }}>
+                        Quick Dispatch Ping
+                      </h3>
+                      <button
+                        type="button"
+                        onClick={() => setShowPingModal(false)}
+                        style={{
+                          background: 'transparent',
+                          border: 'none',
+                          color: '#9EABB8',
+                          cursor: 'pointer',
+                          fontSize: '1.2rem',
+                        }}
+                      >
+                        ✕
+                      </button>
+                    </div>
+
+                    {/* Preset Buttons */}
+                    <div>
+                      <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: '#9EABB8', display: 'block', marginBottom: '6px' }}>
+                        SELECT PING TOPIC
+                      </label>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        {QUICK_PINGS.map((p) => {
+                          const isSel = selectedPing.id === p.id
+                          return (
+                            <button
+                              key={p.id}
+                              type="button"
+                              onClick={() => setSelectedPing(p)}
+                              style={{
+                                fontFamily: 'var(--font-sans)',
+                                fontSize: '0.78rem',
+                                padding: '8px 12px',
+                                borderRadius: '8px',
+                                border: isSel ? '1px solid #F2A93B' : '1px solid var(--color-border-hairline)',
+                                background: isSel ? 'rgba(242, 169, 59, 0.12)' : 'rgba(15, 20, 25, 0.6)',
+                                color: isSel ? '#F2A93B' : '#E8EAED',
+                                textAlign: 'left',
+                                cursor: 'pointer',
+                              }}
+                            >
+                              {p.label}
+                            </button>
+                          )
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Sender Identity */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                      <div>
+                        <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: '#9EABB8', display: 'block', marginBottom: '4px' }}>
+                          YOUR NAME
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={senderName}
+                          onChange={(e) => setSenderName(e.target.value)}
+                          placeholder="e.g. Maya"
+                          style={{
+                            width: '100%',
+                            padding: '8px 10px',
+                            background: 'rgba(15, 20, 25, 0.8)',
+                            border: '1px solid var(--color-border-hairline)',
+                            borderRadius: '8px',
+                            color: '#E8EAED',
+                            fontFamily: 'var(--font-sans)',
+                            fontSize: '0.82rem',
+                            outline: 'none',
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: '#9EABB8', display: 'block', marginBottom: '4px' }}>
+                          YOUR EMAIL
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          value={senderEmail}
+                          onChange={(e) => setSenderEmail(e.target.value)}
+                          placeholder="maya@company.com"
+                          style={{
+                            width: '100%',
+                            padding: '8px 10px',
+                            background: 'rgba(15, 20, 25, 0.8)',
+                            border: '1px solid var(--color-border-hairline)',
+                            borderRadius: '8px',
+                            color: '#E8EAED',
+                            fontFamily: 'var(--font-sans)',
+                            fontSize: '0.82rem',
+                            outline: 'none',
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      style={{
+                        marginTop: '0.5rem',
+                        padding: '12px',
+                        borderRadius: '10px',
+                        background: '#F2A93B',
+                        color: '#0F1419',
+                        fontWeight: 700,
+                        fontFamily: 'var(--font-sans)',
+                        fontSize: '0.86rem',
+                        border: 'none',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Transmit Ping
+                    </button>
+                  </form>
+                )}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* ─── Minimalist Footer ─── */}
         <div
