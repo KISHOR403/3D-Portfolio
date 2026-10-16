@@ -16,6 +16,7 @@
   --font-display: 'Space Grotesk', sans-serif;
   --font-sans: 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+  --font-serif: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
 
   /* Strict Typography Scale Tokens */
   --font-size-h1: clamp(48px, 7.8vw, 112px);
@@ -40,6 +41,7 @@
 }
 
 :root {
+  --font-serif: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
   --font-size-h1: clamp(48px, 7.8vw, 112px);
   --line-height-h1: 0.95;
   --font-weight-h1: 800;
