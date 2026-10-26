@@ -79,6 +79,16 @@ const LOG_DATA = [
       year: '2025'
     },
     pdf: '/certificates/anthropic-claude-101.pdf'
+  },
+  {
+    pass: '[PASS]',
+    parts: {
+      name: '  Claude Code 101 — Certificate of Completion ',
+      dots: '................. ',
+      issuer: 'Anthropic  ',
+      year: '2026'
+    },
+    pdf: '/certificates/anthropic-claude-code-101.pdf'
   }
 ]
 
@@ -388,7 +398,7 @@ export default function QualityGates() {
     return {
       isStarted: initialCompleted,
       isCompleted: initialCompleted,
-      currentLineIndex: initialCompleted ? 8 : 0,
+      currentLineIndex: initialCompleted ? LOG_DATA.length : 0,
       charCount: initialCompleted ? 999 : 0,
       phase: initialCompleted ? 'complete' : 'typing_pass',
       summaryTypedLength: initialCompleted ? 999 : 0,
@@ -479,7 +489,7 @@ export default function QualityGates() {
         }
 
         if (prev.phase === 'typing_summary') {
-          const summaryText = '  > 8 tests passed, 0 failed — Build Successful ✓'
+          const summaryText = `  > ${LOG_DATA.length} tests passed, 0 failed — Build Successful ✓`
           if (prev.summaryTypedLength < summaryText.length) {
             return {
               ...prev,
@@ -489,7 +499,7 @@ export default function QualityGates() {
             return {
               ...prev,
               isCompleted: true,
-              currentLineIndex: 8
+              currentLineIndex: LOG_DATA.length
             }
           }
         }
@@ -680,13 +690,13 @@ export default function QualityGates() {
   }
 
   const renderSummary = () => {
-    const isCurrent = linesState.currentLineIndex === 8
+    const isCurrent = linesState.currentLineIndex === LOG_DATA.length
     const isCompleted = linesState.isCompleted
 
     if (!linesState.isStarted) return null
     if (!isCurrent && !isCompleted) return null
 
-    const summaryText1 = '  > 8 tests passed, 0 failed'
+    const summaryText1 = `  > ${LOG_DATA.length} tests passed, 0 failed`
     const summaryText2 = ' — Build Successful ✓'
 
     const currentLen = linesState.summaryTypedLength

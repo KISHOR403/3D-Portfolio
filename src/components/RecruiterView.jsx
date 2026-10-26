@@ -31,6 +31,7 @@ const KEY_PROJECTS = [
 
 const CERTIFICATIONS = [
   'Software Testing (NPTEL)',
+  'Claude Code 101 (Anthropic)',
   'Postman API Fundamentals',
   'Selenium WebDriver with Java',
 ]
