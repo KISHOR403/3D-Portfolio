@@ -1,20 +1,16 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
-import aboutBg from '../assets/about-bg.jpg'
-import kishorCutout from '../assets/profile-cutout.png'
+import aboutBg from '../assets/about-cinematic-bg.jpg'
 
 /* ═══════════════════════════════════════════════════════════════
-   CINEMATIC EDITORIAL ABOUT SECTION — QA ENGINEER PORTFOLIO
+   PREMIUM CINEMATIC EDITORIAL ABOUT SECTION — KISHOR GOGOI
    ═══════════════════════════════════════════════════════════════
-   1. Cohesive vertical composition fitting comfortably in desktop viewports
-   2. Clear, high-contrast typography across eyebrow, identity, prose, and buttons
-   3. Repositioned oversized serif headline visible without bottom clipping
-   4. Preserved technology photograph with layered gradients showing workspace detail
-   5. Natural scale, lighting, and integration of Kishor's portrait cutout
-   6. Unified editorial group uniting narrative, actions, and headline
-   7. Generous touch targets and readable CTA labels
-   8. Fully responsive at 1440x900, 1366x768, 1024x768, 768x1024, and 390x844
+   • Visual Anchor: Kishor's authentic portrait integrated as full photographic layer
+   • Zero artificial stock persons / zero disconnected floating cards
+   • Three clear levels: Minimal Identity -> Personal Intro -> Primary Action
+   • High-contrast editorial serif typography ('Playfair Display') + warm-white text
+   • Balanced 1280px container alignment, responsive across all viewports
    ─────────────────────────────────────────────────────────────── */
 
 export default function TestPlan({ onOpenResume }) {
@@ -35,7 +31,7 @@ export default function TestPlan({ onOpenResume }) {
           observer.unobserve(el)
         }
       },
-      { threshold: 0.05, rootMargin: '100px 0px 0px 0px' }
+      { threshold: 0.08, rootMargin: '60px 0px 0px 0px' }
     )
 
     observer.observe(el)
@@ -48,166 +44,132 @@ export default function TestPlan({ onOpenResume }) {
     <section
       id="about"
       ref={sectionRef}
-      className="cinematic-stage-section"
+      className="about-cinematic-stage"
       aria-label="About Kishor Gogoi — QA Engineer"
     >
       {/* Route anchor compatibility to preserve all existing links */}
-      <span id="test-plan" className="anchor-shim" aria-hidden="true" />
-      <span id="experience" className="anchor-shim" aria-hidden="true" />
+      <span id="experience" className="about-anchor-shim" aria-hidden="true" />
+      <span id="test-plan" className="about-anchor-shim" aria-hidden="true" />
 
-      {/* ── 1. FULL-WIDTH ATMOSPHERIC TECHNOLOGY BACKGROUND ── */}
-      <div className="stage-bg-layer" aria-hidden="true">
+      {/* ── 1. BACKGROUND PHOTOGRAPHIC LAYER ── */}
+      <div className="about-bg-layer" aria-hidden="true">
         <motion.div
-          className="stage-bg-image"
+          className="about-bg-image"
           style={{ backgroundImage: `url(${aboutBg})` }}
-          initial={{ scale: 1.04, opacity: 0 }}
-          animate={inView ? { scale: 1, opacity: 1 } : { scale: 1.04, opacity: 0 }}
-          transition={{ duration: 1.3, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ scale: 1.03, opacity: 0 }}
+          animate={inView ? { scale: 1, opacity: 1 } : { scale: 1.03, opacity: 0 }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
         />
-        {/* Layered gradients to retain monitor & workspace details */}
-        <div className="stage-overlay stage-overlay--top" />
-        <div className="stage-overlay stage-overlay--bottom" />
-        <div className="stage-overlay stage-overlay--sides" />
-        <div className="stage-overlay stage-overlay--vignette" />
+        {/* Layered charcoal scrims: solid read zone on left, natural reveal on right */}
+        <div className="about-bg-scrim-left" />
+        <div className="about-bg-scrim-top" />
+        <div className="about-bg-scrim-bottom" />
+        <div className="about-bg-vignette" />
       </div>
 
-      {/* ── 2. FOREGROUND CONTENT CONTAINER ── */}
-      <div className="stage-content-container">
-        {/* TOP BAR: Identity & Eyebrow */}
-        <header className="stage-top-bar">
-          {/* Left: Identity */}
-          <motion.div
-            className="stage-identity"
-            initial={{ opacity: 0, y: -10 }}
-            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
-            transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="identity-pill">
-              <span className="identity-live-dot" />
-              <span className="identity-title">KISHOR GOGOI</span>
-            </div>
-            <span className="identity-subtitle">QA ENGINEER · TEST AUTOMATION & QUALITY SYSTEMS</span>
-          </motion.div>
-
-          {/* Right: Eyebrow */}
-          <motion.div
-            className="stage-eyebrow"
-            initial={{ opacity: 0, y: -10 }}
-            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
-            transition={{ duration: 0.5, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="eyebrow-index-group">
-              <span className="eyebrow-num">01</span>
-              <span className="eyebrow-slash">/</span>
-              <span className="eyebrow-text">ABOUT THE ENGINEER</span>
-            </div>
-            <span className="eyebrow-motto">
-              Precision, curiosity, and dependable software.
-            </span>
-          </motion.div>
-        </header>
-
-        {/* KISHOR'S AUTHENTIC PORTRAIT CUTOUT */}
-        <div className="stage-figure-wrapper" aria-hidden="true">
-          <motion.div
-            className="stage-figure-motion"
-            initial={{ opacity: 0, y: 20, scale: 0.98 }}
-            animate={inView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.98 }}
-            transition={{ duration: 0.9, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <img
-              src={kishorCutout}
-              alt="Kishor Gogoi — QA Engineer"
-              className="stage-figure-img"
-              loading="lazy"
-            />
-            {/* Ambient backlight glow */}
-            <div className="stage-figure-glow" />
-          </motion.div>
-        </div>
-
-        {/* ── 3. UNIFIED EDITORIAL HERO GROUP (Prose + CTAs + Oversized Headline) ── */}
-        <div className="stage-editorial-group">
-          {/* Narrative Glass Card + Action Targets */}
-          <motion.div
-            className="stage-prose-card"
-            initial={{ opacity: 0, y: 16 }}
-            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-            transition={{ duration: 0.65, delay: 0.28, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <p className="stage-prose-text">
-              I'm a <strong className="prose-accent">Computer Science graduate</strong> focused on{' '}
-              <strong className="prose-accent">software quality</strong>,{' '}
-              <strong className="prose-accent">test automation</strong>, and building{' '}
-              <strong className="prose-accent">reliable digital experiences</strong>. I enjoy exploring edge cases,
-              validating APIs, and creating maintainable automation workflows that help teams deliver software with
-              confidence.
-            </p>
-
-            {/* Action Buttons grouped directly with the narrative */}
-            <div className="stage-cta-wrapper">
-              <a
-                href="#pipeline-runs"
-                id="stage-cta-projects"
-                className="stage-pill-cta"
-              >
-                <span>EXPLORE MY WORK</span>
-                <ArrowUpRight size={16} className="pill-cta-arrow" />
-              </a>
-
-              {onOpenResume && (
-                <button
-                  type="button"
-                  onClick={onOpenResume}
-                  className="stage-secondary-btn"
-                >
-                  <span>RESUME</span>
-                </button>
-              )}
-            </div>
-          </motion.div>
-
-          {/* OVERSIZED EDITORIAL HEADLINE + REFLECTION */}
-          <div className="stage-headline-zone">
-            <motion.div
-              className="stage-oversized-headline"
-              initial={{ opacity: 0, y: 18 }}
-              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
-              transition={{ duration: 0.75, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}
-            >
-              {/* Primary Headline: "MORE THAN" and "JUST TESTING." on two distinct lines */}
-              <h2 className="stage-title">
-                <span className="stage-title-line stage-title-line--1">MORE THAN</span>
-                <span className="stage-title-line stage-title-line--2">JUST TESTING.</span>
-              </h2>
-
-              {/* Mirrored Vertical Reflection */}
-              <div className="stage-title-reflection" aria-hidden="true">
-                <span className="reflection-line reflection-line--1">MORE THAN</span>
-                <span className="reflection-line reflection-line--2">JUST TESTING.</span>
-              </div>
-            </motion.div>
+      {/* ── 2. FOREGROUND EDITORIAL CONTENT (1280px Container) ── */}
+      <div className="about-container">
+        {/* LEVEL 1: TOP — MINIMAL IDENTITY */}
+        <motion.header
+          className="about-identity"
+          initial={{ opacity: 0, y: -12 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: -12 }}
+          transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <div className="about-identity-tag">
+            <span className="about-live-dot" aria-hidden="true" />
+            <span className="about-identity-name">KISHOR GOGOI</span>
           </div>
+          <span className="about-identity-divider" aria-hidden="true">/</span>
+          <span className="about-identity-role">QA ENGINEER · TEST AUTOMATION</span>
+        </motion.header>
+
+        {/* LEVEL 2 & 3: MAIN EDITORIAL INTRODUCTION */}
+        <div className="about-editorial-flow">
+          {/* Small Eyebrow */}
+          <motion.div
+            className="about-eyebrow"
+            initial={{ opacity: 0, y: 14 }}
+            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
+            transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <span className="about-eyebrow-label">ABOUT ME</span>
+            <span className="about-eyebrow-sep">/</span>
+            <span className="about-eyebrow-index">01</span>
+          </motion.div>
+
+          {/* Main Heading — Oversized High-Contrast Serif */}
+          <motion.h2
+            className="about-headline"
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.75, delay: 0.28, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <span className="about-headline-line">I THINK BEYOND</span>
+            <span className="about-headline-line">THE BUG.</span>
+          </motion.h2>
+
+          {/* Supporting Text — Directly on image without opaque card */}
+          <motion.p
+            className="about-paragraph"
+            initial={{ opacity: 0, y: 18 }}
+            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+            transition={{ duration: 0.7, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}
+          >
+            I'm a Computer Science graduate focused on software quality, test
+            automation, and building reliable digital experiences. I enjoy
+            exploring edge cases, validating APIs, and creating maintainable
+            automation workflows that help teams deliver software with confidence.
+          </motion.p>
+
+          {/* LEVEL 3: BOTTOM — PRIMARY ACTION */}
+          <motion.div
+            className="about-action-row"
+            initial={{ opacity: 0, y: 18 }}
+            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+            transition={{ duration: 0.7, delay: 0.46, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <a
+              href="#pipeline-runs"
+              id="about-cta-projects"
+              className="about-primary-cta"
+            >
+              <span>EXPLORE MY PROJECTS</span>
+              <ArrowUpRight size={17} className="about-cta-arrow" aria-hidden="true" />
+            </a>
+
+            {onOpenResume && (
+              <button
+                type="button"
+                onClick={onOpenResume}
+                className="about-secondary-cta"
+              >
+                <span>VIEW RESUME</span>
+              </button>
+            )}
+          </motion.div>
         </div>
       </div>
 
       {/* ══════════════════════════════════════════════════════════
-          SCOPED STYLES — POLISHED CINEMATIC EDITORIAL LAYOUT
+          SCOPED STYLES — EDITORIAL CINEMATIC PORTFOLIO SYSTEM
           ══════════════════════════════════════════════════════════ */}
       <style>{`
-        .cinematic-stage-section {
+        .about-cinematic-stage {
           position: relative;
-          min-height: calc(100svh - 64px);
+          min-height: clamp(680px, 94vh, 980px);
           width: 100%;
           display: flex;
-          flex-direction: column;
-          justify-content: flex-start;
+          align-items: center;
           overflow: hidden;
-          background: #070A0E;
+          background-color: #0A0D12;
           scroll-margin-top: 64px;
+          padding-top: calc(64px + clamp(1.5rem, 3.5vh, 3.25rem));
+          padding-bottom: clamp(3.5rem, 6vh, 5.5rem);
+          box-sizing: border-box;
         }
 
-        .anchor-shim {
+        .about-anchor-shim {
           position: absolute;
           top: -64px;
           left: 0;
@@ -217,8 +179,8 @@ export default function TestPlan({ onOpenResume }) {
           pointer-events: none;
         }
 
-        /* ── 1. BACKGROUND PHOTOGRAPH & LAYERED GRADIENTS ── */
-        .stage-bg-layer {
+        /* ── BACKGROUND PHOTOGRAPHIC LAYER ── */
+        .about-bg-layer {
           position: absolute;
           inset: 0;
           z-index: 0;
@@ -226,611 +188,326 @@ export default function TestPlan({ onOpenResume }) {
           pointer-events: none;
         }
 
-        .stage-bg-image {
+        .about-bg-image {
           position: absolute;
           inset: -2%;
           background-size: cover;
-          background-position: center 36%;
+          background-position: right 24% center;
           background-repeat: no-repeat;
-          filter: brightness(0.82) contrast(1.1) saturate(1.15);
           will-change: transform, opacity;
         }
 
-        .stage-overlay {
+        /* Charcoal Scrims: Preserve skin tones on right, guarantee 100% text contrast on left */
+        .about-bg-scrim-left {
           position: absolute;
           inset: 0;
-          pointer-events: none;
-        }
-
-        /* Gentle top transition preserving navbar separation */
-        .stage-overlay--top {
           background: linear-gradient(
-            to bottom,
-            #070A0E 0%,
-            rgba(7, 10, 14, 0.75) 8%,
-            rgba(7, 10, 14, 0.2) 20%,
-            transparent 35%
+            90deg,
+            #0A0D12 0%,
+            #0A0D12 30%,
+            rgba(10, 13, 18, 0.94) 48%,
+            rgba(10, 13, 18, 0.5) 68%,
+            rgba(10, 13, 18, 0.1) 85%,
+            transparent 100%
           );
         }
 
-        /* Bottom transition fading into next section */
-        .stage-overlay--bottom {
-          background: linear-gradient(
-            to top,
-            #070A0E 0%,
-            rgba(7, 10, 14, 0.8) 10%,
-            rgba(7, 10, 14, 0.2) 24%,
-            transparent 40%
-          );
+        .about-bg-scrim-top {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 180px;
+          background: linear-gradient(180deg, #0A0D12 0%, rgba(10, 13, 18, 0.6) 45%, transparent 100%);
         }
 
-        /* Lateral edge vignette - keeps central monitors & desk lit */
-        .stage-overlay--sides {
-          background: linear-gradient(
-            to right,
-            rgba(7, 10, 14, 0.6) 0%,
-            transparent 18%,
-            transparent 82%,
-            rgba(7, 10, 14, 0.6) 100%
-          );
+        .about-bg-scrim-bottom {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 220px;
+          background: linear-gradient(0deg, #0A0D12 0%, rgba(10, 13, 18, 0.8) 45%, transparent 100%);
         }
 
-        /* Subtle radial depth */
-        .stage-overlay--vignette {
+        .about-bg-vignette {
+          position: absolute;
+          inset: 0;
           background: radial-gradient(
-            ellipse 90% 75% at 50% 48%,
-            transparent 42%,
-            rgba(7, 10, 14, 0.4) 75%,
-            rgba(7, 10, 14, 0.7) 100%
+            ellipse at 78% 45%,
+            transparent 40%,
+            rgba(10, 13, 18, 0.45) 85%,
+            rgba(10, 13, 18, 0.85) 100%
           );
         }
 
-        /* ── 2. FOREGROUND CONTENT CONTAINER ── */
-        .stage-content-container {
+        /* ── FOREGROUND CONTAINER ── */
+        .about-container {
           position: relative;
           z-index: 2;
           width: 100%;
-          max-width: 1360px;
+          max-width: 1280px;
           margin: 0 auto;
-          height: 100%;
-          min-height: calc(100svh - 64px);
-          padding: 4.5rem clamp(1.25rem, 3.5vw, 3.5rem) 2rem;
+          padding: 0 clamp(1.5rem, 5vw, 4rem);
           display: flex;
           flex-direction: column;
-          align-items: center;
           justify-content: flex-start;
-          box-sizing: border-box;
+          min-height: clamp(520px, 72vh, 720px);
         }
 
-        /* ── TOP BAR: IDENTITY & EYEBROW ── */
-        .stage-top-bar {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          gap: 1.5rem;
-          width: 100%;
-          flex-wrap: wrap;
-          position: relative;
-          z-index: 3;
-          margin-bottom: 0;
+        /* ── LEVEL 1: MINIMAL IDENTITY ── */
+        .about-identity {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.85rem;
+          font-family: var(--font-mono, 'JetBrains Mono', monospace);
+          font-size: clamp(0.72rem, 1.05vw, 0.82rem);
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          margin-bottom: clamp(2.5rem, 6vh, 4.5rem);
         }
 
-        /* Identity (Left) */
-        .stage-identity {
-          display: flex;
-          flex-direction: column;
-          gap: 0.35rem;
-        }
-
-        .identity-pill {
+        .about-identity-tag {
           display: inline-flex;
           align-items: center;
           gap: 0.55rem;
+          color: #F5F5F7;
+          font-weight: 600;
         }
 
-        .identity-live-dot {
+        .about-live-dot {
           width: 7px;
           height: 7px;
           border-radius: 50%;
-          background: var(--color-accent-pass, #4ADE9A);
-          box-shadow: 0 0 10px rgba(74, 222, 154, 0.9);
+          background-color: var(--color-accent-pass, #4ADE9A);
+          box-shadow: 0 0 10px rgba(74, 222, 154, 0.7);
         }
 
-        .identity-title {
-          font-family: var(--font-mono, monospace);
-          font-size: clamp(0.8rem, 0.85vw, 0.88rem);
-          font-weight: 700;
-          letter-spacing: 0.18em;
-          color: #FAF7F2;
+        .about-identity-divider {
+          color: rgba(158, 171, 184, 0.35);
+          font-weight: 300;
         }
 
-        .identity-subtitle {
-          font-family: var(--font-mono, monospace);
-          font-size: clamp(0.68rem, 0.74vw, 0.74rem);
-          font-weight: 500;
-          letter-spacing: 0.14em;
-          color: #94A3B8;
-          padding-left: 17px;
+        .about-identity-role {
+          color: var(--color-text-muted, #9EABB8);
+          font-weight: 400;
+          letter-spacing: 0.12em;
         }
 
-        /* Eyebrow (Right) */
-        .stage-eyebrow {
+        /* ── LEVEL 2: EDITORIAL INTRODUCTION FLOW ── */
+        .about-editorial-flow {
+          max-width: clamp(340px, 52vw, 640px);
           display: flex;
           flex-direction: column;
-          align-items: flex-end;
-          text-align: right;
-          gap: 0.35rem;
+          align-items: flex-start;
         }
 
-        .eyebrow-index-group {
+        /* Eyebrow */
+        .about-eyebrow {
           display: inline-flex;
           align-items: center;
           gap: 0.45rem;
-          font-family: var(--font-mono, monospace);
-          font-size: clamp(0.76rem, 0.8vw, 0.84rem);
-          font-weight: 600;
-          letter-spacing: 0.18em;
+          font-family: var(--font-mono, 'JetBrains Mono', monospace);
+          font-size: clamp(0.7rem, 0.95vw, 0.78rem);
+          letter-spacing: 0.2em;
           text-transform: uppercase;
-        }
-
-        .eyebrow-num {
           color: var(--color-accent-pass, #4ADE9A);
-          font-weight: 800;
-        }
-
-        .eyebrow-slash {
-          color: rgba(255, 255, 255, 0.35);
-        }
-
-        .eyebrow-text {
-          color: #E2E8F0;
-        }
-
-        .eyebrow-motto {
-          font-family: var(--font-sans, sans-serif);
-          font-size: clamp(0.82rem, 0.86vw, 0.9rem);
-          color: #94A3B8;
-          letter-spacing: 0.01em;
-        }
-
-        /* ── 3. KISHOR'S PORTRAIT CUTOUT LAYER ── */
-        .stage-figure-wrapper {
-          position: absolute;
-          left: 50%;
-          transform: translateX(-50%);
-          top: clamp(3.2rem, 5vh, 4.5rem);
-          height: clamp(320px, 44vh, 440px);
-          display: flex;
-          justify-content: center;
-          align-items: flex-start;
-          z-index: 1;
-          pointer-events: none;
-        }
-
-        .stage-figure-motion {
-          position: relative;
-          height: 100%;
-          display: flex;
-          justify-content: center;
-          align-items: flex-start;
-        }
-
-        .stage-figure-img {
-          height: 100%;
-          width: auto;
-          max-height: 440px;
-          object-fit: contain;
-          mask-image: linear-gradient(to bottom, black 65%, rgba(0, 0, 0, 0.35) 85%, transparent 100%);
-          -webkit-mask-image: linear-gradient(to bottom, black 65%, rgba(0, 0, 0, 0.35) 85%, transparent 100%);
-          filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.92)) drop-shadow(0 0 20px rgba(10, 15, 20, 0.5));
-          user-select: none;
-          pointer-events: none;
-        }
-
-        .stage-figure-glow {
-          position: absolute;
-          top: 32%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: clamp(280px, 32vw, 400px);
-          height: clamp(280px, 32vw, 400px);
-          background: radial-gradient(
-            circle,
-            rgba(74, 222, 154, 0.1) 0%,
-            rgba(56, 189, 248, 0.05) 42%,
-            transparent 70%
-          );
-          filter: blur(48px);
-          z-index: -1;
-          pointer-events: none;
-        }
-
-        /* ── 4. UNIFIED EDITORIAL HERO GROUP ── */
-        .stage-editorial-group {
-          position: relative;
-          z-index: 2;
-          width: 100%;
-          max-width: 960px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          margin-top: clamp(16.5rem, 26vh, 21rem);
-          margin-bottom: 0;
-        }
-
-        /* Narrative Glass Card */
-        .stage-prose-card {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-align: center;
-          width: 100%;
-          max-width: 650px;
-          background: rgba(7, 10, 14, 0.74);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 20px;
-          padding: clamp(0.95rem, 1.6vw, 1.25rem) clamp(1.2rem, 2.2vw, 1.9rem);
-          box-shadow: 
-            0 20px 45px rgba(0, 0, 0, 0.75),
-            0 0 1px rgba(255, 255, 255, 0.15);
-          margin-bottom: clamp(1rem, 1.8vh, 1.5rem);
-        }
-
-        .stage-prose-text {
-          margin: 0 0 1.1rem;
-          font-family: var(--font-sans, sans-serif);
-          font-size: clamp(0.95rem, 1.1vw, 1.05rem);
-          line-height: 1.68;
-          color: #E2E8F0;
-          letter-spacing: -0.005em;
-        }
-
-        .prose-accent {
-          color: #FFFFFF;
+          margin-bottom: clamp(0.9rem, 1.8vh, 1.35rem);
           font-weight: 600;
         }
 
-        /* Action Buttons */
-        .stage-cta-wrapper {
+        .about-eyebrow-sep {
+          color: rgba(74, 222, 154, 0.45);
+        }
+
+        .about-eyebrow-index {
+          color: #F5F5F7;
+        }
+
+        /* Oversized Serif Headline */
+        .about-headline {
+          font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+          font-size: clamp(2.65rem, 5.5vw, 4.85rem);
+          font-weight: 700;
+          line-height: 1.04;
+          letter-spacing: -0.025em;
+          color: #F5F5F7;
+          margin: 0 0 clamp(1.4rem, 2.5vh, 2rem) 0;
+          display: flex;
+          flex-direction: column;
+          text-shadow: 0 2px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .about-headline-line {
+          display: block;
+          white-space: nowrap;
+        }
+
+        /* Supporting Text — directly on background */
+        .about-paragraph {
+          font-family: var(--font-sans, 'Inter', sans-serif);
+          font-size: clamp(0.95rem, 1.22vw, 1.06rem);
+          line-height: 1.76;
+          color: rgba(225, 230, 238, 0.82);
+          margin: 0 0 clamp(2rem, 3.8vh, 2.85rem) 0;
+          max-width: 46ch;
+          text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6);
+        }
+
+        /* ── LEVEL 3: PRIMARY ACTION ── */
+        .about-action-row {
           display: flex;
           align-items: center;
-          gap: 1rem;
-          justify-content: center;
+          gap: 1.15rem;
           flex-wrap: wrap;
         }
 
-        .stage-pill-cta {
+        .about-primary-cta {
           display: inline-flex;
           align-items: center;
-          gap: 0.55rem;
-          font-family: var(--font-mono, monospace);
-          font-size: clamp(0.82rem, 0.9vw, 0.88rem);
+          gap: 0.65rem;
+          padding: 0.9rem 1.75rem;
+          border-radius: 9999px;
+          background-color: var(--color-accent-pass, #4ADE9A);
+          color: #070A0E;
+          font-family: var(--font-mono, 'JetBrains Mono', monospace);
+          font-size: 0.82rem;
           font-weight: 700;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
+          letter-spacing: 0.08em;
           text-decoration: none;
-          color: #070A0E;
-          background: #FAF7F2;
-          padding: 13px 30px;
-          min-height: 48px;
-          box-sizing: border-box;
-          border-radius: 999px;
-          box-shadow: 
-            0 8px 25px rgba(0, 0, 0, 0.6),
-            0 0 20px rgba(250, 247, 242, 0.25);
           transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: 0 4px 18px rgba(74, 222, 154, 0.28);
         }
 
-        .stage-pill-cta:hover {
-          background: var(--color-accent-pass, #4ADE9A);
-          color: #070A0E;
-          box-shadow: 
-            0 8px 32px rgba(74, 222, 154, 0.45),
-            0 0 25px rgba(74, 222, 154, 0.35);
+        .about-primary-cta:hover {
+          background-color: #65f5af;
           transform: translateY(-2px);
+          box-shadow: 0 8px 26px rgba(74, 222, 154, 0.45);
         }
 
-        .pill-cta-arrow {
-          transition: transform 0.2s ease;
+        .about-cta-arrow {
+          transition: transform 0.25s ease;
         }
 
-        .stage-pill-cta:hover .pill-cta-arrow {
+        .about-primary-cta:hover .about-cta-arrow {
           transform: translate(2px, -2px);
         }
 
-        .stage-secondary-btn {
+        .about-secondary-cta {
           display: inline-flex;
           align-items: center;
-          justify-content: center;
-          font-family: var(--font-mono, monospace);
-          font-size: clamp(0.8rem, 0.86vw, 0.85rem);
+          padding: 0.88rem 1.45rem;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(225, 230, 238, 0.22);
+          border-radius: 9999px;
+          color: #E8EAED;
+          font-family: var(--font-mono, 'JetBrains Mono', monospace);
+          font-size: 0.8rem;
           font-weight: 600;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          color: #E2E8F0;
-          background: rgba(15, 20, 25, 0.72);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.24);
-          padding: 12px 26px;
-          min-height: 48px;
-          box-sizing: border-box;
-          border-radius: 999px;
+          letter-spacing: 0.08em;
           cursor: pointer;
-          transition: all 0.25s ease;
+          transition: all 0.2s ease;
         }
 
-        .stage-secondary-btn:hover {
-          color: #FFFFFF;
-          border-color: rgba(255, 255, 255, 0.5);
-          background: rgba(255, 255, 255, 0.12);
-          transform: translateY(-2px);
+        .about-secondary-cta:hover {
+          border-color: rgba(74, 222, 154, 0.6);
+          color: var(--color-accent-pass, #4ADE9A);
+          background-color: rgba(74, 222, 154, 0.06);
+          transform: translateY(-1px);
         }
 
-        /* ── 5. OVERSIZED EDITORIAL SERIF HEADLINE + REFLECTION ── */
-        .stage-headline-zone {
-          width: 100%;
-          position: relative;
-          user-select: none;
-          margin: 0;
-          padding-bottom: 0.5rem;
-        }
-
-        .stage-oversized-headline {
-          position: relative;
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-align: center;
-        }
-
-        .stage-title {
-          margin: 0;
-          font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-          font-size: clamp(2.3rem, 5vw, 4.6rem);
-          font-weight: 800;
-          line-height: 0.92;
-          letter-spacing: -0.025em;
-          text-transform: uppercase;
-          color: #FAF7F2;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-shadow: 
-            0 10px 35px rgba(0, 0, 0, 0.98),
-            0 2px 8px rgba(0, 0, 0, 0.9);
-          width: 100%;
-          max-width: 100%;
-          overflow-wrap: break-word;
-        }
-
-        .stage-title-line {
-          display: block;
-          white-space: nowrap;
-          text-align: center;
-        }
-
-        .stage-title-line--1 {
-          color: #FAF7F2;
-        }
-
-        .stage-title-line--2 {
-          color: #FAF7F2;
-          margin-top: 0.02em;
-        }
-
-        /* Mirrored Vertical Reflection */
-        .stage-title-reflection {
-          position: absolute;
-          top: 96%;
-          left: 0;
-          right: 0;
-          margin: 0 auto;
-          font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-          font-size: clamp(2.3rem, 5vw, 4.6rem);
-          font-weight: 800;
-          line-height: 0.92;
-          letter-spacing: -0.025em;
-          text-transform: uppercase;
-          color: #FAF7F2;
-          opacity: 0.08;
-          transform: scaleY(-1);
-          transform-origin: top;
-          mask-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.75) 0%, transparent 60%);
-          -webkit-mask-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.75) 0%, transparent 60%);
-          pointer-events: none;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          width: 100%;
-        }
-
-        .reflection-line {
-          display: block;
-          white-space: nowrap;
-          text-align: center;
-        }
-
-        /* ── COMPACT LAPTOPS & SHORT VIEWPORTS (e.g. 1366x768, 1024x768) ── */
-        @media (max-height: 820px) and (min-width: 769px) {
-          .stage-content-container {
-            padding-top: 4rem;
-            padding-bottom: 1rem;
-          }
-
-          .stage-figure-wrapper {
-            top: 3rem;
-            height: clamp(260px, 36vh, 320px);
-          }
-
-          .stage-figure-img {
-            max-height: 320px;
-          }
-
-          .stage-editorial-group {
-            margin-top: clamp(12rem, 21vh, 15rem);
-          }
-
-          .stage-prose-card {
-            max-width: 580px;
-            padding: 0.75rem 1.25rem;
-            margin-bottom: 0.75rem;
-          }
-
-          .stage-prose-text {
-            margin-bottom: 0.75rem;
-            font-size: 0.92rem;
-            line-height: 1.55;
-          }
-
-          .stage-pill-cta {
-            padding: 10px 24px;
-            min-height: 42px;
-            font-size: 0.8rem;
-          }
-
-          .stage-secondary-btn {
-            padding: 9px 20px;
-            min-height: 42px;
-            font-size: 0.78rem;
-          }
-
-          .stage-title,
-          .stage-title-reflection {
-            font-size: clamp(2rem, 4.2vw, 3.4rem);
-          }
-        }
-
-        /* ── TABLET & INTERMEDIATE BREAKPOINTS ── */
+        /* ── RESPONSIVE ADAPTATIONS ── */
         @media (max-width: 1024px) {
-          .stage-content-container {
-            padding: 4.5rem 1.75rem 1.5rem;
+          .about-cinematic-stage {
+            min-height: 85vh;
+            padding-top: calc(64px + 2rem);
+            padding-bottom: 4rem;
           }
-
-          .stage-figure-wrapper {
-            height: clamp(240px, 32vh, 300px);
+          .about-container {
+            min-height: auto;
           }
-
-          .stage-title,
-          .stage-title-reflection {
-            font-size: clamp(2rem, 5.2vw, 4rem);
+          .about-editorial-flow {
+            max-width: 540px;
+          }
+          .about-bg-image {
+            background-position: right 18% center;
+          }
+          .about-bg-scrim-left {
+            background: linear-gradient(
+              90deg,
+              #0A0D12 0%,
+              #0A0D12 36%,
+              rgba(10, 13, 18, 0.95) 55%,
+              rgba(10, 13, 18, 0.65) 78%,
+              transparent 100%
+            );
           }
         }
 
-        /* ── TABLET PORTRAIT & MOBILE BREAKPOINTS ── */
         @media (max-width: 768px) {
-          .cinematic-stage-section {
+          .about-cinematic-stage {
             min-height: auto;
+            padding-top: calc(64px + 1.25rem);
+            padding-bottom: 4.5rem;
           }
-
-          .stage-content-container {
-            padding: 5rem 1.25rem 2.5rem;
+          .about-container {
             min-height: auto;
+            padding: 0 1.25rem;
           }
-
-          .stage-top-bar {
+          .about-bg-image {
+            background-position: 78% 10px;
+            background-size: 130% auto;
+          }
+          .about-bg-scrim-left {
+            background: linear-gradient(
+              180deg,
+              rgba(10, 13, 18, 0.4) 0%,
+              rgba(10, 13, 18, 0.1) 180px,
+              rgba(10, 13, 18, 0.92) 280px,
+              #0A0D12 340px,
+              #0A0D12 100%
+            );
+          }
+          .about-identity {
             flex-direction: column;
             align-items: flex-start;
-            gap: 1rem;
-            margin-bottom: 1rem;
+            gap: 0.35rem;
+            margin-bottom: 1.5rem;
           }
-
-          .stage-eyebrow {
-            align-items: flex-start;
-            text-align: left;
-          }
-
-          .stage-figure-wrapper {
-            position: relative;
-            left: auto;
-            transform: none;
-            top: auto;
-            height: 280px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            margin: 0.25rem auto 1rem;
-          }
-
-          .stage-figure-img {
-            height: 280px;
-            max-height: 280px;
-          }
-
-          .stage-editorial-group {
-            margin-top: 0;
-            margin-bottom: 0;
-          }
-
-          .stage-prose-card {
-            margin-bottom: 1.25rem;
-          }
-
-          .stage-title {
-            font-size: clamp(1.9rem, 7.8vw, 3.2rem);
-            line-height: 0.94;
-          }
-
-          .stage-title-reflection {
+          .about-identity-divider {
             display: none;
           }
-        }
-
-        /* ── MOBILE (390px & SMALLER) ── */
-        @media (max-width: 480px) {
-          .stage-content-container {
-            padding: 5rem 1rem 2.25rem;
+          .about-editorial-flow {
+            max-width: 100%;
+            margin-top: clamp(140px, 24vh, 220px);
           }
-
-          .stage-figure-wrapper {
-            height: 240px;
-            margin-bottom: 0.75rem;
-          }
-
-          .stage-figure-img {
-            height: 240px;
-            max-height: 240px;
-          }
-
-          .stage-title {
-            font-size: clamp(1.7rem, 7.6vw, 2.25rem);
-            letter-spacing: -0.02em;
-          }
-
-          .stage-prose-card {
-            padding: 0.95rem 1.1rem;
-            border-radius: 16px;
+          .about-headline {
+            font-size: clamp(2.3rem, 8.5vw, 3.2rem);
             margin-bottom: 1.25rem;
           }
-
-          .stage-prose-text {
-            font-size: 0.92rem;
-            line-height: 1.62;
+          .about-headline-line {
+            white-space: normal;
           }
-
-          .stage-pill-cta {
-            font-size: 0.76rem;
-            padding: 12px 24px;
-            min-height: 44px;
+          .about-paragraph {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            max-width: 100%;
           }
-
-          .stage-secondary-btn {
-            font-size: 0.76rem;
-            padding: 11px 20px;
-            min-height: 44px;
+          .about-action-row {
+            width: 100%;
+            gap: 0.75rem;
+            flex-direction: column;
           }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          .stage-bg-image,
-          .stage-figure-wrapper,
-          .cinematic-stage-section * {
-            transition: none !important;
-            animation: none !important;
-            transform: none !important;
+          .about-primary-cta {
+            width: 100%;
+            justify-content: center;
+            padding: 0.95rem 1.5rem;
+          }
+          .about-secondary-cta {
+            width: 100%;
+            justify-content: center;
+            padding: 0.85rem 1.5rem;
           }
         }
       `}</style>
