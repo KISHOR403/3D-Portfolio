@@ -248,7 +248,7 @@ export default function TestPlan({ onOpenResume }) {
           width: 100%;
           max-width: 1280px;
           margin: 0 auto;
-          padding: 0 clamp(1.5rem, 5vw, 4rem);
+          padding: 0 clamp(16px, 4vw, 64px);
           display: flex;
           flex-direction: column;
           justify-content: flex-start;
@@ -452,7 +452,7 @@ export default function TestPlan({ onOpenResume }) {
           }
           .about-container {
             min-height: auto;
-            padding: 0 1.25rem;
+            padding: 0 clamp(16px, 4vw, 32px);
           }
           .about-bg-image {
             background-position: 78% 10px;

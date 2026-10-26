@@ -82,17 +82,17 @@ function EducationCard({ title, institution, period, status, details, isMobile }
       style={{
         position: 'relative',
         perspective: '1000px',
-        paddingBottom: '12px',
-        paddingRight: '12px',
+        paddingBottom: isMobile ? '6px' : '12px',
+        paddingRight: isMobile ? '6px' : '12px',
         width: '100%',
       }}
     >
-      {/* Ghost Layer 2 (12px offset) */}
+      {/* Ghost Layer 2 (12px offset desktop, 6px mobile) */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          transform: 'translate(12px, 12px)',
+          transform: isMobile ? 'translate(6px, 6px)' : 'translate(12px, 12px)',
           background: 'var(--color-bg-base)',
           border: '1px solid var(--color-border-hairline)',
           borderRadius: '12px',
@@ -102,12 +102,12 @@ function EducationCard({ title, institution, period, status, details, isMobile }
         }}
       />
 
-      {/* Ghost Layer 1 (6px offset) */}
+      {/* Ghost Layer 1 (6px offset desktop, 3px mobile) */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          transform: 'translate(6px, 6px)',
+          transform: isMobile ? 'translate(3px, 3px)' : 'translate(6px, 6px)',
           background: 'var(--color-bg-base)',
           border: '1px solid var(--color-border-hairline)',
           borderRadius: '12px',
@@ -124,7 +124,7 @@ function EducationCard({ title, institution, period, status, details, isMobile }
           background: 'var(--color-bg-base)',
           border: '1px solid var(--color-border-hairline)',
           borderRadius: '12px',
-          padding: '1.5rem',
+          padding: 'clamp(1rem, 3.5vw, 1.5rem)',
           borderTop: `2px solid ${accentColor}`,
           boxShadow: `0 -8px 24px rgba(${accentRGB}, 0.12), 0 4px 20px rgba(0, 0, 0, 0.3)`,
           position: 'relative',

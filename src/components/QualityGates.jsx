@@ -796,17 +796,18 @@ export default function QualityGates() {
           {/* Terminal Title Bar */}
           <div
             style={{
-              height: '32px',
+              height: '34px',
               background: 'rgba(35, 44, 53, 0.4)',
               borderBottom: '1px solid #232C35',
               display: 'flex',
               alignItems: 'center',
-              padding: '0 1rem',
-              position: 'relative',
+              justifyContent: 'space-between',
+              padding: '0 0.85rem',
+              gap: '8px',
             }}
           >
             {/* macOS window control buttons */}
-            <div style={{ display: 'flex', gap: '6px' }}>
+            <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
               <span
                 style={{
                   width: '10px',
@@ -835,17 +836,19 @@ export default function QualityGates() {
             {/* Centered label */}
             <div
               style={{
-                position: 'absolute',
-                left: '50%',
-                transform: 'translateX(-50%)',
                 fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
+                fontSize: 'clamp(0.65rem, 2vw, 0.75rem)',
                 color: 'var(--color-text-muted)',
                 whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                textAlign: 'center',
+                flex: 1,
               }}
             >
               kishor@qa-portfolio: ~ test-suite --certs
             </div>
+            <div style={{ width: '42px', flexShrink: 0 }} aria-hidden="true" />
           </div>
 
           {/* Terminal Body */}

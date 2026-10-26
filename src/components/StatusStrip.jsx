@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 const STATS = [
   { label: '10 PROJECTS SHIPPED', icon: '●' },
   { label: '95% AVG COVERAGE', icon: '●' },
-  { label: '8 QUALITY GATES PASSED', icon: '●' },
+  { label: '9 QUALITY GATES PASSED', icon: '●' },
   { label: 'CI/CD INTEGRATED', icon: '●' },
 ]
 
@@ -19,7 +19,7 @@ export default function StatusStrip() {
         borderBottom: '1px solid var(--color-border-hairline)',
         background: 'rgba(22, 29, 36, 0.75)',
         backdropFilter: 'blur(10px)',
-        padding: '1rem 1.5rem',
+        padding: '1rem clamp(16px, 4vw, 24px)',
         overflow: 'hidden',
       }}
     >
@@ -30,7 +30,7 @@ export default function StatusStrip() {
         alignItems: 'center',
         justifyContent: 'center',
         flexWrap: 'wrap',
-        gap: '1.5rem 2.5rem',
+        gap: '0.75rem clamp(1rem, 3vw, 2.5rem)',
       }}>
         {STATS.map((stat, i) => (
           <div

@@ -222,17 +222,13 @@
   margin-right: 0;
 }
 
-/* Section container */
+/* Section container — Fluid horizontal & vertical spacing */
 .section-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 6rem 1.5rem;
-}
-
-@media (max-width: 640px) {
-  .section-container {
-    padding: 3rem 1rem;
-  }
+  padding-block: clamp(3.5rem, 8vh, 6rem);
+  padding-inline: clamp(16px, 4vw, 64px);
+  width: 100%;
 }
 
 /* Glass card */
@@ -754,8 +750,8 @@
 
 @media (max-width: 640px) {
   .mascot-float {
-    width: 145px;
-    height: 145px;
+    width: 140px;
+    height: 140px;
     bottom: 16px;
     right: 16px;
   }
@@ -781,6 +777,33 @@
 
   .mascot-restore-icon {
     font-size: 17px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mascot-float {
+    width: 115px;
+    height: 115px;
+    bottom: 12px;
+    right: 12px;
+  }
+
+  .mascot-grip {
+    height: 28px;
+    right: 18px;
+  }
+
+  .mascot-say {
+    font-size: 10px;
+    padding: 3px 8px;
+    max-width: 130px;
+  }
+
+  .mascot-restore {
+    width: 34px;
+    height: 34px;
+    bottom: 12px;
+    right: 12px;
   }
 }
 

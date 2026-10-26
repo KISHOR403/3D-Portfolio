@@ -44,7 +44,9 @@ export default function Hero({ onOpenResume }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: isMobile ? '120px 1.5rem 4rem' : '130px 2.5rem 5rem',
+        padding: isMobile
+          ? 'clamp(90px, 12vh, 120px) clamp(16px, 4vw, 32px) clamp(2.5rem, 5vh, 4rem)'
+          : '130px clamp(24px, 4vw, 40px) 5rem',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -147,13 +149,15 @@ export default function Hero({ onOpenResume }) {
             variants={heroChildVariants}
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: isMobile ? '48px' : 'clamp(96px, 7.8vw, 118px)',
+              fontSize: isMobile ? 'clamp(32px, 8.5vw, 48px)' : 'clamp(64px, 7.8vw, 118px)',
               fontWeight: 800,
               lineHeight: 0.95,
               letterSpacing: '-0.045em',
               color: '#F8FAFC',
               marginBottom: '1.25rem',
               textWrap: 'balance',
+              overflowWrap: 'break-word',
+              wordBreak: 'break-word',
             }}
           >
             <span className="t-shimmer" data-text="Kishor Gogoi">

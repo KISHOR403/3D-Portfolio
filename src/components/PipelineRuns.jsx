@@ -351,10 +351,10 @@ function PipelineCard({ project, index, progress, onViewTestSuite }) {
           scale,
           transformOrigin: 'top center',
           borderRadius: '16px',
-          padding: '1.75rem 2rem',
+          padding: 'clamp(1.25rem, 3.5vw, 1.75rem) clamp(1rem, 3.5vw, 2rem)',
           display: 'grid',
-          gridTemplateColumns: 'auto 1fr',
-          gap: '1.75rem',
+          gridTemplateColumns: 'minmax(0, auto) minmax(0, 1fr)',
+          gap: 'clamp(1rem, 3vw, 1.75rem)',
           alignItems: 'start',
           width: '100%',
           maxWidth: '1000px',
@@ -372,7 +372,7 @@ function PipelineCard({ project, index, progress, onViewTestSuite }) {
             flexDirection: 'column',
             alignItems: 'flex-start',
             gap: '0.85rem',
-            minWidth: '120px',
+            minWidth: '100px',
           }}
         >
           {/* Redoyanul Number Badge */}
@@ -455,9 +455,11 @@ function PipelineCard({ project, index, progress, onViewTestSuite }) {
             <h3
               style={{
                 fontFamily: 'var(--font-display)',
-                fontSize: '1.3rem',
+                fontSize: 'clamp(1.1rem, 2.5vw, 1.3rem)',
                 fontWeight: 700,
                 color: 'var(--color-text-primary)',
+                overflowWrap: 'break-word',
+                wordBreak: 'break-word',
               }}
             >
               {project.title}

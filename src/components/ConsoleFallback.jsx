@@ -90,7 +90,7 @@ export default function ConsoleFallback() {
           borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '7px', flexShrink: 0 }}>
           <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#EF4444', opacity: 0.8 }} />
           <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#F59E0B', opacity: 0.8 }} />
           <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10B981', opacity: 0.8 }} />
@@ -102,16 +102,21 @@ export default function ConsoleFallback() {
             alignItems: 'center',
             gap: '6px',
             fontFamily: 'var(--font-mono)',
-            fontSize: '0.72rem',
+            fontSize: 'clamp(0.65rem, 2vw, 0.72rem)',
             color: 'var(--color-text-muted)',
             letterSpacing: '0.04em',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            minWidth: 0,
+            margin: '0 8px',
           }}
         >
-          <TerminalIcon size={12} style={{ opacity: 0.7 }} />
-          <span>kishor@macbook: ~/qa-suite</span>
+          <TerminalIcon size={12} style={{ opacity: 0.7, flexShrink: 0 }} />
+          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>kishor@macbook: ~/qa-suite</span>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
           <span
             style={{
               width: '5px',
@@ -138,18 +143,20 @@ export default function ConsoleFallback() {
       {/* Terminal Console Content */}
       <div
         style={{
-          padding: '18px 22px',
+          padding: 'clamp(14px, 3.5vw, 18px) clamp(14px, 3.5vw, 22px)',
           fontFamily: 'var(--font-mono)',
-          fontSize: '0.82rem',
+          fontSize: 'clamp(0.72rem, 2vw, 0.82rem)',
           lineHeight: 1.7,
           minHeight: '190px',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'flex-start',
+          overflowWrap: 'break-word',
+          wordBreak: 'break-word',
         }}
       >
         {/* Environment line */}
-        <div style={{ color: 'rgba(255, 255, 255, 0.38)', fontSize: '0.7rem', marginBottom: '8px' }}>
+        <div style={{ color: 'rgba(255, 255, 255, 0.38)', fontSize: '0.7rem', marginBottom: '8px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           node v20.12 · chromium headless · playwright v1.42
         </div>
 

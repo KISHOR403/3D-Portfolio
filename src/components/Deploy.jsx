@@ -162,7 +162,7 @@ export default function Deploy() {
           style={{
             position: 'relative',
             width: '100%',
-            height: '570px',
+            height: 'clamp(360px, 50vh, 570px)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -177,7 +177,7 @@ export default function Deploy() {
             maxWidth: '780px',
             margin: '1.2rem auto 0',
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))',
             gap: '0.85rem',
           }}
         >
@@ -196,9 +196,10 @@ export default function Deploy() {
               color: '#E8EAED',
               cursor: 'pointer',
               transition: 'all 0.2s ease',
+              minWidth: 0,
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0, overflow: 'hidden' }}>
               <div
                 style={{
                   width: '32px',
@@ -208,16 +209,17 @@ export default function Deploy() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  flexShrink: 0,
                 }}
               >
                 <Mail size={16} color="#4ADE9A" />
               </div>
-              <div style={{ textAlign: 'left' }}>
+              <div style={{ textAlign: 'left', minWidth: 0 }}>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#9EABB8' }}>DIRECT EMAIL</div>
-                <div style={{ fontSize: '0.78rem', fontWeight: 600 }}>{copied ? 'Copied to Clipboard!' : 'kishorgogoi403@gmail.com'}</div>
+                <div style={{ fontSize: '0.78rem', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{copied ? 'Copied to Clipboard!' : 'kishorgogoi403@gmail.com'}</div>
               </div>
             </div>
-            {copied ? <CheckCheck size={14} color="#4ADE9A" /> : <Copy size={13} color="#9EABB8" />}
+            {copied ? <CheckCheck size={14} color="#4ADE9A" style={{ flexShrink: 0 }} /> : <Copy size={13} color="#9EABB8" style={{ flexShrink: 0 }} />}
           </button>
 
           {/* LinkedIn Button */}

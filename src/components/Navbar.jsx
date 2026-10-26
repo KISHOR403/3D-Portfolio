@@ -331,6 +331,11 @@ export default function Navbar({ onOpenResume, onOpenRecruiterView }) {
           .desktop-nav {
             display: none !important;
           }
+          .mobile-menu-btn {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+          }
         }
         @media (max-width: 768px) {
           .desktop-nav,
@@ -339,7 +344,9 @@ export default function Navbar({ onOpenResume, onOpenRecruiterView }) {
             display: none !important;
           }
           .mobile-menu-btn {
-            display: block !important;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
           }
         }
       `}</style>

@@ -78,7 +78,7 @@ function TestRunner({ testCase, index, isRunning, result, onRun }) {
       gap: '0.75rem',
       flexWrap: 'wrap',
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1, minWidth: '200px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1, minWidth: 0, flexWrap: 'wrap' }}>
         <span style={{
           fontFamily: 'var(--font-mono)',
           fontSize: '0.65rem',
