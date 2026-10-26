@@ -134,6 +134,9 @@ function CertificateModal({ isOpen, onClose, pdfUrl, certName, certIssuer, certY
         onClick={onClose}
       >
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Certificate Details — ${certName}`}
           style={{
             width: '100%',
             maxWidth: '380px',

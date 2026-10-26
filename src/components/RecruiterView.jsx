@@ -90,6 +90,9 @@ export default function RecruiterView({ isOpen, onClose, onOpenResume }) {
             exit={{ opacity: 0, y: 40, scale: 0.97 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             onClick={e => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Recruiter Summary for Kishor Gogoi"
             style={{
               width: '100%',
               maxWidth: '640px',
@@ -194,7 +197,8 @@ export default function RecruiterView({ isOpen, onClose, onOpenResume }) {
                   View Resume
                 </button>
                 <a
-                  href="mailto:gogoi.kishor0@gmail.com"
+                  href="mailto:kishorgogoi403@gmail.com"
+                  aria-label="Send email to kishorgogoi403@gmail.com"
                   style={{
                     display: 'flex',
                     alignItems: 'center',

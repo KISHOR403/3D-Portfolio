@@ -67,7 +67,7 @@ export default function Hero({ onOpenResume }) {
 
       <div
         style={{
-          maxWidth: '1240px',
+          maxWidth: '1280px',
           width: '100%',
           display: 'grid',
           gridTemplateColumns: isMobile ? '1fr' : '1.15fr 0.85fr',

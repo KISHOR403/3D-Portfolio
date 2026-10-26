@@ -40,45 +40,67 @@ export default function Navbar({ onOpenResume, onOpenRecruiterView }) {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Close mobile drawer on Escape key press
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && mobileOpen) {
+        setMobileOpen(false)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [mobileOpen])
+
   return (
     <motion.nav
       initial={{ y: -80 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       id="navbar"
+      role="banner"
       style={{
         position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
         zIndex: 100,
-        padding: '0 1.5rem',
         height: '64px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        background: scrolled ? 'rgba(15, 20, 25, 0.85)' : 'transparent',
+        background: scrolled ? 'rgba(15, 20, 25, 0.88)' : 'transparent',
         backdropFilter: scrolled ? 'blur(16px) saturate(180%)' : 'none',
+        WebkitBackdropFilter: scrolled ? 'blur(16px) saturate(180%)' : 'none',
         borderBottom: scrolled ? '1px solid rgba(35, 44, 53, 0.5)' : '1px solid transparent',
         transition: 'background 0.3s ease, backdrop-filter 0.3s ease, border-color 0.3s ease',
       }}
     >
-      {/* Logo / Name */}
-      <a
-        href="#"
-        id="nav-logo"
+      {/* Centered Main Content Alignment Container */}
+      <div
         style={{
+          maxWidth: '1280px',
+          margin: '0 auto',
+          width: '100%',
+          height: '100%',
+          padding: '0 clamp(16px, 4vw, 64px)',
           display: 'flex',
           alignItems: 'center',
-          gap: '8px',
-          textDecoration: 'none',
-          color: 'var(--color-text-primary)',
-          fontFamily: 'var(--font-display)',
-          fontWeight: 600,
-          fontSize: '1.1rem',
-          letterSpacing: '-0.02em',
+          justifyContent: 'space-between',
         }}
       >
+        {/* Logo / Name */}
+        <a
+          href="#"
+          id="nav-logo"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            textDecoration: 'none',
+            color: 'var(--color-text-primary)',
+            fontFamily: 'var(--font-display)',
+            fontWeight: 600,
+            fontSize: '1.1rem',
+            letterSpacing: '-0.02em',
+          }}
+        >
         <span style={{
           width: '8px',
           height: '8px',
@@ -217,17 +239,23 @@ export default function Navbar({ onOpenResume, onOpenRecruiterView }) {
         className="mobile-menu-btn"
         onClick={() => setMobileOpen(!mobileOpen)}
         aria-label="Toggle navigation menu"
+        aria-expanded={mobileOpen}
+        aria-controls="nav-mobile-drawer"
         style={{
           display: 'none',
           background: 'none',
           border: 'none',
           color: 'var(--color-text-primary)',
           cursor: 'pointer',
-          padding: '8px',
+          padding: '10px',
+          minWidth: '44px',
+          minHeight: '44px',
+          borderRadius: '8px',
         }}
       >
         {mobileOpen ? <X size={22} /> : <Menu size={22} />}
       </button>
+      </div>
 
       {/* Mobile drawer */}
       <AnimatePresence>
@@ -238,6 +266,8 @@ export default function Navbar({ onOpenResume, onOpenRecruiterView }) {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.25 }}
             id="nav-mobile-drawer"
+            role="region"
+            aria-label="Mobile Navigation Drawer"
             style={{
               position: 'absolute',
               top: '64px',

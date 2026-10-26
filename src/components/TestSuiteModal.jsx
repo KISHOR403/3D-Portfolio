@@ -113,6 +113,9 @@ export default function TestSuiteModal({ isOpen, onClose, projectTitle }) {
             exit={{ opacity: 0, y: 30, scale: 0.97 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
             onClick={e => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Test Suite for ${projectTitle}`}
             style={{
               width: '100%',
               maxWidth: '720px',
@@ -202,7 +205,7 @@ export default function TestSuiteModal({ isOpen, onClose, projectTitle }) {
                         gap: '0.75rem',
                         flexWrap: 'wrap',
                       }}>
-                        <div style={{ flex: 1, minWidth: '200px' }}>
+                        <div style={{ flex: 1, minWidth: 0 }}>
                           <div style={{
                             display: 'flex',
                             alignItems: 'center',

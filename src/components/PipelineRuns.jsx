@@ -471,6 +471,7 @@ function PipelineCard({ project, index, progress, onViewTestSuite }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 id={`project-link-${index}`}
+                aria-label={`Open ${project.link.includes('github.com') ? 'repository' : 'demo'} for ${project.title}`}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ duration: 0.2, ease: 'easeOut' }}
@@ -597,6 +598,7 @@ function PipelineCard({ project, index, progress, onViewTestSuite }) {
           {/* View Test Suite action */}
           <motion.button
             onClick={() => onViewTestSuite && onViewTestSuite(project.title)}
+            aria-label={`View automated test suite for ${project.title}`}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
@@ -611,7 +613,8 @@ function PipelineCard({ project, index, progress, onViewTestSuite }) {
               background: 'rgba(255, 255, 255, 0.04)',
               border: '1px solid var(--color-border-hairline)',
               borderRadius: '8px',
-              padding: '6px 14px',
+              padding: '8px 14px',
+              minHeight: '36px',
               cursor: 'pointer',
               transition: 'all 0.2s ease',
             }}
