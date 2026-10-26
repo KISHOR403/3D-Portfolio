@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import SectionHeader from './SectionHeader'
 
 const LOG_DATA = [
   {
@@ -771,15 +772,13 @@ export default function QualityGates() {
       `}</style>
 
       <div className="section-container">
-        <div>
-          <p className="section-eyebrow">Quality Gates Passed</p>
-          <h2
-            className="section-headline-editorial"
-            style={{ marginBottom: '3rem' }}
-          >
-            <span className="shading-word">Certifications</span>
-          </h2>
-        </div>
+        <SectionHeader
+          number="06"
+          category="CERTIFICATIONS"
+          title="Certifications & Credentials"
+          description="Verified credentials and professional certifications validating automated testing and software engineering mastery."
+          style={{ marginBottom: '2.25rem' }}
+        />
 
         {/* Terminal Window Frame */}
         <div

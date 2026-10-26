@@ -15,6 +15,7 @@ import {
   SlidersHorizontal
 } from 'lucide-react'
 import EarthSkillsCanvas, { SmartSkillIcon, RAW_SKILLS } from './EarthSkillsCanvas'
+import SectionHeader from './SectionHeader'
 
 /* ═══════════════════════════════════════════════════════════════
    SKILL DATA
@@ -389,57 +390,36 @@ function SphereScatterView({ isSectionVisible, activeCategory, hoveredSkillId, s
           }}
         >
           <p
+            className="section-eyebrow"
             style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: isMobile ? '0.58rem' : '0.68rem',
-              fontWeight: 600,
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-              color: 'var(--color-accent-pass, #4ADE9A)',
-              marginBottom: isMobile ? '0.35rem' : '0.75rem',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem',
+              marginBottom: isMobile ? '0.35rem' : '0.65rem',
             }}
           >
-            Coverage Report
+            <span className="section-eyebrow-num">03</span>
+            <span className="section-eyebrow-sep">//</span>
+            <span className="section-eyebrow-text">TECHNICAL STACK</span>
           </p>
           <h2
+            className="section-headline-editorial"
             style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: isMobile ? 'clamp(1.75rem, 6.5vw, 2.5rem)' : 'clamp(2.5rem, 5.5vw, 5rem)',
-              fontWeight: 700,
-              lineHeight: 1.06,
-              letterSpacing: '-0.04em',
+              fontSize: isMobile ? 'clamp(1.75rem, 6.5vw, 2.25rem)' : 'clamp(28px, 3.4vw, 42px)',
               margin: 0,
             }}
           >
-            Skills{' '}
-            <span style={{ color: 'var(--color-text-muted, #9EABB8)', fontWeight: 600 }}>
-              That
-            </span>{' '}
-            <span
-              style={{
-                background: 'linear-gradient(90deg, var(--color-accent-pass, #4ADE9A), #38BDF8)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
-              Ship.
-            </span>
+            Technical Expertise
           </h2>
           <p
+            className="section-description"
             style={{
-              fontFamily: 'var(--font-sans)',
-              fontSize: isMobile ? '0.72rem' : 'clamp(0.85rem, 1.2vw, 1.05rem)',
-              lineHeight: isMobile ? 1.4 : 1.65,
-              color: 'var(--color-text-muted, #9EABB8)',
-              maxWidth: isMobile ? '220px' : '440px',
-              margin: isMobile ? '0.4rem auto 0' : '1.25rem auto 0',
-              opacity: 0.8,
+              margin: isMobile ? '0.4rem auto 0' : '0.75rem auto 0',
+              textAlign: 'center',
             }}
           >
-            {isMobile
-              ? 'Automation frameworks & quality engineering.'
-              : 'Automation frameworks, full-stack tools, and quality engineering — precision-built for production.'}
+            Automation frameworks, modern architectures, and full-stack testing workflows — precision-built for production.
           </p>
         </motion.div>
 
@@ -659,30 +639,14 @@ export default function CoverageReport() {
         /* ── GRID VIEW: standard layout with category cards ── */
         <div style={{ background: 'rgba(22, 29, 36, 0.75)', backdropFilter: 'blur(10px)', padding: '5rem 0' }}>
           <div className="section-container">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.5 }}
-              style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}
-            >
-              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: '1rem' }}>
-                <div>
-                  <p className="section-eyebrow">Coverage Report</p>
-                  <h2 className="section-headline-editorial" style={{ marginTop: '0.25rem' }}>
-                    <span className="shading-word">Skills</span>
-                    <span className="shading-word">&amp;</span>
-                    <span className="shading-word">Technologies</span>
-                  </h2>
-                </div>
-
-                <ViewToggle viewStyle={viewStyle} setViewStyle={setViewStyle} />
-              </div>
-
-              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.95rem', color: 'var(--color-text-muted)', maxWidth: '650px' }}>
-                Interactive 3D visualization of full-stack engineering, QA automation frameworks, and developer toolchains.
-              </p>
-            </motion.div>
+            <SectionHeader
+              number="03"
+              category="TECHNICAL STACK"
+              title="Technical Expertise"
+              description="Interactive 3D visualization of full-stack engineering, QA automation frameworks, and developer toolchains."
+              action={<ViewToggle viewStyle={viewStyle} setViewStyle={setViewStyle} />}
+              style={{ marginBottom: '1.75rem' }}
+            />
 
             {/* Filters */}
             <motion.div

@@ -19,15 +19,15 @@
   --font-serif: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
 
   /* Strict Typography Scale Tokens */
-  --font-size-h1: clamp(48px, 7.8vw, 112px);
-  --line-height-h1: 0.95;
+  --font-size-h1: clamp(44px, 7vw, 100px);
+  --line-height-h1: 0.98;
   --font-weight-h1: 800;
 
-  --font-size-h2: clamp(38px, 4.5vw, 54px);
-  --line-height-h2: 1.05;
+  --font-size-h2: clamp(28px, 3.4vw, 42px);
+  --line-height-h2: 1.15;
   --font-weight-h2: 700;
 
-  --font-size-h3: clamp(22px, 2.2vw, 28px);
+  --font-size-h3: clamp(20px, 2.1vw, 26px);
   --line-height-h3: 1.25;
   --font-weight-h3: 600;
 
@@ -35,22 +35,26 @@
   --line-height-body: 1.65;
   --font-weight-body: 400;
 
-  --font-size-small: 12.5px;
-  --font-weight-small: 500;
-  --letter-spacing-small: 0.08em;
+  --font-size-eyebrow: clamp(10.5px, 0.85vw, 12px);
+  --font-size-description: clamp(14px, 1.1vw, 16.5px);
+  --line-height-description: 1.65;
+
+  --font-size-small: clamp(10.5px, 0.85vw, 12px);
+  --font-weight-small: 600;
+  --letter-spacing-small: 0.12em;
 }
 
 :root {
   --font-serif: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
-  --font-size-h1: clamp(48px, 7.8vw, 112px);
-  --line-height-h1: 0.95;
+  --font-size-h1: clamp(44px, 7vw, 100px);
+  --line-height-h1: 0.98;
   --font-weight-h1: 800;
 
-  --font-size-h2: clamp(38px, 4.5vw, 54px);
-  --line-height-h2: 1.05;
+  --font-size-h2: clamp(28px, 3.4vw, 42px);
+  --line-height-h2: 1.15;
   --font-weight-h2: 700;
 
-  --font-size-h3: clamp(22px, 2.2vw, 28px);
+  --font-size-h3: clamp(20px, 2.1vw, 26px);
   --line-height-h3: 1.25;
   --font-weight-h3: 600;
 
@@ -58,9 +62,13 @@
   --line-height-body: 1.65;
   --font-weight-body: 400;
 
-  --font-size-small: 12.5px;
-  --font-weight-small: 500;
-  --letter-spacing-small: 0.08em;
+  --font-size-eyebrow: clamp(10.5px, 0.85vw, 12px);
+  --font-size-description: clamp(14px, 1.1vw, 16.5px);
+  --line-height-description: 1.65;
+
+  --font-size-small: clamp(10.5px, 0.85vw, 12px);
+  --font-weight-small: 600;
+  --letter-spacing-small: 0.12em;
 }
 
 /* ═══════════════════════════════════════════
@@ -139,26 +147,83 @@
    UTILITY CLASSES
    ═══════════════════════════════════════════ */
 
-/* Section eyebrow — strict small/label token (12-13px, 500 weight, 0.08em tracking) */
+/* Unified Section Header System */
+.section-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: clamp(1.75rem, 3.5vh, 2.5rem);
+  width: 100%;
+}
+
+.section-header--left {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.section-header--center {
+  align-items: center;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Section eyebrow — small uppercase text with section number or category */
 .section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   font-family: var(--font-mono);
-  font-size: var(--font-size-small);
-  font-weight: var(--font-weight-small);
-  letter-spacing: var(--letter-spacing-small);
+  font-size: var(--font-size-eyebrow);
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-accent-pass);
   margin-bottom: 0.5rem;
 }
 
-/* Swiss Editorial Section Title — strict H2 token (48-54px desktop / 38px mobile, 700 weight, 1.05 line-height) */
+.section-eyebrow-num {
+  color: var(--color-accent-pass);
+  font-weight: 700;
+}
+
+.section-eyebrow-sep {
+  color: var(--color-accent-pass);
+  opacity: 0.45;
+}
+
+.section-eyebrow-text {
+  color: var(--color-accent-pass);
+  letter-spacing: 0.14em;
+}
+
+/* Swiss Editorial Section Title — prominent, warm-white, consistent scale (approx 30-44px desktop) */
 .section-headline-editorial {
   font-family: var(--font-display);
   font-size: var(--font-size-h2);
   font-weight: var(--font-weight-h2);
   line-height: var(--line-height-h2);
-  letter-spacing: -0.035em;
-  color: var(--color-text-primary);
+  letter-spacing: -0.03em;
+  color: #F8FAFC;
   margin: 0;
+  text-wrap: balance;
+}
+
+.section-headline-editorial.is-serif {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Section supporting description — one short sentence in muted grey */
+.section-description {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-description);
+  font-weight: 400;
+  line-height: var(--line-height-description);
+  color: var(--color-text-muted);
+  max-width: 620px;
+  margin-top: 0.65rem;
+  margin-bottom: 0;
 }
 
 /* Strict Typography Scale Utilities */
@@ -175,7 +240,7 @@
   font-size: var(--font-size-h2);
   font-weight: var(--font-weight-h2);
   line-height: var(--line-height-h2);
-  letter-spacing: -0.035em;
+  letter-spacing: -0.03em;
 }
 
 .type-h3 {
@@ -202,22 +267,21 @@
   text-transform: uppercase;
 }
 
-/* Horizontal monochrome split shading inside letterforms (white → gray → dark gray / near black) */
+/* Clean warm-white letterform gradient with 100% legibility on dark background */
 .shading-word {
   display: inline-block;
   margin-right: 0.28em;
+  color: #F8FAFC;
   background: linear-gradient(
     90deg,
     #FFFFFF 0%,
-    #E2E8F0 28%,
-    #8E9CAE 58%,
-    #4A5568 82%,
-    #202833 100%
+    #F8FAFC 35%,
+    #E2E8F0 70%,
+    #CBD5E1 100%
   );
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  color: transparent;
 }
 
 .shading-word:last-child {

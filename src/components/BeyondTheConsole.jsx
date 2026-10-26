@@ -77,18 +77,19 @@ export default function BeyondTheConsole() {
           z-index: 10;
         }
         .swiss-btc__inner {
-          max-width: 1200px;
+          max-width: 1280px;
           margin: 0 auto;
+          padding: 0 clamp(16px, 4vw, 64px);
           display: flex;
           align-items: center;
           gap: 1.25rem;
         }
         .swiss-btc__label {
           font-family: var(--font-mono);
-          font-size: 0.58rem;
+          font-size: var(--font-size-eyebrow, 0.65rem);
           font-weight: 700;
-          letter-spacing: 0.2em;
-          color: var(--color-accent-pending);
+          letter-spacing: 0.16em;
+          color: var(--color-accent-pass);
           white-space: nowrap;
           flex-shrink: 0;
         }
@@ -121,10 +122,10 @@ export default function BeyondTheConsole() {
           opacity: 0.7;
         }
         .swiss-btc__entry-num {
-          font-size: 0.55rem;
+          font-size: 0.58rem;
           font-weight: 700;
-          color: var(--color-accent-pending);
-          opacity: 0.6;
+          color: var(--color-accent-pass);
+          opacity: 0.8;
           letter-spacing: 0.1em;
         }
         .swiss-btc__entry-label {

@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Play, Check, X, RotateCcw, Shield } from 'lucide-react'
+import SectionHeader from './SectionHeader'
 
 const TEST_CASES = [
   {
@@ -237,31 +238,13 @@ export default function QALab() {
   return (
     <section id="qa-lab" style={{ background: 'transparent' }}>
       <div className="section-container">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.5 }}
-        >
-          <p className="section-eyebrow">QA Lab</p>
-          <h2
-            className="section-headline-editorial"
-            style={{ marginBottom: '0.75rem' }}
-          >
-            <span className="shading-word">Interactive</span>
-            <span className="shading-word">testing</span>
-          </h2>
-          <p style={{
-            fontFamily: 'var(--font-sans)',
-            fontSize: '0.95rem',
-            color: 'var(--color-text-muted)',
-            lineHeight: 1.7,
-            marginBottom: '2.5rem',
-            maxWidth: '600px',
-          }}>
-            A live demo of client-side validation testing. Run individual test cases or execute the full suite to see real-time pass/fail assertions.
-          </p>
-        </motion.div>
+        <SectionHeader
+          number="05"
+          category="QA LAB"
+          title="Interactive Testing Lab"
+          description="Live client-side validation testbed demonstrating real-time assertion workflows and automated verification."
+          style={{ maxWidth: '800px', marginBottom: '2rem' }}
+        />
 
         <div style={{
           display: 'grid',

@@ -149,10 +149,10 @@ export default function Hero({ onOpenResume }) {
             variants={heroChildVariants}
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: isMobile ? 'clamp(32px, 8.5vw, 48px)' : 'clamp(64px, 7.8vw, 118px)',
+              fontSize: isMobile ? 'clamp(34px, 8.5vw, 48px)' : 'clamp(48px, 6vw, 88px)',
               fontWeight: 800,
-              lineHeight: 0.95,
-              letterSpacing: '-0.045em',
+              lineHeight: 1.02,
+              letterSpacing: '-0.04em',
               color: '#F8FAFC',
               marginBottom: '1.25rem',
               textWrap: 'balance',

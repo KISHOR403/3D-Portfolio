@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Check, ExternalLink, Star, Lock, Box, Cpu, FlaskConical } from 'lucide-react'
+import SectionHeader from './SectionHeader'
 
 const PROJECTS = [
   {
@@ -455,9 +456,10 @@ function PipelineCard({ project, index, progress, onViewTestSuite }) {
             <h3
               style={{
                 fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(1.1rem, 2.5vw, 1.3rem)',
+                fontSize: 'clamp(1.25rem, 2.4vw, 1.6rem)',
                 fontWeight: 700,
-                color: 'var(--color-text-primary)',
+                color: '#F8FAFC',
+                letterSpacing: '-0.02em',
                 overflowWrap: 'break-word',
                 wordBreak: 'break-word',
               }}
@@ -669,29 +671,13 @@ export default function PipelineRuns({ onViewTestSuite }) {
       style={{ background: 'transparent' }}
     >
       <div className="section-container">
-        <div>
-          <p className="section-eyebrow">// FEATURED WORK</p>
-          <h2
-            className="section-headline-editorial"
-            style={{ marginBottom: '0.75rem' }}
-          >
-            <span className="shading-word">Projects</span>
-            <span className="shading-word">&amp;</span>
-            <span className="shading-word">Case</span>
-            <span className="shading-word">Studies</span>
-          </h2>
-          <p
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.78rem',
-              color: 'var(--color-text-muted)',
-              marginBottom: '3rem',
-              letterSpacing: '0.03em',
-            }}
-          >
-            Scroll to explore — Redoyanul-styled numbered project cards
-          </p>
-        </div>
+        <SectionHeader
+          number="04"
+          category="PROJECTS"
+          title="Projects & Case Studies"
+          description="Production-ready web applications, automated test architectures, and end-to-end full stack platforms."
+          style={{ marginBottom: '2.5rem' }}
+        />
 
         <motion.div
           ref={containerRef}
@@ -703,7 +689,7 @@ export default function PipelineRuns({ onViewTestSuite }) {
             display: 'flex',
             flexDirection: 'column',
             gap: '1.5rem',
-            paddingBottom: '12rem',
+            paddingBottom: '4.5rem',
           }}
         >
           {PROJECTS.map((project, i) => (

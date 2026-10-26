@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { Check } from 'lucide-react'
+import SectionHeader from './SectionHeader'
 
 function EducationCard({ title, institution, period, status, details, isMobile }) {
   const cardRef = useRef(null)
@@ -286,24 +287,19 @@ export default function Education() {
   const badgeY = useTransform(activeProgress, [0.88, 0.98], [10, 0])
 
   return (
-    <section id="environment-setup" style={{ background: 'transparent' }}>
+    <section id="education" style={{ background: 'transparent', position: 'relative' }}>
+      <span id="environment-setup" style={{ position: 'absolute', top: '-80px', visibility: 'hidden' }} aria-hidden="true" />
       <div className="section-container">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.5 }}
-        >
-          <p className="section-eyebrow">ENVIRONMENT SETUP</p>
-          <h2
-            className="section-headline-editorial"
-            style={{ marginBottom: '3.5rem' }}
-          >
-            <span className="shading-word">Education</span>
-          </h2>
-        </motion.div>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <SectionHeader
+            number="02"
+            category="EDUCATION"
+            title="Education"
+            description="Academic foundations in computer science, software engineering principles, and core testing methodologies."
+            style={{ marginBottom: '2.25rem' }}
+          />
 
-        <div ref={containerRef} style={{ position: 'relative', maxWidth: '800px', margin: '0 auto' }}>
+          <div ref={containerRef} style={{ position: 'relative' }}>
           {/* Vertical Connecting Line Background */}
           <div style={{
             position: 'absolute',
@@ -499,6 +495,7 @@ export default function Education() {
                 GRADUATED ✓
               </motion.span>
             </div>
+          </div>
           </div>
         </div>
       </div>

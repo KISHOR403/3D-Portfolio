@@ -88,38 +88,37 @@ export default function TestPlan({ onOpenResume }) {
         <div className="about-editorial-flow">
           {/* Small Eyebrow */}
           <motion.div
-            className="about-eyebrow"
+            className="about-eyebrow section-eyebrow"
             initial={{ opacity: 0, y: 14 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
             transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
-            <span className="about-eyebrow-label">ABOUT ME</span>
-            <span className="about-eyebrow-sep">/</span>
-            <span className="about-eyebrow-index">01</span>
+            <span className="section-eyebrow-num">01</span>
+            <span className="section-eyebrow-sep">//</span>
+            <span className="section-eyebrow-text">ABOUT</span>
           </motion.div>
 
-          {/* Main Heading — Oversized High-Contrast Serif */}
+          {/* Main Heading — Editorial Headline */}
           <motion.h2
-            className="about-headline"
+            className="about-headline section-headline-editorial is-serif"
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.75, delay: 0.28, ease: [0.16, 1, 0.3, 1] }}
           >
-            <span className="about-headline-line">I THINK BEYOND</span>
-            <span className="about-headline-line">THE BUG.</span>
+            <span className="about-headline-line">The Engineer Behind</span>
+            <span className="about-headline-line">the Quality.</span>
           </motion.h2>
 
-          {/* Supporting Text — Directly on image without opaque card */}
+          {/* Supporting Text */}
           <motion.p
-            className="about-paragraph"
+            className="about-paragraph section-description"
             initial={{ opacity: 0, y: 18 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
             transition={{ duration: 0.7, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}
           >
-            I'm a Computer Science graduate focused on software quality, test
-            automation, and building reliable digital experiences. I enjoy
-            exploring edge cases, validating APIs, and creating maintainable
-            automation workflows that help teams deliver software with confidence.
+            Computer Science graduate focused on software quality, test automation,
+            and building resilient digital experiences — exploring edge cases,
+            validating APIs, and creating maintainable automation workflows that help teams ship with confidence.
           </motion.p>
 
           {/* LEVEL 3: BOTTOM — PRIMARY ACTION */}
@@ -324,15 +323,15 @@ export default function TestPlan({ onOpenResume }) {
           color: #F5F5F7;
         }
 
-        /* Oversized Serif Headline */
+        /* Editorial Serif Headline */
         .about-headline {
           font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
-          font-size: clamp(2.65rem, 5.5vw, 4.85rem);
+          font-size: clamp(30px, 4.2vw, 48px);
           font-weight: 700;
-          line-height: 1.04;
+          line-height: 1.12;
           letter-spacing: -0.025em;
-          color: #F5F5F7;
-          margin: 0 0 clamp(1.4rem, 2.5vh, 2rem) 0;
+          color: #F8FAFC;
+          margin: 0 0 clamp(1rem, 2vh, 1.5rem) 0;
           display: flex;
           flex-direction: column;
           text-shadow: 0 2px 24px rgba(0, 0, 0, 0.4);

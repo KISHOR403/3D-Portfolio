@@ -5,6 +5,7 @@ import {
   Clock, MapPin, Sparkles, ChevronUp, Radio
 } from 'lucide-react'
 import Contact3DCanvas from './Contact3DCanvas'
+import SectionHeader from './SectionHeader'
 
 /* ─── Inline Brand SVG Icons ─── */
 function LinkedinIcon({ size = 17, style }) {
@@ -84,78 +85,34 @@ export default function Deploy() {
           padding: '0 1.5rem',
         }}
       >
-        {/* ─── Header ─── */}
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.55 }}
-          style={{ marginBottom: '1.8rem', textAlign: 'center' }}
-        >
-          {/* Eyebrow Status Badge */}
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '6px 14px',
-              borderRadius: '9999px',
-              background: 'rgba(74, 222, 154, 0.08)',
-              border: '1px solid rgba(74, 222, 154, 0.22)',
-              marginBottom: '1rem',
-            }}
-          >
-            <Radio size={13} color="#4ADE9A" className="animate-pulse" />
+        <SectionHeader
+          align="center"
+          number="07"
+          category="CONTACT"
+          badge={
             <span
               style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.74rem',
-                fontWeight: 600,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '5px',
+                padding: '3px 9px',
+                borderRadius: '999px',
+                background: 'rgba(74, 222, 154, 0.08)',
+                border: '1px solid rgba(74, 222, 154, 0.22)',
+                fontSize: '0.68rem',
                 color: '#4ADE9A',
                 letterSpacing: '0.04em',
+                textTransform: 'none',
               }}
             >
-              Open for Senior QA Roles & Contracts · 2026
+              <Radio size={11} color="#4ADE9A" className="animate-pulse" />
+              Available for Roles
             </span>
-          </div>
-
-          <h2
-            className="section-headline-editorial"
-            style={{
-              fontSize: 'clamp(2.4rem, 4.8vw, 3.8rem)',
-              fontWeight: 800,
-              letterSpacing: '-0.025em',
-              lineHeight: 1.08,
-              margin: '0 auto',
-              color: '#FFFFFF',
-              maxWidth: '750px',
-            }}
-          >
-            Connect with{' '}
-            <span
-              style={{
-                background: 'linear-gradient(135deg, #4ADE9A 0%, #38BDF8 60%, #F2A93B 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
-              Kishor Gogoi.
-            </span>
-          </h2>
-          <p
-            style={{
-              fontFamily: 'var(--font-sans)',
-              fontSize: '0.98rem',
-              color: 'var(--color-text-muted)',
-              marginTop: '0.8rem',
-              maxWidth: '560px',
-              margin: '0.8rem auto 0',
-              lineHeight: 1.6,
-            }}
-          >
-            Interactive 3D ID Badge hanging on a dynamic woven lanyard band. Move your mouse to swing the badge, or tap to flip.
-          </p>
-        </motion.div>
+          }
+          title="Let's Connect"
+          description="Open for QA engineering roles, test automation initiatives, and full-stack collaborations. Let's discuss how I can help strengthen your software delivery."
+          style={{ marginBottom: '2.5rem' }}
+        />
 
         {/* ─── Seamless 3D ID Badge & Moving Lanyard Band (Unboxed & Borderless) ─── */}
         <div
