@@ -154,8 +154,8 @@ function BookModel({
   const frontMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        roughness: 0.85,
-        metalness: 0.08,
+        roughness: 1.0,
+        metalness: 0.0,
         side: THREE.FrontSide,
       }),
     []
@@ -164,8 +164,8 @@ function BookModel({
   const backMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        roughness: 0.85,
-        metalness: 0.08,
+        roughness: 1.0,
+        metalness: 0.0,
         side: THREE.BackSide,
       }),
     []
@@ -174,8 +174,8 @@ function BookModel({
   const leftBaseMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        roughness: 0.88,
-        metalness: 0.05,
+        roughness: 1.0,
+        metalness: 0.0,
       }),
     []
   )
@@ -183,8 +183,8 @@ function BookModel({
   const rightBaseMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        roughness: 0.88,
-        metalness: 0.05,
+        roughness: 1.0,
+        metalness: 0.0,
       }),
     []
   )
@@ -192,10 +192,10 @@ function BookModel({
   // Adjust camera distance for mobile / desktop
   useEffect(() => {
     if (isMobile) {
-      camera.position.set(0, -0.15, 9.6)
-      camera.fov = 38
+      camera.position.set(0, -0.05, 8.4)
+      camera.fov = 36
     } else {
-      camera.position.set(0, -0.15, 7.8)
+      camera.position.set(0, -0.05, 6.7)
       camera.fov = 34
     }
     camera.lookAt(0, 0, 0)
@@ -356,21 +356,18 @@ export default function CertBookCanvas({
   return (
     <div className="cert-3d-canvas-wrapper" style={{ width: '100%', height: '100%' }}>
       <Canvas
-        camera={{ position: [0, -0.15, 7.8], fov: 34 }}
+        camera={{ position: [0, -0.05, 6.7], fov: 34 }}
         dpr={[1, 2]}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       >
-        {/* Cinematic Ambient lighting */}
-        <ambientLight intensity={1.1} color="#F1F5F9" />
+        {/* Soft, even ambient lighting */}
+        <ambientLight intensity={0.9} color="#FFFFFF" />
 
-        {/* Directional Key Light casting specular highlights across paper bend */}
-        <directionalLight position={[4, 7, 5]} intensity={1.5} color="#FFFFFF" castShadow />
+        {/* Directional Key Light with controlled intensity to eliminate glare */}
+        <directionalLight position={[2, 6, 5]} intensity={0.65} color="#FFFFFF" castShadow />
 
-        {/* Warm Side Light for parchment glow */}
-        <pointLight position={[-3.5, 2, 4]} intensity={0.7} color="#FFF5EB" />
-
-        {/* Central Gutter / Spine Accent Glow */}
-        <pointLight position={[0, 0, 2.2]} intensity={0.4} color="#38BDF8" />
+        {/* Soft fill point light */}
+        <pointLight position={[0, 0, 2.5]} intensity={0.25} color="#E2E8F0" />
 
         {/* 3D Book Experience */}
         <BookModel
