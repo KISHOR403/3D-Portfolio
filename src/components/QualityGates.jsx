@@ -1,98 +1,81 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useCallback, useMemo } from 'react'
 import { createPortal } from 'react-dom'
 import SectionHeader from './SectionHeader'
 
-const LOG_DATA = [
+/* ─────────────────────────────────────────────
+   CERTIFICATION DATA
+   ───────────────────────────────────────────── */
+const CERTIFICATIONS = [
   {
-    pass: '[PASS]',
-    parts: {
-      name: '  SAP Certified Project Manager – SAP Activate & Agile ',
-      dots: '........ ',
-      issuer: 'SAP        ',
-      year: '2026'
-    },
-    pdf: '/certificates/sap-project-manager.pdf'
+    title: 'SAP Certified Project Manager – SAP Activate & Agile',
+    issuer: 'SAP',
+    year: '2026',
+    pdf: '/certificates/sap-project-manager.pdf',
   },
   {
-    pass: '[PASS]',
-    parts: {
-      name: '  Oracle Cloud Infrastructure 2025 Certified DevOps Prof ',
-      dots: '....... ',
-      issuer: 'Oracle     ',
-      year: '2025'
-    },
-    pdf: '/certificates/oracle-devops-professional.pdf'
+    title: 'Oracle Cloud Infrastructure 2025 Certified DevOps Professional',
+    issuer: 'Oracle',
+    year: '2025',
+    pdf: '/certificates/oracle-devops-professional.pdf',
   },
   {
-    pass: '[PASS]',
-    parts: {
-      name: '  Oracle Cloud Infrastructure 2025 AI Foundations Associate ',
-      dots: '.... ',
-      issuer: 'Oracle     ',
-      year: '2025'
-    },
-    pdf: '/certificates/oracle-ai-foundations.pdf'
+    title: 'Oracle Cloud Infrastructure 2025 AI Foundations Associate',
+    issuer: 'Oracle',
+    year: '2025',
+    pdf: '/certificates/oracle-ai-foundations.pdf',
   },
   {
-    pass: '[PASS]',
-    parts: {
-      name: '  Oracle Data Platform 2025 Certified Foundations Associate ',
-      dots: '.... ',
-      issuer: 'Oracle     ',
-      year: '2025'
-    },
-    pdf: '/certificates/oracle-data-platform.pdf'
+    title: 'Oracle Data Platform 2025 Certified Foundations Associate',
+    issuer: 'Oracle',
+    year: '2025',
+    pdf: '/certificates/oracle-data-platform.pdf',
   },
   {
-    pass: '[PASS]',
-    parts: {
-      name: '  Software Testing and Automation Specialization ',
-      dots: '............... ',
-      issuer: 'Coursera   ',
-      year: '2025'
-    }
+    title: 'Software Testing and Automation Specialization',
+    issuer: 'Coursera',
+    year: '2025',
+    pdf: null,
   },
   {
-    pass: '[PASS]',
-    parts: {
-      name: '  Web and Mobile Testing with Selenium ',
-      dots: '......................... ',
-      issuer: 'Coursera   ',
-      year: '2025'
-    }
+    title: 'Web and Mobile Testing with Selenium',
+    issuer: 'Coursera',
+    year: '2025',
+    pdf: null,
   },
   {
-    pass: '[PASS]',
-    parts: {
-      name: '  IBM DevOps and Software Engineering ',
-      dots: '.......................... ',
-      issuer: 'IBM        ',
-      year: '2025'
-    },
-    pdf: '/certificates/ibm-devops-engineering.pdf'
+    title: 'IBM DevOps and Software Engineering',
+    issuer: 'IBM',
+    year: '2025',
+    pdf: '/certificates/ibm-devops-engineering.pdf',
   },
   {
-    pass: '[PASS]',
-    parts: {
-      name: '  Claude 101 — Certificate of Completion ',
-      dots: '....................... ',
-      issuer: 'Anthropic  ',
-      year: '2025'
-    },
-    pdf: '/certificates/anthropic-claude-101.pdf'
+    title: 'Claude 101 — Certificate of Completion',
+    issuer: 'Anthropic',
+    year: '2025',
+    pdf: '/certificates/anthropic-claude-101.pdf',
   },
   {
-    pass: '[PASS]',
-    parts: {
-      name: '  Claude Code 101 — Certificate of Completion ',
-      dots: '................. ',
-      issuer: 'Anthropic  ',
-      year: '2026'
-    },
-    pdf: '/certificates/anthropic-claude-code-101.pdf'
-  }
+    title: 'Claude Code 101 — Certificate of Completion',
+    issuer: 'Anthropic',
+    year: '2026',
+    pdf: '/certificates/anthropic-claude-code-101.pdf',
+  },
 ]
 
+/* ─────────────────────────────────────────────
+   ISSUER ACCENT COLOURS (muted, editorial)
+   ───────────────────────────────────────────── */
+const ISSUER_ACCENT = {
+  SAP: '#496EA5',
+  Oracle: '#C74634',
+  Coursera: '#0056D2',
+  IBM: '#3D5A80',
+  Anthropic: '#D4A15E',
+}
+
+/* ─────────────────────────────────────────────
+   CERTIFICATE PDF MODAL (unchanged from prior)
+   ───────────────────────────────────────────── */
 function CertificateModal({ isOpen, onClose, pdfUrl, certName, certIssuer, certYear }) {
   const [isMobile, setIsMobile] = useState(false)
 
@@ -110,271 +93,48 @@ function CertificateModal({ isOpen, onClose, pdfUrl, certName, certIssuer, certY
     } else {
       document.body.style.overflow = 'unset'
     }
-    return () => {
-      document.body.style.overflow = 'unset'
-    }
+    return () => { document.body.style.overflow = 'unset' }
   }, [isOpen])
 
   if (!isOpen) return null
 
-  // MOBILE DEVICE OPTIMIZED LAYOUT
   if (isMobile) {
     return createPortal(
-      <div
-        style={{
-          position: 'fixed',
-          inset: 0,
-          backgroundColor: 'rgba(13, 17, 23, 0.9)',
-          backdropFilter: 'blur(10px)',
-          zIndex: 9999,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '1.25rem',
-        }}
-        onClick={onClose}
-      >
+      <div className="cert-modal-overlay" onClick={onClose}>
         <div
           role="dialog"
           aria-modal="true"
           aria-label={`Certificate Details — ${certName}`}
-          style={{
-            width: '100%',
-            maxWidth: '380px',
-            backgroundColor: '#0D1117',
-            border: '1px solid #232C35',
-            borderRadius: '16px',
-            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.6)',
-            padding: '1.75rem',
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1rem',
-          }}
+          className="cert-modal-mobile"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Top Close Icon Button */}
-          <button
-            onClick={onClose}
-            aria-label="Close modal"
-            style={{
-              position: 'absolute',
-              top: '12px',
-              right: '12px',
-              width: '36px',
-              height: '36px',
-              borderRadius: '50%',
-              backgroundColor: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              color: 'var(--color-text-muted)',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '1.25rem',
-              transition: 'all 0.2s',
-            }}
-          >
-            &times;
-          </button>
-
-          {/* Issuer Tag */}
-          <div style={{ display: 'flex', marginTop: '0.5rem' }}>
-            <span
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.7rem',
-                fontWeight: 'bold',
-                textTransform: 'uppercase',
-                color: 'var(--color-accent-pass)',
-                backgroundColor: 'rgba(74, 222, 154, 0.1)',
-                padding: '4px 10px',
-                borderRadius: '4px',
-                letterSpacing: '0.05em',
-              }}
-            >
-              {certIssuer}
-            </span>
+          <button onClick={onClose} aria-label="Close modal" className="cert-modal-close-btn">&times;</button>
+          <div className="cert-modal-issuer-tag" style={{ color: ISSUER_ACCENT[certIssuer] || '#9EABB8' }}>
+            {certIssuer}
           </div>
-
-          {/* Certificate Name */}
-          <h3
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '1.2rem',
-              fontWeight: 600,
-              color: 'var(--color-text-primary)',
-              lineHeight: 1.4,
-              margin: 0,
-              wordWrap: 'break-word',
-            }}
-          >
-            {certName}
-          </h3>
-
-          {/* Details list */}
-          <div
-            style={{
-              borderTop: '1px solid rgba(35, 44, 53, 0.5)',
-              borderBottom: '1px solid rgba(35, 44, 53, 0.5)',
-              padding: '0.75rem 0',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '0.5rem',
-              fontSize: '0.85rem',
-              fontFamily: 'var(--font-mono)',
-              color: 'var(--color-text-muted)',
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span>ISSUER</span>
-              <span style={{ color: 'var(--color-text-primary)' }}>{certIssuer}</span>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span>YEAR</span>
-              <span style={{ color: 'var(--color-accent-pending)' }}>{certYear}</span>
-            </div>
+          <h3 className="cert-modal-title">{certName}</h3>
+          <div className="cert-modal-details">
+            <div className="cert-modal-row"><span>ISSUER</span><span style={{ color: '#E8EAED' }}>{certIssuer}</span></div>
+            <div className="cert-modal-row"><span>YEAR</span><span style={{ color: '#F2A93B' }}>{certYear}</span></div>
           </div>
-
-          {/* Primary View PDF Button */}
-          <a
-            href={pdfUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={onClose}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '100%',
-              padding: '12px 20px',
-              backgroundColor: 'var(--color-accent-pass)',
-              color: '#0D1117',
-              fontWeight: 'bold',
-              fontFamily: 'var(--font-display)',
-              fontSize: '0.9rem',
-              textDecoration: 'none',
-              borderRadius: '8px',
-              boxShadow: '0 4px 15px rgba(74, 222, 154, 0.3)',
-              textAlign: 'center',
-              transition: 'transform 0.2s',
-            }}
-          >
+          <a href={pdfUrl} target="_blank" rel="noopener noreferrer" onClick={onClose} className="cert-modal-open-btn">
             Open Document (PDF)
           </a>
-
-          {/* Secondary Close Button */}
-          <button
-            onClick={onClose}
-            style={{
-              width: '100%',
-              padding: '10px 20px',
-              backgroundColor: 'transparent',
-              border: '1px solid #232C35',
-              color: 'var(--color-text-muted)',
-              fontSize: '0.85rem',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.borderColor = 'rgba(255,255,255,0.2)'
-              e.target.style.color = '#FFFFFF'
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.borderColor = '#232C35'
-              e.target.style.color = 'var(--color-text-muted)'
-            }}
-          >
-            Close
-          </button>
+          <button onClick={onClose} className="cert-modal-secondary-btn">Close</button>
         </div>
       </div>,
       document.body
     )
   }
 
-  // DESKTOP LAYOUT (WITH EMBEDDED IFRAME VIEWER)
   return createPortal(
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        backgroundColor: 'rgba(13, 17, 23, 0.85)',
-        backdropFilter: 'blur(8px)',
-        zIndex: 9999,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '1.5rem',
-      }}
-      onClick={onClose}
-    >
-      <div
-        style={{
-          width: 'min(95vw, 900px)',
-          height: 'min(90vh, 700px)',
-          backgroundColor: '#0D1117',
-          border: '1px solid #232C35',
-          borderRadius: '12px',
-          display: 'flex',
-          flexDirection: 'column',
-          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.5)',
-          overflow: 'hidden',
-          position: 'relative',
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: '1rem 1.5rem',
-            borderBottom: '1px solid #232C35',
-            backgroundColor: 'rgba(35, 44, 53, 0.2)',
-          }}
-        >
-          <h3
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '1rem',
-              fontWeight: 500,
-              color: 'var(--color-text-primary)',
-              margin: 0,
-              maxWidth: '85%',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {certName}
-          </h3>
-          <button
-            onClick={onClose}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--color-text-muted)',
-              cursor: 'pointer',
-              fontSize: '1.75rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '4px',
-              transition: 'color 0.2s',
-              lineHeight: 1,
-            }}
-            onMouseEnter={(e) => (e.target.style.color = '#FFFFFF')}
-            onMouseLeave={(e) => (e.target.style.color = 'var(--color-text-muted)')}
-          >
-            &times;
-          </button>
+    <div className="cert-modal-overlay" onClick={onClose}>
+      <div className="cert-modal-desktop" onClick={(e) => e.stopPropagation()}>
+        <div className="cert-modal-desktop-header">
+          <h3>{certName}</h3>
+          <button onClick={onClose} aria-label="Close modal">&times;</button>
         </div>
-
-        {/* Content - Embed PDF */}
-        <div style={{ flex: 1, minHeight: 0, backgroundColor: '#161D24', position: 'relative' }}>
+        <div className="cert-modal-desktop-body">
           <iframe
             src={`${pdfUrl}#toolbar=0&navpanes=0`}
             width="100%"
@@ -389,492 +149,347 @@ function CertificateModal({ isOpen, onClose, pdfUrl, certName, certIssuer, certY
   )
 }
 
+/* ─────────────────────────────────────────────
+   BOOK PAGE COMPONENT
+   ───────────────────────────────────────────── */
+function BookPage({ cert, pageIndex, totalPages, isActive }) {
+  const accent = ISSUER_ACCENT[cert.issuer] || '#9EABB8'
+
+  return (
+    <div className="book-page-content" role="article" aria-label={`Credential ${pageIndex + 1} of ${totalPages}`}>
+      {/* Page number */}
+      <div className="book-page-number" aria-hidden="true">
+        {String(pageIndex + 1).padStart(2, '0')}
+      </div>
+
+      {/* Issuer badge */}
+      <div className="book-page-issuer" style={{ borderColor: accent }}>
+        <span className="book-page-issuer-text" style={{ color: accent }}>{cert.issuer}</span>
+        <span className="book-page-issuer-year">{cert.year}</span>
+      </div>
+
+      {/* Certificate title */}
+      <h3 className="book-page-title">{cert.title}</h3>
+
+      {/* Decorative divider */}
+      <div className="book-page-divider" aria-hidden="true">
+        <div className="book-page-divider-line" />
+        <div className="book-page-divider-diamond" />
+        <div className="book-page-divider-line" />
+      </div>
+
+      {/* Credential details block */}
+      <div className="book-page-details">
+        <div className="book-page-detail-row">
+          <span className="book-page-detail-label">Issuing Authority</span>
+          <span className="book-page-detail-value">{cert.issuer}</span>
+        </div>
+        <div className="book-page-detail-row">
+          <span className="book-page-detail-label">Date Conferred</span>
+          <span className="book-page-detail-value">{cert.year}</span>
+        </div>
+        <div className="book-page-detail-row">
+          <span className="book-page-detail-label">Document</span>
+          <span className="book-page-detail-value">{cert.pdf ? 'Verified PDF' : 'Digital Credential'}</span>
+        </div>
+      </div>
+
+      {/* Footer with view link */}
+      <div className="book-page-footer">
+        {cert.pdf && (
+          <span className="book-page-view-link" tabIndex={isActive ? 0 : -1}>
+            View credential →
+          </span>
+        )}
+      </div>
+    </div>
+  )
+}
+
+/* ─────────────────────────────────────────────
+   MAIN COMPONENT
+   ───────────────────────────────────────────── */
 export default function QualityGates() {
   const sectionRef = useRef(null)
+  const stageRef = useRef(null)
+  const scrollContainerRef = useRef(null)
+  const totalPages = CERTIFICATIONS.length
 
+  const [currentPage, setCurrentPage] = useState(0)
+  const [turnProgress, setTurnProgress] = useState(0) // 0–1 progress of current page turn
+  const [prefersReduced, setPrefersReduced] = useState(false)
+
+  // Modal state
   const [activePdf, setActivePdf] = useState(null)
   const [activeName, setActiveName] = useState(null)
   const [activeIssuer, setActiveIssuer] = useState(null)
   const [activeYear, setActiveYear] = useState(null)
 
-  const [linesState, setLinesState] = useState(() => {
-    const initialCompleted = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    return {
-      isStarted: initialCompleted,
-      isCompleted: initialCompleted,
-      currentLineIndex: initialCompleted ? LOG_DATA.length : 0,
-      charCount: initialCompleted ? 999 : 0,
-      phase: initialCompleted ? 'complete' : 'typing_pass',
-      summaryTypedLength: initialCompleted ? 999 : 0,
-    }
-  })
-
+  // Detect reduced motion
   useEffect(() => {
-    const element = sectionRef.current
-    if (!element) return
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setPrefersReduced(mq.matches)
+    const handler = (e) => setPrefersReduced(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
 
-    if (linesState.isStarted) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setLinesState(prev => {
-            if (prev.isStarted) return prev
-            return { ...prev, isStarted: true }
-          })
-          observer.unobserve(element)
-        }
-      },
-      { threshold: 0.1 }
-    )
-
-    observer.observe(element)
-    return () => {
-      if (element) observer.unobserve(element)
-    }
-  }, [linesState.isStarted])
-
+  // Scroll-driven page turn logic
   useEffect(() => {
-    if (!linesState.isStarted || linesState.isCompleted) return
+    const section = scrollContainerRef.current
+    if (!section) return
 
-    let timer
+    const handleScroll = () => {
+      const rect = section.getBoundingClientRect()
+      const sectionHeight = section.offsetHeight
+      const viewportH = window.innerHeight
 
-    const tick = () => {
-      setLinesState(prev => {
-        if (prev.phase === 'typing_pass') {
-          const line = LOG_DATA[prev.currentLineIndex]
-          const currentPassLength = prev.charCount
-          if (currentPassLength < line.pass.length) {
-            return {
-              ...prev,
-              charCount: currentPassLength + 1
-            }
-          } else {
-            return {
-              ...prev,
-              phase: 'pulse_pass'
-            }
-          }
-        }
+      // How far into the scroll container we are
+      const scrolled = -rect.top
+      const scrollableDistance = sectionHeight - viewportH
 
-        if (prev.phase === 'pulse_pass') {
-          return prev
-        }
+      if (scrollableDistance <= 0) return
 
-        if (prev.phase === 'typing_rest') {
-          const line = LOG_DATA[prev.currentLineIndex]
-          const fullRestLength =
-            line.parts.name.length +
-            line.parts.dots.length +
-            line.parts.issuer.length +
-            line.parts.year.length
+      const rawProgress = scrolled / scrollableDistance
+      const clampedProgress = Math.max(0, Math.min(1, rawProgress))
 
-          const currentRestLength = prev.charCount
-          if (currentRestLength < fullRestLength) {
-            return {
-              ...prev,
-              charCount: currentRestLength + 1
-            }
-          } else {
-            if (prev.currentLineIndex < LOG_DATA.length - 1) {
-              return {
-                ...prev,
-                phase: 'pause_between_lines',
-                charCount: 0
-              }
-            } else {
-              return {
-                ...prev,
-                phase: 'typing_summary',
-                charCount: 0
-              }
-            }
-          }
-        }
+      // Map progress to pages
+      const totalTurns = totalPages - 1
+      const progressPerPage = 1 / totalTurns
+      const pageFloat = clampedProgress / progressPerPage
+      const pageIdx = Math.min(Math.floor(pageFloat), totalTurns - 1)
+      const pageFrac = pageFloat - pageIdx
 
-        if (prev.phase === 'typing_summary') {
-          const summaryText = `  > ${LOG_DATA.length} tests passed, 0 failed — Build Successful ✓`
-          if (prev.summaryTypedLength < summaryText.length) {
-            return {
-              ...prev,
-              summaryTypedLength: prev.summaryTypedLength + 1
-            }
-          } else {
-            return {
-              ...prev,
-              isCompleted: true,
-              currentLineIndex: LOG_DATA.length
-            }
-          }
-        }
-
-        return prev
-      })
-    }
-
-    let intervalMs = 20
-    if (linesState.phase === 'pulse_pass') {
-      intervalMs = 200
-      timer = setTimeout(() => {
-        setLinesState(prev => ({ ...prev, phase: 'typing_rest', charCount: 0 }))
-      }, intervalMs)
-    } else if (linesState.phase === 'pause_between_lines') {
-      intervalMs = 150
-      timer = setTimeout(() => {
-        setLinesState(prev => ({
-          ...prev,
-          currentLineIndex: prev.currentLineIndex + 1,
-          phase: 'typing_pass',
-          charCount: 0
-        }))
-      }, intervalMs)
-    } else {
-      timer = setInterval(tick, intervalMs)
-    }
-
-    return () => {
-      clearInterval(timer)
-      clearTimeout(timer)
-    }
-  }, [linesState.isStarted, linesState.isCompleted, linesState.phase, linesState.currentLineIndex])
-
-  const handleOpenCertificate = (pdf, name, issuer, year) => {
-    if (pdf) {
-      setActivePdf(pdf)
-      setActiveName(name)
-      setActiveIssuer(issuer.trim())
-      setActiveYear(year.trim())
-    }
-  }
-
-  const renderLineContent = (index) => {
-    const line = LOG_DATA[index]
-    const isCurrent = linesState.currentLineIndex === index
-    const isPast = linesState.currentLineIndex > index
-
-    if (!linesState.isStarted) return null
-
-    let passText = ''
-    let restLength = 0
-    let showCursor = false
-    let isPulse = false
-
-    if (isPast) {
-      passText = line.pass
-      restLength =
-        line.parts.name.length +
-        line.parts.dots.length +
-        line.parts.issuer.length +
-        line.parts.year.length
-    } else if (isCurrent) {
-      if (linesState.phase === 'typing_pass') {
-        passText = line.pass.substring(0, linesState.charCount)
-        showCursor = true
-      } else if (linesState.phase === 'pulse_pass') {
-        passText = line.pass
-        isPulse = true
-        showCursor = true
-      } else if (linesState.phase === 'typing_rest') {
-        passText = line.pass
-        restLength = linesState.charCount
-        showCursor = true
-      } else if (linesState.phase === 'pause_between_lines') {
-        passText = line.pass
-        restLength =
-          line.parts.name.length +
-          line.parts.dots.length +
-          line.parts.issuer.length +
-          line.parts.year.length
+      if (clampedProgress >= 1) {
+        setCurrentPage(totalPages - 1)
+        setTurnProgress(0)
+      } else {
+        setCurrentPage(Math.max(0, pageIdx))
+        setTurnProgress(Math.max(0, Math.min(1, pageFrac)))
       }
-    } else {
-      return null
     }
 
-    let remaining = restLength
-    const getSegmentText = (text) => {
-      if (remaining <= 0) return ''
-      const sliceLen = Math.min(text.length, remaining)
-      remaining -= sliceLen
-      return text.substring(0, sliceLen)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [totalPages])
+
+  // Navigate via buttons
+  const goToPage = useCallback((targetPage) => {
+    const section = scrollContainerRef.current
+    if (!section) return
+    const clamped = Math.max(0, Math.min(totalPages - 1, targetPage))
+    const sectionTop = section.offsetTop
+    const sectionHeight = section.offsetHeight
+    const viewportH = window.innerHeight
+    const scrollableDistance = sectionHeight - viewportH
+    const totalTurns = totalPages - 1
+    const targetProgress = clamped / totalTurns
+    const targetScroll = sectionTop + (targetProgress * scrollableDistance)
+    window.scrollTo({ top: targetScroll, behavior: 'smooth' })
+  }, [totalPages])
+
+  const handlePrev = useCallback(() => goToPage(currentPage - 1), [currentPage, goToPage])
+  const handleNext = useCallback(() => goToPage(currentPage + 1), [currentPage, goToPage])
+
+  const handleViewCredential = useCallback((cert) => {
+    if (cert.pdf) {
+      setActivePdf(cert.pdf)
+      setActiveName(cert.title)
+      setActiveIssuer(cert.issuer)
+      setActiveYear(cert.year)
     }
+  }, [])
 
-    const nameTyped = getSegmentText(line.parts.name)
-    const dotsTyped = getSegmentText(line.parts.dots)
-    const issuerTyped = getSegmentText(line.parts.issuer)
-    const yearTyped = getSegmentText(line.parts.year)
+  // Keyboard navigation
+  useEffect(() => {
+    const handler = (e) => {
+      const stage = stageRef.current
+      if (!stage) return
+      const rect = stage.getBoundingClientRect()
+      const isVisible = rect.top >= -100 && rect.top <= window.innerHeight
+      if (!isVisible) return
 
-    const isFullyTyped =
-      restLength >=
-      line.parts.name.length +
-        line.parts.dots.length +
-        line.parts.issuer.length +
-        line.parts.year.length
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault()
+        goToPage(currentPage + 1)
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault()
+        goToPage(currentPage - 1)
+      }
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [currentPage, goToPage])
 
-    const cleanCertName = line.parts.name.trim()
+  // Build page layers for the 3D book
+  const pageElements = useMemo(() => {
+    return CERTIFICATIONS.map((cert, i) => {
+      const isCurrentPage = i === currentPage
+      const isPastPage = i < currentPage
+      const isNextPage = i === currentPage + 1
 
-    return (
-      <div
-        className="terminal-line"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          minHeight: '24px',
-          fontFamily: 'var(--font-mono)',
-          transition: 'background-color 0.15s ease',
-          padding: '2px 8px',
-          borderRadius: '4px',
-          cursor: line.pdf ? 'pointer' : 'default',
-          whiteSpace: 'pre',
-        }}
-        onClick={() => handleOpenCertificate(line.pdf, cleanCertName, line.parts.issuer, line.parts.year)}
-      >
-        <span
-          className="pass-tag"
+      let rotateY = 0
+      let zIndex = totalPages - i
+      let opacity = 1
+      let shadowIntensity = 0
+
+      if (isPastPage) {
+        rotateY = -180
+        zIndex = i
+        opacity = 0
+      } else if (isCurrentPage) {
+        if (prefersReduced) {
+          rotateY = 0
+        } else {
+          rotateY = -(turnProgress * 180)
+          shadowIntensity = Math.sin(turnProgress * Math.PI)
+        }
+        zIndex = totalPages + 1
+        opacity = turnProgress > 0.5 ? 0 : 1
+      } else if (isNextPage) {
+        zIndex = totalPages
+        opacity = turnProgress > 0.5 ? 1 : 1
+      }
+
+      const isActive = isCurrentPage && turnProgress < 0.5 || (isNextPage && turnProgress >= 0.5)
+
+      return (
+        <div
+          key={i}
+          className={`book-page-leaf ${isActive ? 'is-active' : ''}`}
           style={{
-            color: isPulse ? '#FFFFFF' : 'var(--color-accent-pass)',
-            fontWeight: 'bold',
-            textShadow: isPulse
-              ? '0 0 12px rgba(74, 222, 154, 1), 0 0 4px rgba(74, 222, 154, 1)'
-              : 'none',
-            transition: isPulse ? 'none' : 'color 0.15s ease, text-shadow 0.15s ease',
+            '--rotate-y': `${rotateY}deg`,
+            '--z-index': zIndex,
+            '--shadow-intensity': shadowIntensity,
+            opacity: isPastPage ? 0 : 1,
+            pointerEvents: isActive ? 'auto' : 'none',
           }}
+          onClick={() => isActive && handleViewCredential(cert)}
         >
-          {passText}
-        </span>
+          {/* Front face */}
+          <div className="book-page-face book-page-front">
+            <BookPage
+              cert={cert}
+              pageIndex={i}
+              totalPages={totalPages}
+              isActive={isActive}
+            />
+          </div>
+          {/* Back face */}
+          <div className="book-page-face book-page-back">
+            <div className="book-page-back-pattern" aria-hidden="true">
+              <div className="book-page-back-lines" />
+            </div>
+          </div>
+        </div>
+      )
+    })
+  }, [currentPage, turnProgress, totalPages, prefersReduced, handleViewCredential])
 
-        <span style={{ color: 'var(--color-text-primary)' }}>{nameTyped}</span>
-        <span style={{ color: '#8B97A3' }}>{dotsTyped}</span>
-        <span
-          style={{
-            color: 'color-mix(in srgb, #8B97A3 85%, var(--color-text-primary))',
-          }}
-        >
-          {issuerTyped}
-        </span>
-        <span style={{ color: 'var(--color-accent-pending)' }}>{yearTyped}</span>
+  // Scroll height = enough for all page turns + viewport padding
+  const scrollHeight = `${100 + (totalPages - 1) * 100}vh`
 
-        {line.pdf && isFullyTyped && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              handleOpenCertificate(line.pdf, cleanCertName, line.parts.issuer, line.parts.year)
-            }}
-            style={{
-              color: 'var(--color-accent-pass)',
-              marginLeft: '12px',
-              textDecoration: 'none',
-              fontSize: '0.7rem',
-              opacity: 0.5,
-              transition: 'opacity 0.2s',
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              padding: 0,
-              fontFamily: 'var(--font-mono)',
-            }}
-            className="view-link"
-          >
-            [VIEW]
-          </button>
-        )}
-
-        {showCursor && (
-          <span
-            style={{
-              animation: 'blink 1s step-start infinite',
-              color: 'var(--color-accent-pass)',
-              marginLeft: '2px',
-            }}
-          >
-            ▋
-          </span>
-        )}
-      </div>
-    )
-  }
-
-  const renderSummary = () => {
-    const isCurrent = linesState.currentLineIndex === LOG_DATA.length
-    const isCompleted = linesState.isCompleted
-
-    if (!linesState.isStarted) return null
-    if (!isCurrent && !isCompleted) return null
-
-    const summaryText1 = `  > ${LOG_DATA.length} tests passed, 0 failed`
-    const summaryText2 = ' — Build Successful ✓'
-
-    const currentLen = linesState.summaryTypedLength
-    const t1 = summaryText1.substring(0, currentLen)
-    const t2 =
-      currentLen > summaryText1.length
-        ? summaryText2.substring(0, currentLen - summaryText1.length)
-        : ''
-
-    const isFullyTyped = currentLen >= summaryText1.length + summaryText2.length
-
-    return (
-      <div
-        style={{
-          fontFamily: 'var(--font-mono)',
-          padding: '8px 8px 2px 8px',
-          borderTop: '1px solid rgba(35, 44, 53, 0.4)',
-          marginTop: '8px',
-          minHeight: '24px',
-        }}
-      >
-        <span style={{ color: 'var(--color-text-muted)' }}>{t1}</span>
-        <span style={{ color: 'var(--color-accent-pass)', fontWeight: 'bold' }}>
-          {t2}
-        </span>
-        {!isFullyTyped && (
-          <span
-            style={{
-              animation: 'blink 1s step-start infinite',
-              color: 'var(--color-accent-pass)',
-              marginLeft: '2px',
-            }}
-          >
-            ▋
-          </span>
-        )}
-      </div>
-    )
-  }
+  // Current active cert for the View link
+  const activeCert = CERTIFICATIONS[
+    turnProgress >= 0.5 && currentPage + 1 < totalPages
+      ? currentPage + 1
+      : currentPage
+  ]
 
   return (
-    <section
-      id="quality-gates"
-      ref={sectionRef}
-      style={{
-        background: 'rgba(22, 29, 36, 0.75)',
-        backdropFilter: 'blur(10px)',
-      }}
-    >
-      <style>{`
-        .terminal-line:hover {
-          background-color: rgba(74, 222, 154, 0.06) !important;
-        }
-        .terminal-line:hover .pass-tag {
-          color: #a7ffd1 !important;
-          text-shadow: 0 0 8px rgba(74, 222, 154, 0.5);
-        }
-        .terminal-line:hover .view-link {
-          opacity: 1 !important;
-        }
-        .terminal-body-text {
-          font-size: 13.5px;
-        }
-        @media (max-width: 768px) {
-          .terminal-body-text {
-            font-size: 11.5px;
-          }
-        }
-      `}</style>
-
+    <section id="quality-gates" ref={sectionRef} className="cert-book-section">
       <div className="section-container">
         <SectionHeader
           number="06"
           category="CERTIFICATIONS"
           title="Certifications & Credentials"
-          description="Verified credentials and professional certifications validating automated testing and software engineering mastery."
-          style={{ marginBottom: '2.25rem' }}
+          description="A curated collection of professional certifications — scroll to browse each credential."
+          style={{ marginBottom: '1.5rem' }}
         />
+      </div>
 
-        {/* Terminal Window Frame */}
-        <div
-          style={{
-            backgroundColor: '#0D1117',
-            backgroundImage:
-              'linear-gradient(rgba(255, 255, 255, 0.03) 50%, transparent 50%)',
-            backgroundSize: '100% 4px',
-            borderRadius: '10px',
-            border: '1px solid #232C35',
-            boxShadow:
-              'inset 0 4px 20px rgba(0, 0, 0, 0.5), 0 10px 30px rgba(0, 0, 0, 0.3)',
-            overflow: 'hidden',
-            width: '100%',
-          }}
-        >
-          {/* Terminal Title Bar */}
-          <div
-            style={{
-              height: '34px',
-              background: 'rgba(35, 44, 53, 0.4)',
-              borderBottom: '1px solid #232C35',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '0 0.85rem',
-              gap: '8px',
-            }}
-          >
-            {/* macOS window control buttons */}
-            <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
-              <span
-                style={{
-                  width: '10px',
-                  height: '10px',
-                  borderRadius: '50%',
-                  backgroundColor: '#E8615C',
-                }}
-              />
-              <span
-                style={{
-                  width: '10px',
-                  height: '10px',
-                  borderRadius: '50%',
-                  backgroundColor: '#F2A93B',
-                }}
-              />
-              <span
-                style={{
-                  width: '10px',
-                  height: '10px',
-                  borderRadius: '50%',
-                  backgroundColor: '#4ADE9A',
-                }}
-              />
+      {/* Scroll-driven container */}
+      <div
+        ref={scrollContainerRef}
+        className="cert-book-scroll-container"
+        style={{ height: scrollHeight }}
+      >
+        {/* Sticky stage */}
+        <div ref={stageRef} className="cert-book-stage">
+          {/* Book wrapper */}
+          <div className="cert-book-wrapper">
+            {/* Book structure */}
+            <div className="cert-book">
+              {/* Spine */}
+              <div className="cert-book-spine" aria-hidden="true" />
+
+              {/* Page stack edges */}
+              <div className="cert-book-page-edges" aria-hidden="true">
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="cert-book-edge-line" style={{ '--edge-offset': `${i * 2}px` }} />
+                ))}
+              </div>
+
+              {/* Pages */}
+              <div className="cert-book-pages" aria-live="polite">
+                {pageElements}
+              </div>
             </div>
-            {/* Centered label */}
-            <div
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: 'clamp(0.65rem, 2vw, 0.75rem)',
-                color: 'var(--color-text-muted)',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                textAlign: 'center',
-                flex: 1,
-              }}
+          </div>
+
+          {/* Controls overlay */}
+          <div className="cert-book-controls">
+            <button
+              className="cert-book-nav-btn"
+              onClick={handlePrev}
+              disabled={currentPage === 0 && turnProgress === 0}
+              aria-label="Previous credential"
             >
-              kishor@qa-portfolio: ~ test-suite --certs
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+
+            <div className="cert-book-page-indicator" aria-label={`Page ${(turnProgress >= 0.5 ? currentPage + 2 : currentPage + 1)} of ${totalPages}`}>
+              <span className="cert-book-page-current">
+                {String(turnProgress >= 0.5 && currentPage + 1 < totalPages ? currentPage + 2 : currentPage + 1).padStart(2, '0')}
+              </span>
+              <span className="cert-book-page-sep">/</span>
+              <span className="cert-book-page-total">{String(totalPages).padStart(2, '0')}</span>
             </div>
-            <div style={{ width: '42px', flexShrink: 0 }} aria-hidden="true" />
+
+            <button
+              className="cert-book-nav-btn"
+              onClick={handleNext}
+              disabled={currentPage >= totalPages - 1}
+              aria-label="Next credential"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
           </div>
 
-          {/* Terminal Body */}
-          <div
-            className="terminal-body-text"
-            style={{
-              padding: '1.5rem',
-              overflowX: 'auto',
-              whiteSpace: 'nowrap',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '0.4rem',
-              lineHeight: 1.6,
-            }}
-          >
-            {LOG_DATA.map((_, i) => (
-              <div key={i}>{renderLineContent(i)}</div>
-            ))}
-            {renderSummary()}
-          </div>
+          {/* Scroll hint */}
+          {currentPage === 0 && turnProgress === 0 && (
+            <div className="cert-book-scroll-hint" aria-hidden="true">
+              <span>Scroll to browse</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+            </div>
+          )}
+
+          {/* Active credential quick-view link */}
+          {activeCert?.pdf && (
+            <button
+              className="cert-book-view-btn"
+              onClick={() => handleViewCredential(activeCert)}
+              aria-label={`View certificate: ${activeCert.title}`}
+            >
+              View credential
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Certificate Modal Popup */}
+      {/* Certificate Modal */}
       <CertificateModal
         isOpen={activePdf !== null}
         onClose={() => {

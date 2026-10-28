@@ -1335,3 +1335,729 @@
   color: #FFFFFF;
   border-color: rgba(255, 255, 255, 0.25);
 }
+
+/* ═══════════════════════════════════════════
+   CERTIFICATION BOOK — SCROLL-DRIVEN 3D
+   ═══════════════════════════════════════════ */
+.cert-book-section {
+  background: var(--color-bg-base, #0F1419);
+  position: relative;
+  z-index: 10;
+  overflow: visible;
+}
+
+.cert-book-scroll-container {
+  position: relative;
+  width: 100%;
+}
+
+.cert-book-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 clamp(1rem, 4vw, 4rem);
+  overflow: hidden;
+}
+
+/* Subtle radial vignette */
+.cert-book-stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 80% 70% at 50% 50%,
+    transparent 0%,
+    rgba(15, 20, 25, 0.65) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Book wrapper */
+.cert-book-wrapper {
+  position: relative;
+  z-index: 1;
+  perspective: 1800px;
+  width: 100%;
+  max-width: 580px;
+  aspect-ratio: 3 / 4;
+  max-height: 72vh;
+}
+
+/* The book itself */
+.cert-book {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+/* Spine */
+.cert-book-spine {
+  position: absolute;
+  left: -6px;
+  top: 2%;
+  bottom: 2%;
+  width: 12px;
+  background: linear-gradient(
+    90deg,
+    #1a1f26 0%,
+    #2a3038 40%,
+    #1e242c 60%,
+    #161b22 100%
+  );
+  border-radius: 3px 0 0 3px;
+  box-shadow:
+    inset 2px 0 6px rgba(0, 0, 0, 0.4),
+    -2px 0 8px rgba(0, 0, 0, 0.3);
+  z-index: 0;
+}
+
+/* Stacked page edges */
+.cert-book-page-edges {
+  position: absolute;
+  right: -6px;
+  top: 3%;
+  bottom: 3%;
+  width: 10px;
+  z-index: 0;
+}
+
+.cert-book-edge-line {
+  position: absolute;
+  right: var(--edge-offset, 0px);
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(200, 195, 185, 0.2) 10%,
+    rgba(200, 195, 185, 0.12) 50%,
+    rgba(200, 195, 185, 0.2) 90%,
+    transparent 100%
+  );
+}
+
+/* Pages container */
+.cert-book-pages {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+/* Individual page leaf */
+.cert-book-page-leaf {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  transform: rotateY(var(--rotate-y, 0deg));
+  z-index: var(--z-index, 1);
+  transition: none;
+  will-change: transform;
+  cursor: pointer;
+}
+
+/* Reduced motion: simple crossfade instead of 3D */
+@media (prefers-reduced-motion: reduce) {
+  .cert-book-page-leaf {
+    transform: none !important;
+    transition: opacity 0.3s ease !important;
+  }
+  .cert-book-page-leaf:not(.is-active) {
+    opacity: 0 !important;
+  }
+  .cert-book-page-leaf.is-active {
+    opacity: 1 !important;
+  }
+}
+
+/* Page face */
+.cert-book-page-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 2px 6px 6px 2px;
+  overflow: hidden;
+}
+
+/* Front face — warm ivory page */
+.cert-book-page-front {
+  background: linear-gradient(
+    160deg,
+    #F8F6F1 0%,
+    #F2EFE8 40%,
+    #ECE8E0 100%
+  );
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    0 8px 24px rgba(0, 0, 0, calc(0.12 + var(--shadow-intensity, 0) * 0.15)),
+    inset -1px 0 0 rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Back face */
+.cert-book-page-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(
+    160deg,
+    #EDE9E1 0%,
+    #E5E1D8 100%
+  );
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.cert-book-page-back-pattern {
+  width: 100%;
+  height: 100%;
+  opacity: 0.3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cert-book-page-back-lines {
+  width: 60%;
+  height: 60%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 18px,
+    rgba(0, 0, 0, 0.05) 18px,
+    rgba(0, 0, 0, 0.05) 19px
+  );
+}
+
+/* ─── PAGE CONTENT TYPOGRAPHY ─── */
+.book-page-content {
+  padding: clamp(2rem, 5vw, 3.5rem);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+  color: #1a1a1a;
+  position: relative;
+}
+
+.book-page-number {
+  position: absolute;
+  top: clamp(1rem, 3vw, 2rem);
+  right: clamp(1.25rem, 3vw, 2.5rem);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #b0a89a;
+  letter-spacing: 0.08em;
+}
+
+.book-page-issuer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1.5px solid;
+  align-self: flex-start;
+}
+
+.book-page-issuer-text {
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 1vw, 0.8rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.book-page-issuer-year {
+  font-family: var(--font-mono);
+  font-size: clamp(0.68rem, 0.9vw, 0.76rem);
+  color: #8a8278;
+  letter-spacing: 0.06em;
+}
+
+.book-page-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 3vw, 2.1rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  color: #1a1a1a;
+  margin: 0;
+  max-width: 90%;
+}
+
+/* Decorative divider */
+.book-page-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0.25rem 0;
+}
+
+.book-page-divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.12) 0%,
+    rgba(0, 0, 0, 0.06) 100%
+  );
+}
+
+.book-page-divider-diamond {
+  width: 5px;
+  height: 5px;
+  background: #c4bdb2;
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+/* Credential details */
+.book-page-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.book-page-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  gap: 1rem;
+}
+
+.book-page-detail-row:last-child {
+  border-bottom: none;
+}
+
+.book-page-detail-label {
+  font-family: var(--font-mono);
+  font-size: clamp(0.65rem, 0.85vw, 0.74rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8a8278;
+  flex-shrink: 0;
+}
+
+.book-page-detail-value {
+  font-family: var(--font-sans);
+  font-size: clamp(0.82rem, 1vw, 0.92rem);
+  font-weight: 500;
+  color: #3a3632;
+  text-align: right;
+}
+
+/* Page footer */
+.book-page-footer {
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+.book-page-view-link {
+  font-family: var(--font-mono);
+  font-size: clamp(0.68rem, 0.85vw, 0.76rem);
+  color: #7a7168;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  text-decoration: none;
+}
+
+.book-page-view-link:hover {
+  color: #3a3632;
+}
+
+/* ─── BOOK CONTROLS ─── */
+.cert-book-controls {
+  position: absolute;
+  bottom: clamp(1.5rem, 4vh, 3rem);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  z-index: 10;
+}
+
+.cert-book-nav-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(22, 29, 36, 0.7);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.cert-book-nav-btn:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.cert-book-nav-btn:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.cert-book-nav-btn:focus-visible {
+  outline: 2px solid #38BDF8;
+  outline-offset: 2px;
+}
+
+.cert-book-page-indicator {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+}
+
+.cert-book-page-current {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.cert-book-page-sep {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.cert-book-page-total {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Scroll hint */
+.cert-book-scroll-hint {
+  position: absolute;
+  bottom: clamp(4.5rem, 8vh, 6.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  animation: cert-hint-pulse 2s ease-in-out infinite;
+  z-index: 5;
+}
+
+@keyframes cert-hint-pulse {
+  0%, 100% { opacity: 0.3; transform: translateX(-50%) translateY(0); }
+  50% { opacity: 0.6; transform: translateX(-50%) translateY(3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cert-book-scroll-hint {
+    animation: none;
+    opacity: 0.4;
+  }
+}
+
+/* View credential button */
+.cert-book-view-btn {
+  position: absolute;
+  top: clamp(1rem, 3vh, 2rem);
+  right: clamp(1.5rem, 4vw, 3rem);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(22, 29, 36, 0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.6);
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.cert-book-view-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.cert-book-view-btn:focus-visible {
+  outline: 2px solid #38BDF8;
+  outline-offset: 2px;
+}
+
+/* ─── RESPONSIVE: TABLET ─── */
+@media (max-width: 960px) {
+  .cert-book-wrapper {
+    max-width: 440px;
+    max-height: 65vh;
+  }
+
+  .cert-book-spine {
+    width: 8px;
+    left: -4px;
+  }
+}
+
+/* ─── RESPONSIVE: MOBILE ─── */
+@media (max-width: 640px) {
+  .cert-book-wrapper {
+    max-width: 92vw;
+    aspect-ratio: 2.8 / 4;
+    max-height: 60vh;
+  }
+
+  .cert-book-wrapper {
+    perspective: 1200px;
+  }
+
+  .cert-book-spine {
+    width: 6px;
+    left: -3px;
+  }
+
+  .cert-book-page-edges {
+    display: none;
+  }
+
+  .book-page-content {
+    padding: clamp(1.25rem, 4vw, 2rem);
+    gap: clamp(0.75rem, 2vw, 1.25rem);
+  }
+
+  .book-page-title {
+    font-size: clamp(1.1rem, 4.5vw, 1.5rem);
+    max-width: 100%;
+  }
+
+  .book-page-number {
+    top: 0.75rem;
+    right: 1rem;
+  }
+
+  .cert-book-controls {
+    bottom: 1.25rem;
+    gap: 1rem;
+  }
+
+  .cert-book-nav-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .cert-book-view-btn {
+    top: 0.75rem;
+    right: 1rem;
+    padding: 6px 10px;
+    font-size: 0.65rem;
+  }
+
+  .cert-book-scroll-hint {
+    bottom: 3.5rem;
+  }
+}
+
+/* ─── CERTIFICATE MODAL (shared) ─── */
+.cert-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(13, 17, 23, 0.88);
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.cert-modal-mobile {
+  width: 100%;
+  max-width: 380px;
+  background-color: #0D1117;
+  border: 1px solid #232C35;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  padding: 1.75rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cert-modal-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  transition: all 0.2s;
+}
+
+.cert-modal-close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+}
+
+.cert-modal-issuer-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 0.5rem;
+}
+
+.cert-modal-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+  margin: 0;
+  word-wrap: break-word;
+}
+
+.cert-modal-details {
+  border-top: 1px solid rgba(35, 44, 53, 0.5);
+  border-bottom: 1px solid rgba(35, 44, 53, 0.5);
+  padding: 0.75rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
+}
+
+.cert-modal-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cert-modal-open-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #FFFFFF;
+  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  text-decoration: none;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.cert-modal-open-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.cert-modal-secondary-btn {
+  width: 100%;
+  padding: 10px 20px;
+  background-color: transparent;
+  border: 1px solid #232C35;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cert-modal-secondary-btn:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+}
+
+.cert-modal-desktop {
+  width: min(95vw, 900px);
+  height: min(90vh, 700px);
+  background-color: #0D1117;
+  border: 1px solid #232C35;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  position: relative;
+}
+
+.cert-modal-desktop-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #232C35;
+  background: rgba(35, 44, 53, 0.2);
+}
+
+.cert-modal-desktop-header h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin: 0;
+  max-width: 85%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cert-modal-desktop-header button {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: color 0.2s;
+  line-height: 1;
+}
+
+.cert-modal-desktop-header button:hover {
+  color: #FFFFFF;
+}
+
+.cert-modal-desktop-body {
+  flex: 1;
+  min-height: 0;
+  background-color: #161D24;
+  position: relative;
+}
