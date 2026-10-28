@@ -184,9 +184,12 @@ export function createCertFrontTexture(cert, index, total) {
     hash: `KG-QA-${cert.year}-00${index + 1}`,
   }
 
-  // 1. Warm parchment base with crisp high-contrast border
+  // 1. Warm parchment base with circular rounded outer corners (not 90 degree)
+  ctx.beginPath()
+  ctx.roundRect(0, 0, W, H, [0, 56, 56, 0])
   ctx.fillStyle = '#FAF7F0'
-  ctx.fillRect(0, 0, W, H)
+  ctx.fill()
+  ctx.clip()
 
   // Subtle perimeter vignette for book page depth
   const grad = ctx.createLinearGradient(0, 0, W, 0)
@@ -197,15 +200,19 @@ export function createCertFrontTexture(cert, index, total) {
   ctx.fillStyle = grad
   ctx.fillRect(0, 0, W, H)
 
-  // 2. Bold structural frame
+  // 2. Bold structural frame with rounded outer corners
   const m = 56
   ctx.strokeStyle = '#2D3748'
   ctx.lineWidth = 3.5
-  ctx.strokeRect(m, m, W - m * 2, H - m * 2)
+  ctx.beginPath()
+  ctx.roundRect(m, m, W - m * 2, H - m * 2, [0, 40, 40, 0])
+  ctx.stroke()
 
   ctx.strokeStyle = '#CBD5E1'
   ctx.lineWidth = 1.5
-  ctx.strokeRect(m + 12, m + 12, W - (m + 12) * 2, H - (m + 12) * 2)
+  ctx.beginPath()
+  ctx.roundRect(m + 12, m + 12, W - (m + 12) * 2, H - (m + 12) * 2, [0, 28, 28, 0])
+  ctx.stroke()
 
   // 3. Header Bar: Record Number & Validation Year
   ctx.textAlign = 'left'
@@ -403,9 +410,12 @@ export function createCertVersoTexture(cert, index, total) {
     hash: `KG-QA-${cert.year}-00${index + 1}`,
   }
 
-  // 1. Warm ivory base
+  // 1. Warm ivory base with circular rounded outer corners (top-left and bottom-left)
+  ctx.beginPath()
+  ctx.roundRect(0, 0, W, H, [56, 0, 0, 56])
   ctx.fillStyle = '#F5F1E8'
-  ctx.fillRect(0, 0, W, H)
+  ctx.fill()
+  ctx.clip()
 
   // Gutter shadow along the right edge where page attaches to spine
   const gutterGrad = ctx.createLinearGradient(W - 80, 0, W, 0)
@@ -415,14 +425,18 @@ export function createCertVersoTexture(cert, index, total) {
   ctx.fillRect(W - 80, 0, 80, H)
 
   const m = 56
-  // Border
+  // Border with rounded outer corners
   ctx.strokeStyle = '#2D3748'
   ctx.lineWidth = 3.5
-  ctx.strokeRect(m, m, W - m * 2, H - m * 2)
+  ctx.beginPath()
+  ctx.roundRect(m, m, W - m * 2, H - m * 2, [40, 0, 0, 40])
+  ctx.stroke()
 
   ctx.strokeStyle = '#CBD5E1'
   ctx.lineWidth = 1.5
-  ctx.strokeRect(m + 12, m + 12, W - (m + 12) * 2, H - (m + 12) * 2)
+  ctx.beginPath()
+  ctx.roundRect(m + 12, m + 12, W - (m + 12) * 2, H - (m + 12) * 2, [28, 0, 0, 28])
+  ctx.stroke()
 
   // 2. Header
   ctx.textAlign = 'left'
@@ -586,8 +600,15 @@ export function createCoverTexture(type = 'front') {
   bgGrad.addColorStop(0, '#0F1319')
   bgGrad.addColorStop(0.5, '#141A23')
   bgGrad.addColorStop(1, '#0B0E14')
+  const corners = type === 'front' ? [56, 0, 0, 56] : [0, 56, 56, 0]
+  const borderCorners = type === 'front' ? [40, 0, 0, 40] : [0, 40, 40, 0]
+  const innerCorners = type === 'front' ? [28, 0, 0, 28] : [0, 28, 28, 0]
+
+  ctx.beginPath()
+  ctx.roundRect(0, 0, W, H, corners)
   ctx.fillStyle = bgGrad
-  ctx.fillRect(0, 0, W, H)
+  ctx.fill()
+  ctx.clip()
 
   // Geometric lattice
   ctx.strokeStyle = 'rgba(212, 175, 55, 0.08)'
@@ -600,14 +621,18 @@ export function createCoverTexture(type = 'front') {
   }
 
   const m = 56
-  // Outer gold rim
+  // Outer gold rim with rounded outer corners
   ctx.strokeStyle = '#D4AF37'
   ctx.lineWidth = 3.5
-  ctx.strokeRect(m, m, W - m * 2, H - m * 2)
+  ctx.beginPath()
+  ctx.roundRect(m, m, W - m * 2, H - m * 2, borderCorners)
+  ctx.stroke()
 
   ctx.strokeStyle = 'rgba(212, 175, 55, 0.3)'
   ctx.lineWidth = 1.5
-  ctx.strokeRect(m + 12, m + 12, W - (m + 12) * 2, H - (m + 12) * 2)
+  ctx.beginPath()
+  ctx.roundRect(m + 12, m + 12, W - (m + 12) * 2, H - (m + 12) * 2, innerCorners)
+  ctx.stroke()
 
   ctx.textAlign = 'center'
 

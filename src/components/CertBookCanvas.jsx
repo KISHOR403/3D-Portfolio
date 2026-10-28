@@ -1,5 +1,6 @@
 import { useRef, useEffect, useMemo, useState } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { RoundedBox } from '@react-three/drei'
 import * as THREE from 'three'
 import {
   createCertFrontTexture,
@@ -150,13 +151,15 @@ function BookModel({
     return g
   }, [])
 
-  // Materials
+  // Materials with alpha transparency for rounded paper corners
   const frontMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
         roughness: 1.0,
         metalness: 0.0,
         side: THREE.FrontSide,
+        transparent: true,
+        alphaTest: 0.5,
       }),
     []
   )
@@ -167,6 +170,8 @@ function BookModel({
         roughness: 1.0,
         metalness: 0.0,
         side: THREE.BackSide,
+        transparent: true,
+        alphaTest: 0.5,
       }),
     []
   )
@@ -176,6 +181,8 @@ function BookModel({
       new THREE.MeshStandardMaterial({
         roughness: 1.0,
         metalness: 0.0,
+        transparent: true,
+        alphaTest: 0.5,
       }),
     []
   )
@@ -185,6 +192,8 @@ function BookModel({
       new THREE.MeshStandardMaterial({
         roughness: 1.0,
         metalness: 0.0,
+        transparent: true,
+        alphaTest: 0.5,
       }),
     []
   )
@@ -269,17 +278,25 @@ function BookModel({
 
   return (
     <group rotation={[0.1, 0, 0]} onClick={handleClick} style={{ cursor: 'pointer' }}>
-      {/* ─── 1. HARDCOVER LEATHER BOARD ─── */}
-      <mesh position={[0, 0, -0.09]}>
-        <boxGeometry args={[PAGE_W * 2 + 0.38, PAGE_H + 0.36, 0.12]} />
-        <meshStandardMaterial color="#0E1217" roughness={0.7} metalness={0.2} />
-      </mesh>
+      {/* ─── 1. HARDCOVER LEATHER BOARD (ROUNDED CORNERS) ─── */}
+      <RoundedBox
+        args={[PAGE_W * 2 + 0.44, PAGE_H + 0.4, 0.14]}
+        radius={0.16}
+        smoothness={8}
+        position={[0, 0, -0.09]}
+      >
+        <meshStandardMaterial color="#0E1217" roughness={0.75} metalness={0.15} />
+      </RoundedBox>
 
-      {/* Gold embossed trim on cover edge */}
-      <mesh position={[0, 0, -0.025]}>
-        <boxGeometry args={[PAGE_W * 2 + 0.34, PAGE_H + 0.32, 0.005]} />
-        <meshStandardMaterial color="#C5A059" roughness={0.4} metalness={0.7} wireframe />
-      </mesh>
+      {/* Gold embossed trim on cover edge (rounded) */}
+      <RoundedBox
+        args={[PAGE_W * 2 + 0.36, PAGE_H + 0.34, 0.005]}
+        radius={0.14}
+        smoothness={6}
+        position={[0, 0, -0.015]}
+      >
+        <meshStandardMaterial color="#D4AF37" roughness={0.4} metalness={0.6} wireframe />
+      </RoundedBox>
 
       {/* ─── 2. CENTRAL SPINE HINGE ─── */}
       <mesh position={[0, 0, -0.01]} rotation={[0, 0, 0]}>
@@ -295,18 +312,26 @@ function BookModel({
         </mesh>
       ))}
 
-      {/* ─── 3. PAGE BLOCK (LAYERED PAPER EDGES) ─── */}
+      {/* ─── 3. PAGE BLOCK (LAYERED PAPER EDGES WITH ROUNDED CORNERS) ─── */}
       {/* Left paper block */}
-      <mesh position={[-PAGE_W * 0.5, 0, -0.035]}>
-        <boxGeometry args={[PAGE_W - 0.04, PAGE_H - 0.04, 0.06]} />
+      <RoundedBox
+        args={[PAGE_W - 0.04, PAGE_H - 0.04, 0.06]}
+        radius={0.08}
+        smoothness={4}
+        position={[-PAGE_W * 0.5, 0, -0.035]}
+      >
         <meshStandardMaterial color="#EAE4D8" roughness={0.9} metalness={0.05} />
-      </mesh>
+      </RoundedBox>
 
       {/* Right paper block */}
-      <mesh position={[PAGE_W * 0.5, 0, -0.035]}>
-        <boxGeometry args={[PAGE_W - 0.04, PAGE_H - 0.04, 0.06]} />
+      <RoundedBox
+        args={[PAGE_W - 0.04, PAGE_H - 0.04, 0.06]}
+        radius={0.08}
+        smoothness={4}
+        position={[PAGE_W * 0.5, 0, -0.035]}
+      >
         <meshStandardMaterial color="#EAE4D8" roughness={0.9} metalness={0.05} />
-      </mesh>
+      </RoundedBox>
 
       {/* ─── 4. LEFT BASE PAGE (FLAT RECTO/VERSO) ─── */}
       <mesh position={[-PAGE_W * 0.5, 0, 0.005]} material={leftBaseMat}>
