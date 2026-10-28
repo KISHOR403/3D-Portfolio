@@ -289,7 +289,7 @@ function HangingIDCard({ isFlipped, onToggleFlip, clipPosRef, onCardAction }) {
               <div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '7px', color: '#6A7885' }}>ID: KG-403-2026</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '7.5px', color: '#4ADE9A', fontWeight: 600 }}>
-                  Guwahati · IST Online
+                  Bangalore · IST Online
                 </div>
               </div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '7.5px', color: '#9EABB8' }}>

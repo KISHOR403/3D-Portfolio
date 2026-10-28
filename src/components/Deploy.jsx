@@ -113,7 +113,7 @@ export default function Deploy() {
               }}
               aria-hidden="true"
             >
-              <span>26.14°N 91.73°E</span>
+              <span>12.97°N 77.59°E</span>
               <span>—</span>
               <span>RELIABILITY &amp; AUTOMATION</span>
             </div>
@@ -153,7 +153,7 @@ export default function Deploy() {
               </div>
               <div className="swiss-spec-row" role="listitem">
                 <span className="swiss-spec-label">LOCATION</span>
-                <span className="swiss-spec-val">Guwahati, India · Remote &amp; Relocation</span>
+                <span className="swiss-spec-val">Bangalore, India · Remote &amp; Relocation</span>
               </div>
               <div className="swiss-spec-row" role="listitem">
                 <span className="swiss-spec-label">TIMEZONE</span>
@@ -238,7 +238,7 @@ export default function Deploy() {
 
           <div className="swiss-colophon-col">
             <span>LOCAL TIME — {currentTime ? `${currentTime} IST` : 'IST (UTC+5:30)'}</span>
-            <span>GUWAHATI, ASSAM, INDIA (26.14°N 91.73°E)</span>
+            <span>BANGALORE, KARNATAKA, INDIA (12.97°N 77.59°E)</span>
             <span>ALL QUALITY GATES OPERATIONAL</span>
           </div>
 
