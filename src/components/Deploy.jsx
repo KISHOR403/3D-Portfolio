@@ -1,37 +1,40 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import {
-  Mail, ArrowUpRight, Copy, CheckCheck,
-  Clock, MapPin, Sparkles, ChevronUp, Radio
-} from 'lucide-react'
-import Contact3DCanvas from './Contact3DCanvas'
-import SectionHeader from './SectionHeader'
+import { ArrowUpRight, Copy, Check, ChevronUp } from 'lucide-react'
+import profileImg from '../assets/profile.jpg'
 
-/* ─── Inline Brand SVG Icons ─── */
-function LinkedinIcon({ size = 17, style }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={style}>
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-      <rect width="4" height="12" x="2" y="9" />
-      <circle cx="4" cy="4" r="2" />
-    </svg>
-  )
-}
-
-function GithubIcon({ size = 17, style }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={style}>
-      <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-      <path d="M9 18c-4.51 2-5-2-7-2" />
-    </svg>
-  )
-}
+const CONTACT_ROWS = [
+  {
+    index: '01',
+    category: 'EMAIL',
+    title: 'Start a conversation',
+    detail: 'kishorgogoi403@gmail.com',
+    href: 'mailto:kishorgogoi403@gmail.com',
+    isEmail: true,
+  },
+  {
+    index: '02',
+    category: 'LINKEDIN',
+    title: 'Professional network',
+    detail: 'linkedin.com/in/kishorgogoi',
+    href: 'https://linkedin.com/in/kishorgogoi/',
+    isEmail: false,
+  },
+  {
+    index: '03',
+    category: 'GITHUB',
+    title: 'Explore my work',
+    detail: 'github.com/KISHOR403',
+    href: 'https://github.com/KISHOR403',
+    isEmail: false,
+  },
+]
 
 export default function Deploy() {
   const [copied, setCopied] = useState(false)
-
-  // Real-time IST Digital Clock
   const [currentTime, setCurrentTime] = useState('')
+
+  // Real-time IST Digital Clock in crisp Swiss editorial format
   useEffect(() => {
     const updateTime = () => {
       const now = new Date()
@@ -39,6 +42,7 @@ export default function Deploy() {
         timeZone: 'Asia/Kolkata',
         hour: '2-digit',
         minute: '2-digit',
+        second: '2-digit',
         hour12: true,
       }
       setCurrentTime(new Intl.DateTimeFormat('en-US', options).format(now))
@@ -48,264 +52,208 @@ export default function Deploy() {
     return () => clearInterval(timer)
   }, [])
 
-  const handleCopyEmail = () => {
+  const handleCopyEmail = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
     navigator.clipboard.writeText('kishorgogoi403@gmail.com')
     setCopied(true)
-    setTimeout(() => setCopied(false), 2500)
+    setTimeout(() => setCopied(false), 2400)
   }
 
-  const handleCardAction = (action) => {
-    if (action === 'copy-email') {
-      handleCopyEmail()
-    } else if (action === 'linkedin') {
-      window.open('https://linkedin.com/in/kishorgogoi/', '_blank')
-    } else if (action === 'github') {
-      window.open('https://github.com/KISHOR403', '_blank')
-    }
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (
     <section
       id="deploy"
-      style={{
-        position: 'relative',
-        background: 'transparent',
-        paddingTop: '6rem',
-        paddingBottom: '4.5rem',
-        overflow: 'hidden',
-      }}
+      className="swiss-contact-root"
+      aria-labelledby="contact-heading"
     >
-      <div
-        className="section-container"
-        style={{
-          position: 'relative',
-          zIndex: 1,
-          maxWidth: '1180px',
-          margin: '0 auto',
-          padding: '0 1.5rem',
-        }}
-      >
-        <SectionHeader
-          align="center"
-          number="07"
-          category="CONTACT"
-          badge={
-            <span
+      {/* Anchor target for #contact links */}
+      <div id="contact" style={{ position: 'relative', top: '-70px', visibility: 'hidden' }} />
+
+      <div className="swiss-contact-inner">
+        <div className="swiss-contact-main">
+          {/* ─── Architectural Top Colophon Header ─── */}
+          <div className="swiss-colophon-header" aria-hidden="true">
+            <div>SWISS EDITORIAL ARCHIVE / QA ENGINEERING PORTFOLIO</div>
+            <div>COLOPHON &amp; DIRECT INQUIRY — EDITION 2026</div>
+          </div>
+
+        {/* ─── Asymmetrical Editorial Grid ─── */}
+        <div className="swiss-editorial-grid">
+          {/* Left Column: Dominant Editorial Headline */}
+          <div className="swiss-headline-group">
+            <div className="swiss-eyebrow">
+              <span className="swiss-eyebrow-index">CONTACT / 07</span>
+              <span className="swiss-eyebrow-dash" aria-hidden="true">/</span>
+              <span>DIRECT INQUIRY</span>
+            </div>
+
+            <h2 id="contact-heading" className="swiss-heading">
+              <span className="swiss-heading-primary">LET'S MAKE</span>
+              <span className="swiss-heading-primary">SOFTWARE</span>
+              <span className="swiss-heading-secondary">WORK BETTER.</span>
+            </h2>
+
+            <div
               style={{
-                display: 'inline-flex',
+                display: 'flex',
                 alignItems: 'center',
-                gap: '5px',
-                padding: '3px 9px',
-                borderRadius: '999px',
-                background: 'rgba(74, 222, 154, 0.08)',
-                border: '1px solid rgba(74, 222, 154, 0.22)',
-                fontSize: '0.68rem',
-                color: '#4ADE9A',
-                letterSpacing: '0.04em',
-                textTransform: 'none',
+                gap: '12px',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.72rem',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: '#64748B',
+                paddingTop: '1.25rem',
+                borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                maxWidth: '420px',
               }}
+              aria-hidden="true"
             >
-              <Radio size={11} color="#4ADE9A" className="animate-pulse" />
-              Available for Roles
-            </span>
-          }
-          title="Let's Connect"
-          description="Open for QA engineering roles, test automation initiatives, and full-stack collaborations. Let's discuss how I can help strengthen your software delivery."
-          style={{ marginBottom: '2.5rem' }}
-        />
+              <span>26.14°N 91.73°E</span>
+              <span>—</span>
+              <span>RELIABILITY &amp; AUTOMATION</span>
+            </div>
+          </div>
 
-        {/* ─── Seamless 3D ID Badge & Moving Lanyard Band (Unboxed & Borderless) ─── */}
-        <div
-          style={{
-            position: 'relative',
-            width: '100%',
-            height: 'clamp(360px, 50vh, 570px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Contact3DCanvas onCardAction={handleCardAction} />
-        </div>
-
-        {/* ─── Direct Channel Action Strip ─── */}
-        <div
-          style={{
-            maxWidth: '780px',
-            margin: '1.2rem auto 0',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))',
-            gap: '0.85rem',
-          }}
-        >
-          {/* Copy Email Button */}
-          <button
-            onClick={handleCopyEmail}
-            style={{
-              background: copied ? 'rgba(74, 222, 154, 0.15)' : 'rgba(22, 29, 36, 0.65)',
-              backdropFilter: 'blur(12px)',
-              border: `1px solid ${copied ? '#4ADE9A' : 'var(--color-border-hairline)'}`,
-              borderRadius: '12px',
-              padding: '12px 16px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              color: '#E8EAED',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              minWidth: 0,
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0, overflow: 'hidden' }}>
-              <div
-                style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '8px',
-                  background: 'rgba(74, 222, 154, 0.12)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                }}
-              >
-                <Mail size={16} color="#4ADE9A" />
+          {/* Right Column: Understated Portrait, Supporting Copy & Metadata */}
+          <div className="swiss-right-column">
+            {/* Carefully Cropped Understated Portrait */}
+            <div className="swiss-portrait-card">
+              <div className="swiss-portrait-frame">
+                <img
+                  src={profileImg}
+                  alt="Kishor Gogoi, QA Automation Engineer"
+                  className="swiss-portrait-img"
+                  loading="lazy"
+                  width="108"
+                  height="108"
+                />
               </div>
-              <div style={{ textAlign: 'left', minWidth: 0 }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#9EABB8' }}>DIRECT EMAIL</div>
-                <div style={{ fontSize: '0.78rem', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{copied ? 'Copied to Clipboard!' : 'kishorgogoi403@gmail.com'}</div>
+              <div className="swiss-portrait-meta">
+                <span className="swiss-figure-label">[ FIG. 01 — KISHOR GOGOI ]</span>
+                <span className="swiss-portrait-name">Kishor Gogoi</span>
+                <span className="swiss-portrait-role">QA Engineer &amp; SDET · Automation Lead</span>
               </div>
             </div>
-            {copied ? <CheckCheck size={14} color="#4ADE9A" style={{ flexShrink: 0 }} /> : <Copy size={13} color="#9EABB8" style={{ flexShrink: 0 }} />}
-          </button>
 
-          {/* LinkedIn Button */}
-          <a
-            href="https://linkedin.com/in/kishorgogoi/"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              background: 'rgba(22, 29, 36, 0.65)',
-              backdropFilter: 'blur(12px)',
-              border: '1px solid var(--color-border-hairline)',
-              borderRadius: '12px',
-              padding: '12px 16px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              color: '#E8EAED',
-              textDecoration: 'none',
-              transition: 'all 0.2s ease',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div
-                style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '8px',
-                  background: 'rgba(56, 189, 248, 0.12)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <LinkedinIcon size={16} style={{ color: '#38BDF8' }} />
+            {/* Verbatim Supporting Copy */}
+            <p className="swiss-supporting-copy">
+              I'm interested in building reliable products, improving software quality, and creating better digital experiences through thoughtful testing and automation. If you're hiring for QA engineering or exploring a collaboration, let's connect.
+            </p>
+
+            {/* Editorial Metadata Specification Table */}
+            <div className="swiss-specs-table" role="list" aria-label="Professional specifications">
+              <div className="swiss-spec-row" role="listitem">
+                <span className="swiss-spec-label">AVAILABILITY</span>
+                <span className="swiss-spec-val">Open for Full-Time Roles &amp; Consulting</span>
               </div>
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#9EABB8' }}>PROFESSIONAL NETWORK</div>
-                <div style={{ fontSize: '0.78rem', fontWeight: 600 }}>LinkedIn Profile</div>
+              <div className="swiss-spec-row" role="listitem">
+                <span className="swiss-spec-label">LOCATION</span>
+                <span className="swiss-spec-val">Guwahati, India · Remote &amp; Relocation</span>
+              </div>
+              <div className="swiss-spec-row" role="listitem">
+                <span className="swiss-spec-label">TIMEZONE</span>
+                <span className="swiss-spec-val">IST (UTC +5:30) · Flexible Worldwide</span>
               </div>
             </div>
-            <ArrowUpRight size={14} color="#9EABB8" />
-          </a>
-
-          {/* GitHub Button */}
-          <a
-            href="https://github.com/KISHOR403"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              background: 'rgba(22, 29, 36, 0.65)',
-              backdropFilter: 'blur(12px)',
-              border: '1px solid var(--color-border-hairline)',
-              borderRadius: '12px',
-              padding: '12px 16px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              color: '#E8EAED',
-              textDecoration: 'none',
-              transition: 'all 0.2s ease',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div
-                style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '8px',
-                  background: 'rgba(255, 255, 255, 0.08)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <GithubIcon size={16} style={{ color: '#E8EAED' }} />
-              </div>
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#9EABB8' }}>AUTOMATION REPOS</div>
-                <div style={{ fontSize: '0.78rem', fontWeight: 600 }}>GitHub Source</div>
-              </div>
-            </div>
-            <ArrowUpRight size={14} color="#9EABB8" />
-          </a>
+          </div>
         </div>
 
-        {/* ─── Minimalist Footer ─── */}
-        <div
-          style={{
-            marginTop: '5rem',
-            paddingTop: '2rem',
-            borderTop: '1px solid var(--color-border-hairline)',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: '1rem',
-          }}
-        >
-          <p
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.72rem',
-              color: 'var(--color-text-muted)',
-              letterSpacing: '0.02em',
-              margin: 0,
-            }}
-          >
-            © {new Date().getFullYear()} Kishor Gogoi · Engineered with precision
-          </p>
-
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.68rem',
-              color: 'var(--color-text-muted)',
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              padding: '4px 8px',
-              transition: 'color 0.2s',
-            }}
-          >
-            Back to top <ChevronUp size={13} />
-          </button>
+        {/* ─── Thin Divider & Channels Bar ─── */}
+        <div className="swiss-channels-header" aria-hidden="true">
+          <span>INDEX / 03 DIRECT ENTRY POINTS</span>
+          <span>SELECT A CHANNEL BELOW</span>
         </div>
+
+        {/* ─── Contact Information as Editorial Rows ─── */}
+        <nav className="swiss-rows-list" aria-label="Contact channels">
+          {CONTACT_ROWS.map((row) => (
+            <a
+              key={row.index}
+              href={row.href}
+              target={row.isEmail ? undefined : '_blank'}
+              rel={row.isEmail ? undefined : 'noopener noreferrer'}
+              className="swiss-row-link"
+              aria-label={`${row.category}: ${row.title}. Address: ${row.detail}`}
+            >
+              <div className="swiss-row-meta">
+                <span className="swiss-row-index">{row.index}</span>
+                <span className="swiss-row-dash" aria-hidden="true">—</span>
+                <span className="swiss-row-category">{row.category}</span>
+              </div>
+
+              <div className="swiss-row-center">
+                <span className="swiss-row-title">{row.title}</span>
+                <span className="swiss-row-detail">{row.detail}</span>
+              </div>
+
+              <div className="swiss-row-right">
+                {row.isEmail && (
+                  <button
+                    type="button"
+                    onClick={handleCopyEmail}
+                    className={`swiss-copy-btn${copied ? ' is-copied' : ''}`}
+                    aria-label="Copy email address to clipboard"
+                    title="Copy kishorgogoi403@gmail.com"
+                  >
+                    {copied ? (
+                      <>
+                        <Check size={12} strokeWidth={2.5} />
+                        <span>COPIED</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy size={12} strokeWidth={2} />
+                        <span>COPY</span>
+                      </>
+                    )}
+                  </button>
+                )}
+
+                <div className="swiss-row-arrow" aria-hidden="true">
+                  <ArrowUpRight size={22} strokeWidth={1.75} />
+                </div>
+              </div>
+            </a>
+          ))}
+        </nav>
+      </div>
+
+        {/* Screen Reader Status Announcement for Copy Action */}
+        <div role="status" aria-live="polite" className="sr-only" style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', border: 0 }}>
+          {copied ? 'Email address kishorgogoi403@gmail.com copied to clipboard.' : ''}
+        </div>
+
+        {/* ─── Minimalist Editorial Footer Colophon ─── */}
+        <footer className="swiss-colophon-footer">
+          <div className="swiss-colophon-col">
+            <span style={{ color: '#FFFFFF', fontWeight: 600 }}>© {new Date().getFullYear()} KISHOR GOGOI</span>
+            <span>ENGINEERED WITH RIGOROUS AUTOMATION &amp; PRECISION</span>
+            <span>TYPESET IN SPACE GROTESK &amp; INTER</span>
+          </div>
+
+          <div className="swiss-colophon-col">
+            <span>LOCAL TIME — {currentTime ? `${currentTime} IST` : 'IST (UTC+5:30)'}</span>
+            <span>GUWAHATI, ASSAM, INDIA (26.14°N 91.73°E)</span>
+            <span>ALL QUALITY GATES OPERATIONAL</span>
+          </div>
+
+          <div className="swiss-colophon-col" style={{ alignItems: 'flex-end' }}>
+            <button
+              type="button"
+              onClick={scrollToTop}
+              className="swiss-back-top-btn"
+              aria-label="Scroll back to top of page"
+            >
+              <span>Back to top</span>
+              <ChevronUp size={13} strokeWidth={2} />
+            </button>
+          </div>
+        </footer>
       </div>
     </section>
   )

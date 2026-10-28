@@ -26,6 +26,7 @@ export default function CloudMascot() {
   const [pos, setPos] = useState(null)
   const [speech, setSpeech] = useState(null)
   const [isDragging, setIsDragging] = useState(false)
+  const [isInContactSection, setIsInContactSection] = useState(false)
 
   const containerRef = useRef(null)
   const iframeRef = useRef(null)
@@ -33,13 +34,27 @@ export default function CloudMascot() {
   const speechTimersRef = useRef([])
   const quoteIndexRef = useRef(0)
 
-  // Clear timers on unmount
+  // Clear timers on unmount & observe Contact section to prevent obstruction
   useEffect(() => {
     const handleResize = () => setPos(null)
     window.addEventListener('resize', handleResize)
+
+    const deploySection = document.getElementById('deploy')
+    let observer
+    if (deploySection) {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          setIsInContactSection(entry.isIntersecting)
+        },
+        { rootMargin: '-5% 0px -5% 0px', threshold: 0.08 }
+      )
+      observer.observe(deploySection)
+    }
+
     return () => {
       window.removeEventListener('resize', handleResize)
       speechTimersRef.current.forEach(clearTimeout)
+      if (observer) observer.disconnect()
     }
   }, [])
 
@@ -233,7 +248,7 @@ export default function CloudMascot() {
   return (
     <div
       ref={containerRef}
-      className={`mascot-float${isReady ? ' is-ready' : ''}${isDragging ? ' is-dragging' : ''}`}
+      className={`mascot-float${isReady ? ' is-ready' : ''}${isDragging ? ' is-dragging' : ''}${isInContactSection ? ' is-docked' : ''}`}
       style={
         pos
           ? {

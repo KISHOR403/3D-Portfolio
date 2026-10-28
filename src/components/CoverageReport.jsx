@@ -608,17 +608,19 @@ export default function CoverageReport() {
   const [isSectionVisible, setIsSectionVisible] = useState(false)
   const { isMobile } = useResponsive()
 
+  const [isSectionActive, setIsSectionActive] = useState(false)
+
   useEffect(() => {
     const el = sectionRef.current
     if (!el) return
     const observer = new IntersectionObserver(
       ([entry]) => {
+        setIsSectionActive(entry.isIntersecting)
         if (entry.isIntersecting) {
           setIsSectionVisible(true)
-          observer.disconnect()
         }
       },
-      { rootMargin: '350px' }
+      { rootMargin: '100px 0px 100px 0px', threshold: 0.05 }
     )
     observer.observe(el)
     return () => observer.disconnect()
@@ -702,8 +704,8 @@ export default function CoverageReport() {
         </div>
       )}
 
-      {/* ── Floating view toggle (visible in sphere mode) ── */}
-      {viewStyle === 'sphere' && (
+      {/* ── Floating view toggle (visible in sphere mode when section is in view) ── */}
+      {viewStyle === 'sphere' && isSectionActive && (
         <div
           style={{
             position: 'fixed',
