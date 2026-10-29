@@ -5,9 +5,9 @@ import * as THREE from 'three'
 // Constants for ambient background
 const PARTICLE_COUNT = 18
 const COLORS = [
-  new THREE.Color('#4ADE9A'), // signal green
-  new THREE.Color('#F2A93B'), // amber
-  new THREE.Color('#E8615C'), // coral
+  new THREE.Color('#748079'),
+  new THREE.Color('#879097'),
+  new THREE.Color('#626D74'),
 ]
 
 // Create a soft radial gradient canvas texture for glowing particles
@@ -189,7 +189,7 @@ function SignalStreak({ reducedMotion }) {
       {/* Elongated build signal streak */}
       <boxGeometry args={[0.04, 0.02, 3.5]} />
       <meshBasicMaterial
-        color="#4ADE9A"
+        color="#879097"
         transparent
         opacity={opacity}
         blending={THREE.AdditiveBlending}
@@ -238,7 +238,7 @@ function PipelineGridScene({ reducedMotion }) {
       */}
       <gridHelper
         ref={gridRef}
-        args={[150, 75, '#232C35', '#232C35']}
+        args={[150, 75, '#30363B', '#30363B']}
         position={[0, -4.05, 0]}
       />
 

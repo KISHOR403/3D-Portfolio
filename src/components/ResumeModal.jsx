@@ -143,10 +143,10 @@ export default function ResumeModal({ isOpen, onClose }) {
               maxHeight: '86vh',
               display: 'flex',
               flexDirection: 'column',
-              background: '#0D1117',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
+              background: 'var(--color-background)',
+              border: '1px solid var(--color-border)',
               borderRadius: '16px',
-              boxShadow: '0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.04)',
+              boxShadow: '0 16px 42px rgba(25, 26, 24, 0.16)',
               overflow: 'hidden',
               zIndex: 1001,
               transition: 'max-width 0.25s ease',
@@ -160,19 +160,19 @@ export default function ResumeModal({ isOpen, onClose }) {
                   flexDirection: 'column',
                   height: '84vh',
                   maxHeight: '84vh',
-                  background: '#0D1117',
+                  background: 'var(--color-background)',
                 }}
               >
                 {/* Top Navigation / Action Bar */}
                 <div
                   style={{
                     padding: '0.85rem 1.25rem',
-                    borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                    borderBottom: '1px solid var(--color-border)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     gap: '1rem',
-                    background: 'rgba(15, 20, 25, 0.95)',
+                    background: 'var(--color-surface)',
                     flexShrink: 0,
                   }}
                 >
@@ -185,8 +185,8 @@ export default function ResumeModal({ isOpen, onClose }) {
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '6px',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        background: 'var(--color-surface)',
+                        border: '1px solid var(--color-border)',
                         borderRadius: '8px',
                         padding: '6px 12px',
                         color: 'var(--color-text-primary)',
@@ -197,12 +197,12 @@ export default function ResumeModal({ isOpen, onClose }) {
                         transition: 'background 0.15s ease, border-color 0.15s ease',
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'
-                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)'
+                        e.currentTarget.style.background = 'var(--color-surface-hover)'
+                        e.currentTarget.style.borderColor = 'var(--color-border)'
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'
-                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)'
+                        e.currentTarget.style.background = 'var(--color-surface)'
+                        e.currentTarget.style.borderColor = 'var(--color-border)'
                       }}
                     >
                       <ArrowLeft size={15} />
@@ -255,7 +255,7 @@ export default function ResumeModal({ isOpen, onClose }) {
                         fontWeight: 500,
                         color: 'var(--color-text-muted)',
                         background: 'transparent',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        border: '1px solid var(--color-border)',
                         borderRadius: '8px',
                         padding: '6px 12px',
                         textDecoration: 'none',
@@ -263,11 +263,11 @@ export default function ResumeModal({ isOpen, onClose }) {
                       }}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.color = 'var(--color-text-primary)'
-                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.22)'
+                        e.currentTarget.style.borderColor = 'var(--color-border)'
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.color = 'var(--color-text-muted)'
-                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)'
+                        e.currentTarget.style.borderColor = 'var(--color-border)'
                       }}
                     >
                       <ExternalLink size={13} />
@@ -286,8 +286,8 @@ export default function ResumeModal({ isOpen, onClose }) {
                         fontFamily: 'var(--font-sans)',
                         fontSize: '0.78rem',
                         fontWeight: 600,
-                        color: '#0F1419',
-                        background: 'var(--color-accent-pass)',
+                        color: 'var(--color-button-primary-text)',
+                        background: 'var(--color-button-primary)',
                         borderRadius: '8px',
                         padding: '6px 14px',
                         textDecoration: 'none',
@@ -320,8 +320,8 @@ export default function ResumeModal({ isOpen, onClose }) {
                         marginLeft: '4px',
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.color = '#FFFFFF'
-                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'
+                        e.currentTarget.style.color = 'var(--color-text-primary)'
+                        e.currentTarget.style.background = 'var(--color-surface)'
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.color = 'var(--color-text-muted)'
@@ -338,7 +338,7 @@ export default function ResumeModal({ isOpen, onClose }) {
                   style={{
                     flex: 1,
                     minHeight: 0,
-                    background: '#11161D',
+                    background: 'var(--color-surface)',
                     position: 'relative',
                   }}
                 >
@@ -350,7 +350,7 @@ export default function ResumeModal({ isOpen, onClose }) {
                       height: '100%',
                       border: 'none',
                       display: 'block',
-                      background: '#11161D',
+                      background: 'var(--color-surface)',
                     }}
                   />
                 </div>
@@ -362,12 +362,12 @@ export default function ResumeModal({ isOpen, onClose }) {
                 <div
                   style={{
                     padding: '1.5rem 1.75rem 1.15rem',
-                    borderBottom: '1px solid rgba(255, 255, 255, 0.07)',
+                    borderBottom: '1px solid var(--color-border)',
                     display: 'flex',
                     alignItems: 'flex-start',
                     justifyContent: 'space-between',
                     gap: '1rem',
-                    background: '#0D1117',
+                    background: 'var(--color-surface)',
                     flexShrink: 0,
                   }}
                 >
@@ -414,7 +414,7 @@ export default function ResumeModal({ isOpen, onClose }) {
                     aria-label="Close modal"
                     style={{
                       background: 'transparent',
-                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                      border: '1px solid var(--color-border)',
                       borderRadius: '8px',
                       width: '32px',
                       height: '32px',
@@ -427,13 +427,13 @@ export default function ResumeModal({ isOpen, onClose }) {
                       flexShrink: 0,
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'
-                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.18)'
-                      e.currentTarget.style.color = '#FFFFFF'
+                      e.currentTarget.style.background = 'var(--color-surface)'
+                      e.currentTarget.style.borderColor = 'var(--color-border)'
+                      e.currentTarget.style.color = 'var(--color-text-primary)'
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.background = 'transparent'
-                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)'
+                      e.currentTarget.style.borderColor = 'var(--color-border)'
                       e.currentTarget.style.color = 'var(--color-text-muted)'
                     }}
                   >
@@ -461,12 +461,8 @@ export default function ResumeModal({ isOpen, onClose }) {
                         onMouseEnter={() => setHoveredCardId(cv.id)}
                         onMouseLeave={() => setHoveredCardId(null)}
                         style={{
-                          background: isHovered
-                            ? 'rgba(255, 255, 255, 0.04)'
-                            : 'rgba(255, 255, 255, 0.02)',
-                          border: isHovered
-                            ? '1px solid rgba(255, 255, 255, 0.16)'
-                            : '1px solid rgba(255, 255, 255, 0.07)',
+                          background: isHovered ? 'var(--color-surface-hover)' : 'var(--color-surface)',
+                          border: '1px solid var(--color-border)',
                           borderRadius: '14px',
                           padding: '1.15rem 1.35rem',
                           display: 'flex',
@@ -491,8 +487,8 @@ export default function ResumeModal({ isOpen, onClose }) {
                               width: '34px',
                               height: '34px',
                               borderRadius: '8px',
-                              background: 'rgba(255, 255, 255, 0.035)',
-                              border: '1px solid rgba(255, 255, 255, 0.08)',
+                              background: 'var(--color-background)',
+                              border: '1px solid var(--color-border)',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
@@ -593,7 +589,7 @@ export default function ResumeModal({ isOpen, onClose }) {
                             justifyContent: 'space-between',
                             gap: '1rem',
                             paddingTop: '0.45rem',
-                            borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+                            borderTop: '1px solid var(--color-border)',
                             flexWrap: 'wrap',
                           }}
                         >
@@ -628,21 +624,21 @@ export default function ResumeModal({ isOpen, onClose }) {
                                 fontFamily: 'var(--font-sans)',
                                 fontSize: '0.75rem',
                                 fontWeight: 500,
-                                color: '#E2E8F0',
-                                background: 'rgba(255, 255, 255, 0.04)',
-                                border: '1px solid rgba(255, 255, 255, 0.12)',
+                                color: 'var(--color-text-primary)',
+                                background: 'var(--color-surface)',
+                                border: '1px solid var(--color-border)',
                                 borderRadius: '8px',
                                 padding: '6px 13px',
                                 cursor: 'pointer',
                                 transition: 'background 0.15s ease, border-color 0.15s ease',
                               }}
                               onMouseEnter={(e) => {
-                                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.09)'
-                                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.22)'
+                                e.currentTarget.style.background = 'var(--color-surface-hover)'
+                                e.currentTarget.style.borderColor = 'var(--color-border)'
                               }}
                               onMouseLeave={(e) => {
-                                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)'
-                                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)'
+                                e.currentTarget.style.background = 'var(--color-surface)'
+                                e.currentTarget.style.borderColor = 'var(--color-border)'
                               }}
                             >
                               <Eye size={13} />
@@ -661,8 +657,8 @@ export default function ResumeModal({ isOpen, onClose }) {
                                 fontFamily: 'var(--font-sans)',
                                 fontSize: '0.75rem',
                                 fontWeight: 600,
-                                color: '#0F1419',
-                                background: 'var(--color-accent-pass)',
+                                color: 'var(--color-button-primary-text)',
+                                background: 'var(--color-button-primary)',
                                 border: '1px solid var(--color-accent-pass)',
                                 borderRadius: '8px',
                                 padding: '6px 14px',

@@ -12,7 +12,6 @@ import PipelineRuns from './components/PipelineRuns'
 import QALab from './components/QALab'
 import QualityGates from './components/QualityGates'
 import Deploy from './components/Deploy'
-import PipelineGridBg from './components/PipelineGridBg'
 import ResumeModal from './components/ResumeModal'
 import TestSuiteModal from './components/TestSuiteModal'
 import RecruiterView from './components/RecruiterView'
@@ -54,7 +53,6 @@ export default function App() {
         animate={showContent ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       >
-        <PipelineGridBg active={showContent} />
         <Sidebar />
         <Navbar
           onOpenResume={openResumeModal}

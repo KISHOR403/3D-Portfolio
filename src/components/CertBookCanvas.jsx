@@ -285,7 +285,7 @@ function BookModel({
         smoothness={8}
         position={[0, 0, -0.09]}
       >
-        <meshStandardMaterial color="#0E1217" roughness={0.75} metalness={0.15} />
+        <meshStandardMaterial color="#17191B" roughness={0.82} metalness={0.05} />
       </RoundedBox>
 
       {/* Gold embossed trim on cover edge (rounded) */}
@@ -301,7 +301,7 @@ function BookModel({
       {/* ─── 2. CENTRAL SPINE HINGE ─── */}
       <mesh position={[0, 0, -0.01]} rotation={[0, 0, 0]}>
         <cylinderGeometry args={[0.16, 0.16, PAGE_H + 0.36, 32]} />
-        <meshStandardMaterial color="#141820" roughness={0.65} metalness={0.25} />
+        <meshStandardMaterial color="#303437" roughness={0.72} metalness={0.08} />
       </mesh>
 
       {/* Spine decorative gold ribs */}
@@ -320,7 +320,7 @@ function BookModel({
         smoothness={4}
         position={[-PAGE_W * 0.5, 0, -0.035]}
       >
-        <meshStandardMaterial color="#EAE4D8" roughness={0.9} metalness={0.05} />
+        <meshStandardMaterial color="#222528" roughness={0.9} metalness={0.05} />
       </RoundedBox>
 
       {/* Right paper block */}
@@ -330,7 +330,7 @@ function BookModel({
         smoothness={4}
         position={[PAGE_W * 0.5, 0, -0.035]}
       >
-        <meshStandardMaterial color="#EAE4D8" roughness={0.9} metalness={0.05} />
+        <meshStandardMaterial color="#222528" roughness={0.9} metalness={0.05} />
       </RoundedBox>
 
       {/* ─── 4. LEFT BASE PAGE (FLAT RECTO/VERSO) ─── */}

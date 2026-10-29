@@ -15,10 +15,9 @@ export default function StatusStrip() {
       transition={{ duration: 0.5, delay: 0.3 }}
       id="status-strip"
       style={{
-        borderTop: '1px solid var(--color-border-hairline)',
-        borderBottom: '1px solid var(--color-border-hairline)',
-        background: 'rgba(22, 29, 36, 0.75)',
-        backdropFilter: 'blur(10px)',
+        borderTop: '1px solid var(--color-border)',
+        borderBottom: '1px solid var(--color-border)',
+        background: 'transparent',
         padding: '1rem clamp(16px, 4vw, 24px)',
         overflow: 'hidden',
       }}

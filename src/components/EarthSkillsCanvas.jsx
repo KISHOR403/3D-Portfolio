@@ -57,7 +57,7 @@ export const RAW_SKILLS = [
   { id:'express', name:'Express.js', fullName:'Express.js', category:'Full Stack Development', featured:false, color:'#E8EAED' },
   { id:'redux', name:'Redux', fullName:'Redux', category:'Full Stack Development', featured:false, color:'#764ABC' },
   { id:'junit', name:'JUnit', fullName:'JUnit Testing', category:'Automation Tools & Frameworks', featured:false, color:'#2563eb' },
-  { id:'pom', name:'POM Pattern', fullName:'Page Object Model', category:'Design Patterns', featured:false, color:'#4ADE9A' },
+  { id:'pom', name:'POM Pattern', fullName:'Page Object Model', category:'Design Patterns', featured:false, color:'#91A797' },
 
   { id:'selenium', name:'Selenium', fullName:'Selenium WebDriver', category:'Automation Tools & Frameworks', featured:true, color:'#43B02A' },
   { id:'appium', name:'Appium', fullName:'Appium Mobile', category:'Automation Tools & Frameworks', featured:true, color:'#E42D42' },
@@ -70,11 +70,11 @@ export const RAW_SKILLS = [
   { id:'testrail', name:'TestRail', fullName:'TestRail Mgmt', category:'Developer Tools', featured:false, color:'#0052CC' },
 
   { id:'manual', name:'Manual Testing', fullName:'Manual QA', category:'Testing Skills & Methodologies', featured:true, color:'#F2A93B' },
-  { id:'agile', name:'Agile', fullName:'Agile & Scrum', category:'Testing Skills & Methodologies', featured:true, color:'#4ADE9A' },
+  { id:'agile', name:'Agile', fullName:'Agile & Scrum', category:'Testing Skills & Methodologies', featured:true, color:'#91A797' },
   { id:'git', name:'Git', fullName:'Git Version Control', category:'Developer Tools', featured:true, color:'#F05032' },
   { id:'jira', name:'Jira', fullName:'Jira Tracking', category:'Developer Tools', featured:true, color:'#0052CC' },
   { id:'jenkins', name:'Jenkins', fullName:'Jenkins CI/CD', category:'Developer Tools', featured:true, color:'#D24939' },
-  { id:'cicd', name:'CI/CD', fullName:'CI/CD Pipelines', category:'Design Patterns', featured:true, color:'#4ADE9A' },
+  { id:'cicd', name:'CI/CD', fullName:'CI/CD Pipelines', category:'Design Patterns', featured:true, color:'#91A797' },
   { id:'actions', name:'GitHub Actions', fullName:'GitHub Actions', category:'Developer Tools', featured:false, color:'#2088FF' },
   { id:'figma', name:'Figma', fullName:'Figma UI/UX', category:'Content Creation & Design', featured:false, color:'#F24E1E' },
   { id:'canva', name:'Canva', fullName:'Canva Design', category:'Content Creation & Design', featured:false, color:'#00C4CC' },
@@ -117,22 +117,22 @@ function FibonacciSphereCluster({ activeCategory, hoveredSkillId, setHoveredSkil
       {/* Holographic Mesh Globe matching cluster radius */}
       <mesh>
         <sphereGeometry args={[R * 0.92, 28, 28]} />
-        <meshBasicMaterial color="#38BDF8" wireframe transparent opacity={0.24} />
+        <meshBasicMaterial color="#303437" wireframe transparent opacity={0.8} />
       </mesh>
       {/* Equatorial latitude ring */}
       <mesh rotation={[Math.PI / 2, 0, 0]}>
         <ringGeometry args={[R * 0.90, R * 0.93, 48]} />
-        <meshBasicMaterial color="#38BDF8" transparent opacity={0.35} side={THREE.DoubleSide} />
+        <meshBasicMaterial color="#303437" transparent opacity={0.8} side={THREE.DoubleSide} />
       </mesh>
       {/* Tilted orbital ring */}
       <mesh rotation={[Math.PI / 3.2, Math.PI / 6, 0]}>
         <ringGeometry args={[R * 1.04, R * 1.07, 48]} />
-        <meshBasicMaterial color="#4ADE9A" transparent opacity={0.3} side={THREE.DoubleSide} />
+        <meshBasicMaterial color="#657D6B" transparent opacity={0.35} side={THREE.DoubleSide} />
       </mesh>
       {/* Inner Glowing Reactor Core */}
       <mesh>
         <sphereGeometry args={[deviceTier === 'mobile' ? 0.9 : 1.15, 24, 24]} />
-        <meshStandardMaterial color="#081524" emissive="#4ADE9A" emissiveIntensity={0.6} wireframe />
+        <meshStandardMaterial color="#17191B" emissive="#657D6B" emissiveIntensity={0.18} wireframe />
       </mesh>
 
       {showLabels && nodes.map(({ skill, pos }) => {
@@ -154,20 +154,20 @@ function FibonacciSphereCluster({ activeCategory, hoveredSkillId, setHoveredSkil
             <div onMouseEnter={() => setHoveredSkillId(skill.id)} onMouseLeave={() => setHoveredSkillId(null)}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '2px 6px', borderRadius: '999px',
-                background: isHov ? `color-mix(in srgb, ${skill.color} 25%, #070e17)` : 'rgba(10, 16, 26, 0.92)',
-                backdropFilter: 'blur(6px)', border: `1px solid ${isHov ? skill.color : 'rgba(255, 255, 255, 0.15)'}`,
-                boxShadow: isHov ? `0 0 16px ${skill.color}80` : '0 2px 6px rgba(0,0,0,0.4)',
-                color: '#E5E7EB', fontFamily: 'var(--font-mono)', fontSize: fontSz, fontWeight: 600,
+                background: isHov ? `color-mix(in srgb, ${skill.color} 10%, var(--color-surface))` : 'var(--color-background)',
+                backdropFilter: 'blur(6px)', border: `1px solid ${isHov ? skill.color : 'var(--color-border)'}`,
+                boxShadow: isHov ? '0 4px 14px rgba(25, 26, 24, 0.12)' : '0 1px 4px rgba(25, 26, 24, 0.08)',
+                color: 'var(--color-text-primary)', fontFamily: 'var(--font-mono)', fontSize: fontSz, fontWeight: 600,
                 whiteSpace: 'nowrap', cursor: 'pointer', userSelect: 'none', position: 'relative'
               }}>
               <SmartSkillIcon name={skill.name} size={iconSz} />
               <span>{skill.name}</span>
               {isHov && (
-                <div style={{ position:'absolute',bottom:'140%',left:'50%',transform:'translateX(-50%)',background:'#070d14',
+                <div style={{ position:'absolute',bottom:'140%',left:'50%',transform:'translateX(-50%)',background:'var(--color-surface)',
                   border:`1px solid ${skill.color}`,borderRadius:'6px',padding:'4px 8px',
-                  boxShadow:`0 6px 16px rgba(0,0,0,0.8)`,zIndex:1000,pointerEvents:'none',minWidth:'110px',textAlign:'center' }}>
+                  boxShadow:'0 6px 16px rgba(25,26,24,0.14)',zIndex:1000,pointerEvents:'none',minWidth:'110px',textAlign:'center' }}>
                   <div style={{fontSize:'0.45rem',color:skill.color,textTransform:'uppercase',letterSpacing:'0.06em'}}>{skill.category}</div>
-                  <div style={{fontSize:'0.58rem',color:'#FFF',fontWeight:700,marginTop:'2px'}}>{skill.fullName}</div>
+                  <div style={{fontSize:'0.58rem',color:'var(--color-text-primary)',fontWeight:700,marginTop:'2px'}}>{skill.fullName}</div>
                 </div>
               )}
             </div>
@@ -212,7 +212,7 @@ export default function EarthSkillsCanvas({ activeCategory, hoveredSkillId, setH
         <ambientLight intensity={1.2}/>
         <directionalLight position={[10,10,10]} intensity={2.0} color="#FFFFFF"/>
         <directionalLight position={[-10,-10,-10]} intensity={0.8} color="#38BDF8"/>
-        <pointLight position={[0,0,8]} intensity={1.2} color="#4ADE9A"/>
+        <pointLight position={[0,0,8]} intensity={1.2} color="#91A797"/>
         <OrbitControls enableZoom={false} enablePan={false} rotateSpeed={0.6} autoRotate={!hoveredSkillId || !showLabels} autoRotateSpeed={0.5}/>
 
         <FibonacciSphereCluster

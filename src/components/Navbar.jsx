@@ -57,6 +57,7 @@ export default function Navbar({ onOpenResume, onOpenRecruiterView }) {
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       id="navbar"
+      className={`editorial-nav${scrolled ? ' is-scrolled' : ''}`}
       role="banner"
       style={{
         position: 'fixed',
@@ -65,7 +66,7 @@ export default function Navbar({ onOpenResume, onOpenRecruiterView }) {
         right: 0,
         zIndex: 100,
         height: '64px',
-        background: scrolled ? 'rgba(15, 20, 25, 0.88)' : 'transparent',
+        background: scrolled ? 'rgba(13, 14, 15, 0.96)' : 'transparent',
         backdropFilter: scrolled ? 'blur(16px) saturate(180%)' : 'none',
         WebkitBackdropFilter: scrolled ? 'blur(16px) saturate(180%)' : 'none',
         borderBottom: scrolled ? '1px solid rgba(35, 44, 53, 0.5)' : '1px solid transparent',
@@ -106,7 +107,7 @@ export default function Navbar({ onOpenResume, onOpenRecruiterView }) {
           height: '8px',
           borderRadius: '50%',
           background: 'var(--color-accent-pass)',
-          boxShadow: '0 0 8px rgba(74, 222, 154, 0.4)',
+          boxShadow: '0 0 8px rgba(145, 167, 151, 0.4)',
           flexShrink: 0,
         }} />
         <span className="t-shimmer" data-text="Kishor Gogoi">
@@ -183,7 +184,7 @@ export default function Navbar({ onOpenResume, onOpenRecruiterView }) {
             whiteSpace: 'nowrap',
           }}
           onMouseEnter={e => {
-            e.currentTarget.style.borderColor = 'rgba(74, 222, 154, 0.3)'
+            e.currentTarget.style.borderColor = 'rgba(145, 167, 151, 0.3)'
             e.currentTarget.style.color = 'var(--color-text-primary)'
           }}
           onMouseLeave={e => {
@@ -273,7 +274,7 @@ export default function Navbar({ onOpenResume, onOpenRecruiterView }) {
               top: '64px',
               left: 0,
               right: 0,
-              background: 'rgba(15, 20, 25, 0.97)',
+              background: 'rgba(13, 14, 15, 0.98)',
               backdropFilter: 'blur(20px)',
               borderBottom: '1px solid var(--color-border-hairline)',
               padding: '1.5rem',

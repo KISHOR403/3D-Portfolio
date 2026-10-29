@@ -82,7 +82,7 @@ export default function SocialSidebar() {
             title={link.name}
             aria-label={link.name}
             style={{
-              color: 'rgba(255, 255, 255, 0.5)',
+              color: 'var(--color-text-secondary)',
               textDecoration: 'none',
               display: 'flex',
               alignItems: 'center',
@@ -93,7 +93,7 @@ export default function SocialSidebar() {
               e.currentTarget.style.color = '#ffffff'
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = 'rgba(255, 255, 255, 0.5)'
+              e.currentTarget.style.color = 'var(--color-text-secondary)'
             }}
           >
             {link.icon}
@@ -108,7 +108,7 @@ export default function SocialSidebar() {
           style={{
             width: '1px',
             height: '80px',
-            background: 'rgba(255, 255, 255, 0.15)',
+            background: 'var(--color-border)',
             transformOrigin: 'top',
           }}
         />

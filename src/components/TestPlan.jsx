@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
-import aboutBg from '../assets/about-cinematic-bg.jpg'
 
 /* ═══════════════════════════════════════════════════════════════
    PREMIUM CINEMATIC EDITORIAL ABOUT SECTION — KISHOR GOGOI
@@ -45,47 +44,17 @@ export default function TestPlan({ onOpenResume }) {
       id="about"
       ref={sectionRef}
       className="about-cinematic-stage"
-      aria-label="About Kishor Gogoi — QA Engineer"
+      aria-labelledby="about-heading"
     >
       {/* Route anchor compatibility to preserve all existing links */}
       <span id="experience" className="about-anchor-shim" aria-hidden="true" />
       <span id="test-plan" className="about-anchor-shim" aria-hidden="true" />
 
       {/* ── 1. BACKGROUND PHOTOGRAPHIC LAYER ── */}
-      <div className="about-bg-layer" aria-hidden="true">
-        <motion.div
-          className="about-bg-image"
-          style={{ backgroundImage: `url(${aboutBg})` }}
-          initial={{ scale: 1.03, opacity: 0 }}
-          animate={inView ? { scale: 1, opacity: 1 } : { scale: 1.03, opacity: 0 }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-        />
-        {/* Layered charcoal scrims: solid read zone on left, natural reveal on right */}
-        <div className="about-bg-scrim-left" />
-        <div className="about-bg-scrim-top" />
-        <div className="about-bg-scrim-bottom" />
-        <div className="about-bg-vignette" />
-      </div>
-
-      {/* ── 2. FOREGROUND EDITORIAL CONTENT (1280px Container) ── */}
       <div className="about-container">
-        {/* LEVEL 1: TOP — MINIMAL IDENTITY */}
-        <motion.header
-          className="about-identity"
-          initial={{ opacity: 0, y: -12 }}
-          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: -12 }}
-          transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <div className="about-identity-tag">
-            <span className="about-live-dot" aria-hidden="true" />
-            <span className="about-identity-name">KISHOR GOGOI</span>
-          </div>
-          <span className="about-identity-divider" aria-hidden="true">/</span>
-          <span className="about-identity-role">QA ENGINEER · TEST AUTOMATION</span>
-        </motion.header>
-
-        {/* LEVEL 2 & 3: MAIN EDITORIAL INTRODUCTION */}
-        <div className="about-editorial-flow">
+        {/* Editorial introduction and core QA capabilities */}
+        <div className="about-content-grid">
+          <div className="about-editorial-flow">
           {/* Small Eyebrow */}
           <motion.div
             className="about-eyebrow section-eyebrow"
@@ -94,19 +63,20 @@ export default function TestPlan({ onOpenResume }) {
             transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
             <span className="section-eyebrow-num">01</span>
-            <span className="section-eyebrow-sep">//</span>
-            <span className="section-eyebrow-text">ABOUT</span>
+            <span className="section-eyebrow-sep">/</span>
+            <span className="section-eyebrow-text">ABOUT THE ENGINEER</span>
           </motion.div>
 
           {/* Main Heading — Editorial Headline */}
           <motion.h2
-            className="about-headline section-headline-editorial is-serif"
+            id="about-heading"
+            className="about-headline is-serif"
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.75, delay: 0.28, ease: [0.16, 1, 0.3, 1] }}
           >
             <span className="about-headline-line">The Engineer Behind</span>
-            <span className="about-headline-line">the Quality.</span>
+            <span className="about-headline-line">the Quality</span>
           </motion.h2>
 
           {/* Supporting Text */}
@@ -116,9 +86,7 @@ export default function TestPlan({ onOpenResume }) {
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
             transition={{ duration: 0.7, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}
           >
-            Computer Science graduate focused on software quality, test automation,
-            and building resilient digital experiences — exploring edge cases,
-            validating APIs, and creating maintainable automation workflows that help teams ship with confidence.
+            I&apos;m a Computer Science graduate focused on software quality, test automation, and building reliable digital experiences. I enjoy exploring edge cases, validating APIs, and creating maintainable automation workflows that help teams deliver software with confidence.
           </motion.p>
 
           {/* LEVEL 3: BOTTOM — PRIMARY ACTION */}
@@ -147,6 +115,22 @@ export default function TestPlan({ onOpenResume }) {
               </button>
             )}
           </motion.div>
+          </div>
+          <motion.aside
+            className="about-capabilities"
+            aria-labelledby="about-capabilities-heading"
+            initial={{ opacity: 0, y: 18 }}
+            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+            transition={{ duration: 0.7, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <h3 id="about-capabilities-heading" className="about-capabilities-heading">CORE CAPABILITIES</h3>
+            <ul className="about-capabilities-list">
+              <li>Manual Testing</li>
+              <li>Automation Testing</li>
+              <li>API Testing</li>
+              <li>Test Framework Design</li>
+            </ul>
+          </motion.aside>
         </div>
       </div>
 
@@ -156,15 +140,15 @@ export default function TestPlan({ onOpenResume }) {
       <style>{`
         .about-cinematic-stage {
           position: relative;
-          min-height: clamp(680px, 94vh, 980px);
+          min-height: clamp(560px, 68vh, 760px);
           width: 100%;
           display: flex;
           align-items: center;
-          overflow: hidden;
-          background-color: #0A0D12;
+          overflow: visible;
+          background-color: var(--color-bg-base);
           scroll-margin-top: 64px;
-          padding-top: calc(64px + clamp(1.5rem, 3.5vh, 3.25rem));
-          padding-bottom: clamp(3.5rem, 6vh, 5.5rem);
+          padding-top: calc(64px + clamp(2.5rem, 5vh, 4rem));
+          padding-bottom: clamp(3rem, 5vh, 4.5rem);
           box-sizing: border-box;
         }
 
@@ -178,124 +162,23 @@ export default function TestPlan({ onOpenResume }) {
           pointer-events: none;
         }
 
-        /* ── BACKGROUND PHOTOGRAPHIC LAYER ── */
-        .about-bg-layer {
-          position: absolute;
-          inset: 0;
-          z-index: 0;
-          overflow: hidden;
-          pointer-events: none;
-        }
-
-        .about-bg-image {
-          position: absolute;
-          inset: -2%;
-          background-size: cover;
-          background-position: right 24% center;
-          background-repeat: no-repeat;
-          will-change: transform, opacity;
-        }
-
-        /* Charcoal Scrims: Preserve skin tones on right, guarantee 100% text contrast on left */
-        .about-bg-scrim-left {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(
-            90deg,
-            #0A0D12 0%,
-            #0A0D12 30%,
-            rgba(10, 13, 18, 0.94) 48%,
-            rgba(10, 13, 18, 0.5) 68%,
-            rgba(10, 13, 18, 0.1) 85%,
-            transparent 100%
-          );
-        }
-
-        .about-bg-scrim-top {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 180px;
-          background: linear-gradient(180deg, #0A0D12 0%, rgba(10, 13, 18, 0.6) 45%, transparent 100%);
-        }
-
-        .about-bg-scrim-bottom {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          height: 220px;
-          background: linear-gradient(0deg, #0A0D12 0%, rgba(10, 13, 18, 0.8) 45%, transparent 100%);
-        }
-
-        .about-bg-vignette {
-          position: absolute;
-          inset: 0;
-          background: radial-gradient(
-            ellipse at 78% 45%,
-            transparent 40%,
-            rgba(10, 13, 18, 0.45) 85%,
-            rgba(10, 13, 18, 0.85) 100%
-          );
-        }
-
-        /* ── FOREGROUND CONTAINER ── */
         .about-container {
-          position: relative;
-          z-index: 2;
-          width: 100%;
-          max-width: 1280px;
-          margin: 0 auto;
-          padding: 0 clamp(16px, 4vw, 64px);
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-start;
-          min-height: clamp(520px, 72vh, 720px);
-        }
-
-        /* ── LEVEL 1: MINIMAL IDENTITY ── */
-        .about-identity {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.85rem;
-          font-family: var(--font-mono, 'JetBrains Mono', monospace);
-          font-size: clamp(0.72rem, 1.05vw, 0.82rem);
-          letter-spacing: 0.14em;
-          text-transform: uppercase;
-          margin-bottom: clamp(2.5rem, 6vh, 4.5rem);
-        }
-
-        .about-identity-tag {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.55rem;
-          color: #F5F5F7;
-          font-weight: 600;
-        }
-
-        .about-live-dot {
-          width: 7px;
-          height: 7px;
-          border-radius: 50%;
-          background-color: var(--color-accent-pass, #4ADE9A);
-          box-shadow: 0 0 10px rgba(74, 222, 154, 0.7);
-        }
-
-        .about-identity-divider {
-          color: rgba(158, 171, 184, 0.35);
-          font-weight: 300;
-        }
-
-        .about-identity-role {
-          color: var(--color-text-muted, #9EABB8);
-          font-weight: 400;
-          letter-spacing: 0.12em;
+          width: min(100%, 1280px);
+          margin-inline: auto;
+          padding-inline: clamp(24px, 6vw, 88px);
+          box-sizing: border-box;
         }
 
         /* ── LEVEL 2: EDITORIAL INTRODUCTION FLOW ── */
+        .about-content-grid {
+          display: grid;
+          grid-template-columns: minmax(0, 1.2fr) minmax(250px, 0.8fr);
+          align-items: center;
+          gap: clamp(2.5rem, 8vw, 7rem);
+        }
+
         .about-editorial-flow {
-          max-width: clamp(340px, 52vw, 640px);
+          max-width: 680px;
           display: flex;
           flex-direction: column;
           align-items: flex-start;
@@ -310,47 +193,77 @@ export default function TestPlan({ onOpenResume }) {
           font-size: clamp(0.7rem, 0.95vw, 0.78rem);
           letter-spacing: 0.2em;
           text-transform: uppercase;
-          color: var(--color-accent-pass, #4ADE9A);
+          color: var(--color-accent-pass, #91A797);
           margin-bottom: clamp(0.9rem, 1.8vh, 1.35rem);
           font-weight: 600;
         }
 
         .about-eyebrow-sep {
-          color: rgba(74, 222, 154, 0.45);
+          color: rgba(145, 167, 151, 0.45);
         }
 
         .about-eyebrow-index {
-          color: #F5F5F7;
+          color: var(--color-text-primary);
         }
 
         /* Editorial Serif Headline */
         .about-headline {
           font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
-          font-size: clamp(30px, 4.2vw, 48px);
+          font-size: clamp(2.5rem, 4.2vw, 3.75rem);
           font-weight: 700;
           line-height: 1.12;
           letter-spacing: -0.025em;
-          color: #F8FAFC;
+          color: var(--color-text-primary);
           margin: 0 0 clamp(1rem, 2vh, 1.5rem) 0;
           display: flex;
           flex-direction: column;
-          text-shadow: 0 2px 24px rgba(0, 0, 0, 0.4);
         }
 
         .about-headline-line {
           display: block;
-          white-space: nowrap;
+          white-space: normal;
         }
 
         /* Supporting Text — directly on background */
         .about-paragraph {
           font-family: var(--font-sans, 'Inter', sans-serif);
-          font-size: clamp(0.95rem, 1.22vw, 1.06rem);
-          line-height: 1.76;
-          color: rgba(225, 230, 238, 0.82);
+          font-size: clamp(1rem, 1.22vw, 1.125rem);
+          line-height: 1.75;
+          color: var(--color-text-secondary);
           margin: 0 0 clamp(2rem, 3.8vh, 2.85rem) 0;
           max-width: 46ch;
-          text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6);
+        }
+
+        .about-capabilities {
+          width: 100%;
+          max-width: 420px;
+          justify-self: end;
+        }
+
+        .about-capabilities-heading {
+          margin: 0;
+          padding-bottom: 0.9rem;
+          border-bottom: 1px solid var(--color-border);
+          color: var(--color-text-secondary);
+          font-family: var(--font-mono, 'JetBrains Mono', monospace);
+          font-size: 0.72rem;
+          font-weight: 600;
+          letter-spacing: 0.14em;
+        }
+
+        .about-capabilities-list {
+          margin: 0;
+          padding: 0;
+          list-style: none;
+        }
+
+        .about-capabilities-list li {
+          padding: 1rem 0;
+          border-bottom: 1px solid var(--color-border);
+          color: var(--color-text-primary);
+          font-family: var(--font-sans, 'Inter', sans-serif);
+          font-size: clamp(1rem, 1.3vw, 1.15rem);
+          line-height: 1.4;
         }
 
         /* ── LEVEL 3: PRIMARY ACTION ── */
@@ -367,21 +280,21 @@ export default function TestPlan({ onOpenResume }) {
           gap: 0.65rem;
           padding: 0.9rem 1.75rem;
           border-radius: 9999px;
-          background-color: var(--color-accent-pass, #4ADE9A);
-          color: #070A0E;
+          background-color: var(--color-button-primary);
+          color: var(--color-button-primary-text);
           font-family: var(--font-mono, 'JetBrains Mono', monospace);
           font-size: 0.82rem;
           font-weight: 700;
           letter-spacing: 0.08em;
           text-decoration: none;
           transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-          box-shadow: 0 4px 18px rgba(74, 222, 154, 0.28);
+          box-shadow: none;
         }
 
         .about-primary-cta:hover {
-          background-color: #65f5af;
+          background-color: #343630;
           transform: translateY(-2px);
-          box-shadow: 0 8px 26px rgba(74, 222, 154, 0.45);
+          box-shadow: none;
         }
 
         .about-cta-arrow {
@@ -396,10 +309,10 @@ export default function TestPlan({ onOpenResume }) {
           display: inline-flex;
           align-items: center;
           padding: 0.88rem 1.45rem;
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(225, 230, 238, 0.22);
+          background: transparent;
+          border: 1px solid var(--color-border);
           border-radius: 9999px;
-          color: #E8EAED;
+          color: var(--color-text-primary);
           font-family: var(--font-mono, 'JetBrains Mono', monospace);
           font-size: 0.8rem;
           font-weight: 600;
@@ -409,86 +322,46 @@ export default function TestPlan({ onOpenResume }) {
         }
 
         .about-secondary-cta:hover {
-          border-color: rgba(74, 222, 154, 0.6);
-          color: var(--color-accent-pass, #4ADE9A);
-          background-color: rgba(74, 222, 154, 0.06);
+          border-color: var(--color-text-secondary);
+          color: var(--color-text-primary);
+          background-color: var(--color-surface);
           transform: translateY(-1px);
         }
 
         /* ── RESPONSIVE ADAPTATIONS ── */
         @media (max-width: 1024px) {
           .about-cinematic-stage {
-            min-height: 85vh;
-            padding-top: calc(64px + 2rem);
-            padding-bottom: 4rem;
+            min-height: 0;
+            padding-top: calc(64px + 3rem);
+            padding-bottom: 3.5rem;
           }
-          .about-container {
-            min-height: auto;
-          }
-          .about-editorial-flow {
-            max-width: 540px;
-          }
-          .about-bg-image {
-            background-position: right 18% center;
-          }
-          .about-bg-scrim-left {
-            background: linear-gradient(
-              90deg,
-              #0A0D12 0%,
-              #0A0D12 36%,
-              rgba(10, 13, 18, 0.95) 55%,
-              rgba(10, 13, 18, 0.65) 78%,
-              transparent 100%
-            );
+          .about-content-grid {
+            grid-template-columns: minmax(0, 1.1fr) minmax(220px, 0.9fr);
+            gap: clamp(2rem, 5vw, 3rem);
           }
         }
 
         @media (max-width: 768px) {
           .about-cinematic-stage {
             min-height: auto;
-            padding-top: calc(64px + 1.25rem);
-            padding-bottom: 4.5rem;
+            padding-top: calc(64px + 2rem);
+            padding-bottom: 3.5rem;
           }
           .about-container {
             min-height: auto;
             padding: 0 clamp(16px, 4vw, 32px);
           }
-          .about-bg-image {
-            background-position: 78% 10px;
-            background-size: 130% auto;
+          .about-content-grid {
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
           }
-          .about-bg-scrim-left {
-            background: linear-gradient(
-              180deg,
-              rgba(10, 13, 18, 0.4) 0%,
-              rgba(10, 13, 18, 0.1) 180px,
-              rgba(10, 13, 18, 0.92) 280px,
-              #0A0D12 340px,
-              #0A0D12 100%
-            );
-          }
-          .about-identity {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.35rem;
-            margin-bottom: 1.5rem;
-          }
-          .about-identity-divider {
-            display: none;
-          }
-          .about-editorial-flow {
-            max-width: 100%;
-            margin-top: clamp(140px, 24vh, 220px);
-          }
+          .about-editorial-flow { max-width: 100%; }
           .about-headline {
-            font-size: clamp(2.3rem, 8.5vw, 3.2rem);
+            font-size: clamp(2.35rem, 8vw, 3.25rem);
             margin-bottom: 1.25rem;
           }
-          .about-headline-line {
-            white-space: normal;
-          }
           .about-paragraph {
-            font-size: 0.95rem;
+            font-size: 1rem;
             line-height: 1.7;
             margin-bottom: 2rem;
             max-width: 100%;
@@ -496,17 +369,21 @@ export default function TestPlan({ onOpenResume }) {
           .about-action-row {
             width: 100%;
             gap: 0.75rem;
-            flex-direction: column;
           }
           .about-primary-cta {
-            width: 100%;
             justify-content: center;
-            padding: 0.95rem 1.5rem;
+            padding: 0.85rem 1.25rem;
           }
           .about-secondary-cta {
-            width: 100%;
             justify-content: center;
-            padding: 0.85rem 1.5rem;
+            padding: 0.85rem 1.25rem;
+          }
+        }
+
+        @media (max-width: 440px) {
+          .about-action-row {
+            align-items: stretch;
+            flex-direction: column;
           }
         }
       `}</style>

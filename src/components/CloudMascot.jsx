@@ -26,7 +26,7 @@ export default function CloudMascot() {
   const [pos, setPos] = useState(null)
   const [speech, setSpeech] = useState(null)
   const [isDragging, setIsDragging] = useState(false)
-  const [isInContactSection, setIsInContactSection] = useState(false)
+  const [isInReservedSection, setIsInReservedSection] = useState(false)
 
   const containerRef = useRef(null)
   const iframeRef = useRef(null)
@@ -39,16 +39,19 @@ export default function CloudMascot() {
     const handleResize = () => setPos(null)
     window.addEventListener('resize', handleResize)
 
-    const deploySection = document.getElementById('deploy')
+    const reservedSections = [
+      document.getElementById('hero'),
+      document.getElementById('deploy'),
+    ].filter(Boolean)
     let observer
-    if (deploySection) {
+    if (reservedSections.length) {
       observer = new IntersectionObserver(
-        ([entry]) => {
-          setIsInContactSection(entry.isIntersecting)
+        (entries) => {
+          setIsInReservedSection(entries.some((entry) => entry.isIntersecting))
         },
-        { rootMargin: '-5% 0px -5% 0px', threshold: 0.08 }
+        { rootMargin: '-8% 0px -8% 0px', threshold: 0.08 }
       )
-      observer.observe(deploySection)
+      reservedSections.forEach((section) => observer.observe(section))
     }
 
     return () => {
@@ -248,7 +251,7 @@ export default function CloudMascot() {
   return (
     <div
       ref={containerRef}
-      className={`mascot-float${isReady ? ' is-ready' : ''}${isDragging ? ' is-dragging' : ''}${isInContactSection ? ' is-docked' : ''}`}
+      className={`mascot-float${isReady ? ' is-ready' : ''}${isDragging ? ' is-dragging' : ''}${isInReservedSection ? ' is-docked' : ''}`}
       style={
         pos
           ? {

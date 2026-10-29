@@ -51,9 +51,9 @@ function LanyardBand({ clipPos }) {
       <mesh ref={leftStrapRef}>
         <tubeGeometry args={[new THREE.LineCurve3(topAnchorLeft, new THREE.Vector3(0, 1.3, 0)), 24, 0.07, 8, false]} />
         <meshStandardMaterial
-          color="#1E2836"
-          emissive="#38BDF8"
-          emissiveIntensity={0.35}
+          color="#303437"
+          emissive="#A8AA9F"
+          emissiveIntensity={0.08}
           roughness={0.6}
           metalness={0.25}
         />
@@ -63,9 +63,9 @@ function LanyardBand({ clipPos }) {
       <mesh ref={rightStrapRef}>
         <tubeGeometry args={[new THREE.LineCurve3(topAnchorRight, new THREE.Vector3(0, 1.3, 0)), 24, 0.07, 8, false]} />
         <meshStandardMaterial
-          color="#1E2836"
-          emissive="#4ADE9A"
-          emissiveIntensity={0.35}
+          color="#303437"
+          emissive="#A8AA9F"
+          emissiveIntensity={0.08}
           roughness={0.6}
           metalness={0.25}
         />
@@ -149,7 +149,7 @@ function HangingIDCard({ isFlipped, onToggleFlip, clipPosRef, onCardAction }) {
         onClick={onToggleFlip}
       >
         <meshStandardMaterial
-          color="#0B0F14"
+          color="#17191B"
           roughness={0.25}
           metalness={0.8}
         />
@@ -158,14 +158,14 @@ function HangingIDCard({ isFlipped, onToggleFlip, clipPosRef, onCardAction }) {
       {/* Card Top Punch Hole */}
       <mesh position={[0, 1.9, 0]}>
         <cylinderGeometry args={[0.16, 0.16, 0.1, 24]} rotation={[Math.PI / 2, 0, 0]} />
-        <meshBasicMaterial color="#000000" />
+        <meshBasicMaterial color="#303437" />
       </mesh>
 
       {/* Subtle Chamfer Highlight */}
       <mesh position={[0, 0, 0]}>
         <planeGeometry args={[3.32, 4.32]} />
         <meshBasicMaterial
-          color={hovered ? '#4ADE9A' : '#38BDF8'}
+          color={hovered ? '#657D6B' : '#303437'}
           wireframe
           transparent
           opacity={hovered ? 0.35 : 0.15}
@@ -195,8 +195,8 @@ function HangingIDCard({ isFlipped, onToggleFlip, clipPosRef, onCardAction }) {
             {/* Header Status */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#4ADE9A', boxShadow: '0 0 8px #4ADE9A', display: 'inline-block' }} />
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '8.5px', fontWeight: 700, color: '#4ADE9A', letterSpacing: '0.12em' }}>
+                <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#91A797', boxShadow: '0 0 8px #91A797', display: 'inline-block' }} />
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '8.5px', fontWeight: 700, color: '#91A797', letterSpacing: '0.12em' }}>
                   VERIFIED QA ENGINEER
                 </span>
               </div>
@@ -206,11 +206,11 @@ function HangingIDCard({ isFlipped, onToggleFlip, clipPosRef, onCardAction }) {
                   onToggleFlip()
                 }}
                 style={{
-                  background: 'rgba(255, 255, 255, 0.08)',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  background: 'var(--color-surface-hover)',
+                  border: '1px solid var(--color-border)',
                   borderRadius: '6px',
                   padding: '3px 8px',
-                  color: '#9EABB8',
+                  color: 'var(--color-text-primary)',
                   fontFamily: 'var(--font-mono)',
                   fontSize: '8px',
                   cursor: 'pointer',
@@ -228,10 +228,10 @@ function HangingIDCard({ isFlipped, onToggleFlip, clipPosRef, onCardAction }) {
                   height: '68px',
                   borderRadius: '12px',
                   overflow: 'hidden',
-                  border: '2px solid rgba(74, 222, 154, 0.5)',
-                  boxShadow: '0 0 14px rgba(74, 222, 154, 0.25)',
+                  border: '2px solid rgba(145, 167, 151, 0.5)',
+                  boxShadow: '0 0 14px rgba(145, 167, 151, 0.25)',
                   flexShrink: 0,
-                  background: '#1A222C',
+                  background: 'var(--color-surface)',
                 }}
               >
                 <img
@@ -242,13 +242,13 @@ function HangingIDCard({ isFlipped, onToggleFlip, clipPosRef, onCardAction }) {
               </div>
 
               <div>
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: '19px', fontWeight: 800, color: '#FFFFFF', lineHeight: 1.1 }}>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: '19px', fontWeight: 800, color: 'var(--color-text-primary)', lineHeight: 1.1 }}>
                   Kishor Gogoi
                 </div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: '#38BDF8', fontWeight: 600, marginTop: '3px' }}>
                   SDET & Full-Stack QA
                 </div>
-                <div style={{ fontSize: '8.5px', color: '#9EABB8', marginTop: '2px' }}>
+                <div style={{ fontSize: '8.5px', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
                   Automation Architect · CI/CD
                 </div>
               </div>
@@ -264,9 +264,9 @@ function HangingIDCard({ isFlipped, onToggleFlip, clipPosRef, onCardAction }) {
                     fontSize: '7.5px',
                     padding: '2px 6px',
                     borderRadius: '4px',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    color: '#CBD5E1',
+                    background: 'var(--color-surface-hover)',
+                    border: '1px solid var(--color-border)',
+                    color: 'var(--color-text-primary)',
                   }}
                 >
                   {s}
@@ -277,8 +277,8 @@ function HangingIDCard({ isFlipped, onToggleFlip, clipPosRef, onCardAction }) {
             {/* Bottom ID Barcode */}
             <div
               style={{
-                background: 'rgba(15, 20, 25, 0.85)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
+                background: 'var(--color-surface)',
+                border: '1px solid var(--color-border)',
                 borderRadius: '8px',
                 padding: '7px 10px',
                 display: 'flex',
@@ -287,12 +287,12 @@ function HangingIDCard({ isFlipped, onToggleFlip, clipPosRef, onCardAction }) {
               }}
             >
               <div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '7px', color: '#6A7885' }}>ID: KG-403-2026</div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '7.5px', color: '#4ADE9A', fontWeight: 600 }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '7px', color: 'var(--color-text-secondary)' }}>ID: KG-403-2026</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '7.5px', color: '#91A797', fontWeight: 600 }}>
                   Bangalore · IST Online
                 </div>
               </div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '7.5px', color: '#9EABB8' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '7.5px', color: 'var(--color-text-secondary)' }}>
                 TAP TO FLIP ↷
               </div>
             </div>
@@ -331,11 +331,11 @@ function HangingIDCard({ isFlipped, onToggleFlip, clipPosRef, onCardAction }) {
                   onToggleFlip()
                 }}
                 style={{
-                  background: 'rgba(255, 255, 255, 0.08)',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  background: 'var(--color-surface-hover)',
+                  border: '1px solid var(--color-border)',
                   borderRadius: '6px',
                   padding: '3px 8px',
-                  color: '#9EABB8',
+                  color: 'var(--color-text-primary)',
                   fontFamily: 'var(--font-mono)',
                   fontSize: '8px',
                   cursor: 'pointer',
@@ -353,15 +353,15 @@ function HangingIDCard({ isFlipped, onToggleFlip, clipPosRef, onCardAction }) {
                   onCardAction('copy-email')
                 }}
                 style={{
-                  background: 'rgba(15, 20, 25, 0.8)',
-                  border: '1px solid rgba(74, 222, 154, 0.35)',
+                background: 'var(--color-surface)',
+                border: '1px solid var(--color-border)',
                   borderRadius: '8px',
                   padding: '8px 10px',
                   cursor: 'pointer',
                 }}
               >
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '7px', color: '#6A7885' }}>PRIMARY EMAIL</div>
-                <div style={{ fontSize: '10.5px', fontWeight: 600, color: '#4ADE9A', marginTop: '2px' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '7px', color: 'var(--color-text-secondary)' }}>PRIMARY EMAIL</div>
+                <div style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-text-primary)', marginTop: '2px' }}>
                   kishorgogoi403@gmail.com
                 </div>
               </div>
@@ -372,15 +372,15 @@ function HangingIDCard({ isFlipped, onToggleFlip, clipPosRef, onCardAction }) {
                   onCardAction('linkedin')
                 }}
                 style={{
-                  background: 'rgba(15, 20, 25, 0.8)',
-                  border: '1px solid rgba(56, 189, 248, 0.35)',
+                background: 'var(--color-surface)',
+                border: '1px solid var(--color-border)',
                   borderRadius: '8px',
                   padding: '8px 10px',
                   cursor: 'pointer',
                 }}
               >
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '7px', color: '#6A7885' }}>LINKEDIN PROFILE</div>
-                <div style={{ fontSize: '10.5px', fontWeight: 600, color: '#38BDF8', marginTop: '2px' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '7px', color: 'var(--color-text-secondary)' }}>LINKEDIN PROFILE</div>
+                <div style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-text-primary)', marginTop: '2px' }}>
                   linkedin.com/in/kishorgogoi
                 </div>
               </div>
@@ -391,24 +391,24 @@ function HangingIDCard({ isFlipped, onToggleFlip, clipPosRef, onCardAction }) {
                   onCardAction('github')
                 }}
                 style={{
-                  background: 'rgba(15, 20, 25, 0.8)',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                background: 'var(--color-surface)',
+                border: '1px solid var(--color-border)',
                   borderRadius: '8px',
                   padding: '8px 10px',
                   cursor: 'pointer',
                 }}
               >
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '7px', color: '#6A7885' }}>GITHUB REPOSITORIES</div>
-                <div style={{ fontSize: '10.5px', fontWeight: 600, color: '#E8EAED', marginTop: '2px' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '7px', color: 'var(--color-text-secondary)' }}>GITHUB REPOSITORIES</div>
+                <div style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-text-primary)', marginTop: '2px' }}>
                   github.com/KISHOR403
                 </div>
               </div>
             </div>
 
             {/* Bottom Certification */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '7px', color: '#6A7885' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '7px', color: 'var(--color-text-secondary)' }}>
               <span>PASSPORT: #KG-8842</span>
-              <span style={{ color: '#4ADE9A' }}>100% QUALITY GATES PASS</span>
+              <span style={{ color: '#91A797' }}>100% QUALITY GATES PASS</span>
             </div>
           </Html>
         </group>
@@ -435,7 +435,7 @@ export default function Contact3DCanvas({ onCardAction }) {
         <ambientLight intensity={0.8} />
         <directionalLight position={[4, 6, 4]} intensity={1.5} color="#FFFFFF" />
         <pointLight position={[-4, -3, 2]} intensity={0.8} color="#38BDF8" />
-        <pointLight position={[0, -4, 2]} intensity={0.6} color="#4ADE9A" />
+        <pointLight position={[0, -4, 2]} intensity={0.6} color="#91A797" />
 
         {/* Dynamic Moving Lanyard Band (Ribbon Straps) */}
         <LanyardBand clipPos={clipPosRef} />

@@ -106,9 +106,9 @@ export default function Deploy() {
                 fontSize: '0.72rem',
                 letterSpacing: '0.14em',
                 textTransform: 'uppercase',
-                color: '#64748B',
+                color: 'var(--color-text-secondary)',
                 paddingTop: '1.25rem',
-                borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                borderTop: '1px solid var(--color-border)',
                 maxWidth: '420px',
               }}
               aria-hidden="true"
@@ -231,7 +231,7 @@ export default function Deploy() {
         {/* ─── Minimalist Editorial Footer Colophon ─── */}
         <footer className="swiss-colophon-footer">
           <div className="swiss-colophon-col">
-            <span style={{ color: '#FFFFFF', fontWeight: 600 }}>© {new Date().getFullYear()} KISHOR GOGOI</span>
+            <span style={{ color: 'var(--color-text-primary)', fontWeight: 600 }}>© {new Date().getFullYear()} KISHOR GOGOI</span>
             <span>ENGINEERED WITH RIGOROUS AUTOMATION &amp; PRECISION</span>
             <span>TYPESET IN SPACE GROTESK &amp; INTER</span>
           </div>

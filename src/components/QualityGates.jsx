@@ -127,7 +127,7 @@ function CertificateModal({ isOpen, onClose, pdfUrl, certName, certIssuer, certY
           <div className="cert-modal-details">
             <div className="cert-modal-row">
               <span>ISSUER</span>
-              <span style={{ color: '#E8EAED' }}>{certIssuer}</span>
+              <span style={{ color: 'var(--color-text-primary)' }}>{certIssuer}</span>
             </div>
             <div className="cert-modal-row">
               <span>YEAR</span>
@@ -315,7 +315,7 @@ export default function QualityGates() {
       <div
         ref={scrollContainerRef}
         className="cert-book-scroll-container"
-        style={{ height: `${(totalPages + 1) * 60}vh` }}
+        style={{ height: `${(totalPages + 1) * 43}vh` }}
       >
         {/* Sticky viewport stage */}
         <div className="cert-book-stage">

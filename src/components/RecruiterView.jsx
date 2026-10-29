@@ -144,7 +144,7 @@ export default function RecruiterView({ isOpen, onClose, onOpenResume }) {
                   gap: '4px',
                   fontFamily: 'var(--font-mono)',
                   fontSize: '0.72rem',
-                  color: '#6C7A89',
+                  color: 'var(--color-text-secondary)',
                   marginTop: '0.5rem',
                 }}>
                   <MapPin size={12} /> Bengaluru, India
@@ -154,7 +154,7 @@ export default function RecruiterView({ isOpen, onClose, onOpenResume }) {
                 onClick={onClose}
                 aria-label="Close recruiter view"
                 style={{
-                  background: 'rgba(255, 255, 255, 0.05)',
+                  background: 'var(--color-surface)',
                   border: '1px solid var(--color-border-hairline)',
                   borderRadius: '8px',
                   padding: '6px',
@@ -182,12 +182,12 @@ export default function RecruiterView({ isOpen, onClose, onOpenResume }) {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '6px',
-                    background: 'rgba(74, 222, 154, 0.12)',
-                    border: '1px solid rgba(74, 222, 154, 0.3)',
+                    background: 'var(--color-button-primary)',
+                    border: '1px solid var(--color-button-primary)',
                     borderRadius: '8px',
                     padding: '8px 16px',
                     cursor: 'pointer',
-                    color: '#4ADE9A',
+                    color: 'var(--color-button-primary-text)',
                     fontFamily: 'var(--font-mono)',
                     fontSize: '0.72rem',
                     fontWeight: 600,
@@ -203,7 +203,7 @@ export default function RecruiterView({ isOpen, onClose, onOpenResume }) {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '6px',
-                    background: 'rgba(255, 255, 255, 0.05)',
+                    background: 'var(--color-surface)',
                     border: '1px solid var(--color-border-hairline)',
                     borderRadius: '8px',
                     padding: '8px 16px',
@@ -226,7 +226,7 @@ export default function RecruiterView({ isOpen, onClose, onOpenResume }) {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '6px',
-                    background: 'rgba(255, 255, 255, 0.05)',
+                    background: 'var(--color-surface)',
                     border: '1px solid var(--color-border-hairline)',
                     borderRadius: '8px',
                     padding: '8px 16px',
@@ -253,7 +253,7 @@ export default function RecruiterView({ isOpen, onClose, onOpenResume }) {
                       fontWeight: 500,
                       padding: '4px 10px',
                       borderRadius: '6px',
-                      background: 'rgba(35, 44, 53, 0.4)',
+                      background: 'var(--color-surface)',
                       border: '1px solid var(--color-border-hairline)',
                       color: 'var(--color-text-primary)',
                     }}>
@@ -378,7 +378,7 @@ function Section({ title, children, last = false }) {
         fontWeight: 600,
         letterSpacing: '0.1em',
         textTransform: 'uppercase',
-        color: '#6C7A89',
+        color: 'var(--color-text-secondary)',
         marginBottom: '0.75rem',
       }}>
         {title}

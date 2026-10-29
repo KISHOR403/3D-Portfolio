@@ -133,7 +133,7 @@ export default function BeyondTheConsole() {
           color: var(--color-text-primary);
         }
         .swiss-btc__entry-sep {
-          color: rgba(35, 44, 53, 0.6);
+          color: var(--color-text-secondary);
           font-weight: 400;
         }
         .swiss-btc__entry-value {

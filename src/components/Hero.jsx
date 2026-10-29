@@ -1,308 +1,81 @@
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { ArrowDown, Download, ArrowUpRight } from 'lucide-react'
-import ConsoleFallback from './ConsoleFallback'
-
-const getIsMobile = () => typeof window !== 'undefined' && window.innerWidth < 1024
-
-const heroContainerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.12,
-    },
-  },
-}
-
-const heroChildVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: 'easeOut',
-    },
-  },
-}
+import { motion, useReducedMotion } from 'framer-motion'
+import { ArrowUpRight } from 'lucide-react'
+import portrait from '../assets/profile-cutout.png'
 
 export default function Hero({ onOpenResume }) {
-  const [isMobile, setIsMobile] = useState(getIsMobile)
-
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 1024)
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  const reduceMotion = useReducedMotion()
 
   return (
-    <section
-      id="hero"
-      style={{
-        minHeight: 'calc(100vh - 72px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: isMobile
-          ? 'clamp(90px, 12vh, 120px) clamp(16px, 4vw, 32px) clamp(2.5rem, 5vh, 4rem)'
-          : '130px clamp(24px, 4vw, 40px) 5rem',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
-      {/* Subtle atmospheric ambient glow */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '20%',
-          left: '10%',
-          width: '500px',
-          height: '500px',
-          background: 'radial-gradient(circle, rgba(74, 222, 154, 0.05) 0%, transparent 70%)',
-          filter: 'blur(60px)',
-          pointerEvents: 'none',
-        }}
-      />
+    <section id="hero" className="editorial-hero">
+      <div className="editorial-hero-inner">
+        <div className="editorial-hero-background" aria-hidden="true">
+          <div className="editorial-backdrop-word">KISHOR GOGOI</div>
+          <svg className="editorial-hero-wave" viewBox="0 0 1800 800" preserveAspectRatio="none">
+            <path d="M420 340 C545 370 585 475 715 465 C850 454 874 329 1010 337 C1129 344 1180 397 1274 457 C1369 517 1427 579 1500 687" />
+            <circle cx="1274" cy="457" r="9" />
+            <circle className="editorial-wave-core" cx="1274" cy="457" r="3" />
+          </svg>
+        </div>
 
-      <div
-        style={{
-          maxWidth: '1280px',
-          width: '100%',
-          display: 'grid',
-          gridTemplateColumns: isMobile ? '1fr' : '1.15fr 0.85fr',
-          gap: isMobile ? '3.5rem' : '3.5rem',
-          alignItems: 'center',
-        }}
-      >
-        {/* Left Column — Staggered Entrance on Mount */}
         <motion.div
-          variants={heroContainerVariants}
-          initial="hidden"
-          animate="visible"
-          style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
+          className="editorial-copy editorial-copy-left"
+          initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.12, ease: 'easeOut' }}
         >
-          {/* Exactly 2 Badges Above Headline */}
-          <motion.div
-            variants={heroChildVariants}
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '10px',
-              alignItems: 'center',
-              marginBottom: '1.75rem',
-            }}
-          >
-            {/* Badge 1: Status */}
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                fontFamily: 'var(--font-mono)',
-                fontSize: 'var(--font-size-small)',
-                fontWeight: 'var(--font-weight-small)',
-                letterSpacing: 'var(--letter-spacing-small)',
-                textTransform: 'uppercase',
-                color: '#4ADE9A',
-                background: 'rgba(74, 222, 154, 0.08)',
-                border: '1px solid rgba(74, 222, 154, 0.22)',
-                borderRadius: '999px',
-                padding: '6px 14px',
-              }}
-            >
-              <span
-                style={{
-                  width: '6px',
-                  height: '6px',
-                  borderRadius: '50%',
-                  background: '#4ADE9A',
-                  boxShadow: '0 0 8px rgba(74, 222, 154, 0.8)',
-                }}
-              />
-              Available for Roles
-            </div>
-
-            {/* Badge 2: Location / Discipline */}
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                fontFamily: 'var(--font-mono)',
-                fontSize: 'var(--font-size-small)',
-                fontWeight: 'var(--font-weight-small)',
-                letterSpacing: '0.04em',
-                color: 'var(--color-text-muted)',
-                background: 'rgba(255, 255, 255, 0.03)',
-                border: '1px solid var(--color-border-hairline)',
-                borderRadius: '999px',
-                padding: '6px 14px',
-              }}
-            >
-              Bengaluru, IN · Full-Stack & QA
-            </div>
-          </motion.div>
-
-          {/* Dominate H1 — Strict 96-120px Scale (48px mobile, line-height 0.95, weight 800) */}
-          <motion.h1
-            variants={heroChildVariants}
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: isMobile ? 'clamp(34px, 8.5vw, 48px)' : 'clamp(48px, 6vw, 88px)',
-              fontWeight: 800,
-              lineHeight: 1.02,
-              letterSpacing: '-0.04em',
-              color: '#F8FAFC',
-              marginBottom: '1.25rem',
-              textWrap: 'balance',
-              overflowWrap: 'break-word',
-              wordBreak: 'break-word',
-            }}
-          >
-            <span className="t-shimmer" data-text="Kishor Gogoi">
-              Kishor Gogoi
-            </span>
-          </motion.h1>
-
-          {/* Clean Subtitle Line */}
-          <motion.p
-            variants={heroChildVariants}
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: isMobile ? '1rem' : '1.25rem',
-              fontWeight: 500,
-              letterSpacing: '0.02em',
-              color: '#4ADE9A',
-              marginBottom: '1.25rem',
-            }}
-          >
-            Full Stack Developer &amp; QA Automation Engineer
-          </motion.p>
-
-          {/* Disciplined Editorial Body — Strict 16px, line-height 1.65 */}
-          <motion.p
-            variants={heroChildVariants}
-            style={{
-              fontFamily: 'var(--font-sans)',
-              fontSize: 'var(--font-size-body)',
-              lineHeight: 'var(--line-height-body)',
-              letterSpacing: '0.01em',
-              color: '#94A3B8',
-              maxWidth: '520px',
-              marginBottom: '2.5rem',
-            }}
-          >
-            Designing resilient full-stack architectures and enterprise test frameworks — eliminating regression cycles and shipping bug-free web applications.
-          </motion.p>
-
-          {/* Action CTAs — Staggered & Micro-Interactions */}
-          <motion.div
-            variants={heroChildVariants}
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '1rem',
-              alignItems: 'center',
-            }}
-          >
-            {/* Primary Action */}
-            <motion.a
-              href="#pipeline-runs"
-              id="hero-cta-projects"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.78rem',
-                fontWeight: 600,
-                letterSpacing: '0.06em',
-                textTransform: 'uppercase',
-                color: '#0A0E13',
-                background: '#4ADE9A',
-                textDecoration: 'none',
-                padding: '14px 28px',
-                borderRadius: '999px',
-                boxShadow: '0 0 25px rgba(74, 222, 154, 0.25)',
-              }}
-            >
-              <span>Explore Projects</span>
-              <ArrowDown size={14} />
-            </motion.a>
-
-            {/* Secondary Action */}
-            <motion.button
-              onClick={onOpenResume}
-              id="hero-cta-resume"
-              type="button"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.78rem',
-                fontWeight: 600,
-                letterSpacing: '0.06em',
-                textTransform: 'uppercase',
-                color: 'var(--color-text-primary)',
-                background: 'rgba(255, 255, 255, 0.03)',
-                padding: '14px 26px',
-                borderRadius: '999px',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                cursor: 'pointer',
-              }}
-            >
-              <Download size={14} />
-              <span>Resume Library</span>
-            </motion.button>
-
-            {/* Tertiary Link */}
-            <motion.a
-              href="#deploy"
-              id="hero-cta-contact"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
-                fontWeight: 500,
-                letterSpacing: '0.04em',
-                color: 'var(--color-text-muted)',
-                textDecoration: 'none',
-                padding: '12px 14px',
-              }}
-            >
-              <span>Get in touch</span>
-              <ArrowUpRight size={13} />
-            </motion.a>
-          </motion.div>
+          <div className="editorial-kicker">
+            <span className="editorial-kicker-index">01</span><i />
+            <span>Software quality <b>·</b> Test automation</span>
+          </div>
+          <h1 className="editorial-title"><span>Quality</span><span>is never</span><span>an accident.</span></h1>
+          <p className="editorial-intro">Thoughtful testing. Reliable releases.<br />Better digital experiences.</p>
+          <a className="editorial-left-link" href="#pipeline-runs">
+            <span className="editorial-round-arrow"><ArrowUpRight size={17} strokeWidth={1.4} /></span>
+            <span>Explore my work</span>
+          </a>
         </motion.div>
 
-        {/* Right Column — Typewriter Terminal */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: isMobile ? 'flex-start' : 'center',
-            width: '100%',
-          }}
+        <div className="editorial-portrait-wrap">
+          <motion.img
+            className="editorial-portrait"
+            src={portrait}
+            alt="Kishor Gogoi, software quality engineer"
+            fetchPriority="high"
+            initial={reduceMotion ? false : { y: 24, scale: 0.985 }}
+            animate={{ y: 0, scale: 1 }}
+            transition={{ duration: 0.9, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+          />
+        </div>
+
+        <motion.aside
+          className="editorial-copy editorial-copy-right"
+          initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.65, delay: 0.32, ease: 'easeOut' }}
         >
-          <ConsoleFallback />
-        </motion.div>
+          <div className="editorial-main-copy">
+            <span className="editorial-index">01 <i /> QUALITY, BY DESIGN</span>
+            <p className="editorial-support">Building confidence in software through manual testing, automation frameworks, API validation, and attention to detail.</p>
+            <a className="editorial-text-link" href="#pipeline-runs">
+              Explore my projects <ArrowUpRight size={15} strokeWidth={1.5} />
+            </a>
+            <button className="editorial-text-link editorial-resume-link" type="button" onClick={onOpenResume}>
+              Download resume <ArrowUpRight size={15} strokeWidth={1.5} />
+            </button>
+          </div>
+          <div className="editorial-facts-rail" aria-label="Testing specialties and role">
+            <span className="editorial-rail-star" aria-hidden="true">✦</span>
+            <span>Manual<br />Automation<br />API</span>
+            <i />
+            <span>QA<br />Engineer</span>
+          </div>
+        </motion.aside>
+
+        <div className="editorial-bottom-rule">
+          <span>Independent QA Engineer</span>
+          <span>Bengaluru, India</span>
+          <span>Available for opportunities <i /></span>
+        </div>
       </div>
     </section>
   )

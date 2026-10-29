@@ -57,7 +57,7 @@ const DEFAULT_TESTS = [
 ]
 
 const TYPE_COLORS = {
-  Positive: { bg: 'rgba(74, 222, 154, 0.08)', color: '#4ADE9A', border: 'rgba(74, 222, 154, 0.2)' },
+  Positive: { bg: 'rgba(145, 167, 151, 0.08)', color: '#91A797', border: 'rgba(145, 167, 151, 0.2)' },
   Negative: { bg: 'rgba(232, 97, 92, 0.08)', color: '#E8615C', border: 'rgba(232, 97, 92, 0.2)' },
   Boundary: { bg: 'rgba(242, 169, 59, 0.08)', color: '#F2A93B', border: 'rgba(242, 169, 59, 0.2)' },
   Security: { bg: 'rgba(192, 132, 252, 0.08)', color: '#C084FC', border: 'rgba(192, 132, 252, 0.2)' },
@@ -158,7 +158,7 @@ export default function TestSuiteModal({ isOpen, onClose, projectTitle }) {
                 onClick={onClose}
                 aria-label="Close test suite"
                 style={{
-                  background: 'rgba(255, 255, 255, 0.05)',
+                  background: 'var(--color-surface)',
                   border: '1px solid var(--color-border-hairline)',
                   borderRadius: '8px',
                   padding: '6px',
@@ -250,7 +250,7 @@ export default function TestSuiteModal({ isOpen, onClose, projectTitle }) {
                           fontFamily: 'var(--font-mono)',
                           fontSize: '0.68rem',
                           fontWeight: 600,
-                          color: '#4ADE9A',
+                          color: '#91A797',
                           flexShrink: 0,
                         }}>
                           <Check size={13} />

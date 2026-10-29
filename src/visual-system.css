@@ -1,0 +1,142 @@
+:root {
+  --editorial-ivory: #0D0E0F;
+  --color-background: #0D0E0F;
+  --color-surface: #17191B;
+  --color-surface-hover: #222528;
+  --color-text-primary: #F2F1EA;
+  --color-text-secondary: #A6A8AA;
+  --color-border: #303437;
+  --color-button-primary: #F2F1EA;
+  --color-button-primary-text: #191A18;
+  --color-bg-base: var(--color-background);
+  --color-bg-surface: var(--color-surface);
+  --color-border-hairline: var(--color-border);
+  --color-text-muted: var(--color-text-secondary);
+  --color-accent-pass: #657D6B;
+  --color-accent-pending: #92764D;
+  --color-accent-fail: #A94F49;
+  --color-graphite: #343A3F;
+  --section-space: clamp(3.75rem, 7vw, 6.25rem);
+}
+
+html { background-color: var(--color-background); }
+body { background-color: var(--color-background); color: var(--color-text-primary); }
+::selection { background-color: rgba(101, 125, 107, 0.2); }
+
+/* Keep the hero and all content sections on the shared ivory canvas. */
+.editorial-hero { background: var(--editorial-ivory); }
+.editorial-bottom-rule { border-color: var(--color-border); }
+#status-strip { border-color: var(--color-border) !important; background: transparent !important; }
+
+/* One readable, shared hierarchy for every section using SectionHeader. */
+.section-header {
+  margin-bottom: clamp(1.75rem, 3.5vw, 2.5rem) !important;
+}
+.section-eyebrow {
+  color: var(--color-text-secondary) !important;
+  font-size: clamp(0.68rem, 0.8vw, 0.76rem) !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.14em !important;
+}
+.section-eyebrow-num,
+.section-eyebrow-text { color: var(--color-text-primary) !important; }
+.section-eyebrow-sep { color: var(--color-text-secondary) !important; }
+.section-headline-editorial {
+  color: var(--color-text-primary) !important;
+  font-family: var(--font-sans) !important;
+  font-size: clamp(1.9rem, 3.2vw, 2.8rem) !important;
+  font-weight: 650 !important;
+  line-height: 1.12 !important;
+  letter-spacing: -0.045em !important;
+}
+.section-headline-editorial.is-serif {
+  font-family: var(--font-serif) !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.025em !important;
+}
+.section-description {
+  max-width: 66ch;
+  color: var(--color-text-muted) !important;
+  font-size: clamp(0.92rem, 1.05vw, 1rem) !important;
+  line-height: 1.7 !important;
+  margin-top: 0.65rem !important;
+}
+
+/* Neutral surfaces and controlled corners for repeated project content. */
+.glass-card,
+.corner-bracket-card,
+.swiss-portrait-frame {
+  border-color: var(--color-border-hairline) !important;
+}
+.corner-bracket-card {
+  border-style: solid !important;
+  border-radius: 8px !important;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.22) !important;
+  backdrop-filter: none !important;
+}
+.status-badge { border-radius: 4px !important; }
+.status-badge--passed {
+  background: rgba(145, 167, 151, 0.09) !important;
+  border-color: rgba(145, 167, 151, 0.2) !important;
+}
+
+/* The main project actions remain obvious without a neon fill. */
+.about-primary-cta {
+  color: var(--color-button-primary-text) !important;
+  background: var(--color-button-primary) !important;
+  border: 1px solid var(--color-button-primary) !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+}
+.about-primary-cta:hover {
+  color: var(--color-button-primary-text) !important;
+  background: #D8D7CE !important;
+  box-shadow: none !important;
+}
+.about-secondary-cta { border-radius: 4px !important; }
+.editorial-text-link { border-radius: 0; }
+.qa-run-all-button {
+  color: var(--color-button-primary-text) !important;
+  background: var(--color-button-primary) !important;
+  border: 1px solid var(--color-button-primary) !important;
+  border-radius: 4px !important;
+}
+.qa-run-all-button:disabled { opacity: 0.6; }
+
+/* Reposition the assistant subtly in the opening and at the contact section. */
+.mascot-float.is-docked { opacity: 0.12; }
+.mascot-close {
+  border-color: rgba(145, 167, 151, 0.18) !important;
+  box-shadow: none !important;
+}
+
+/* The scroll state is the same dark masthead, with a faint paper divider. */
+.editorial-nav.is-scrolled { background: rgba(13, 14, 15, 0.96) !important; border-bottom-color: var(--color-border) !important; }
+.editorial-nav.is-scrolled #nav-mobile-drawer { background: rgba(13, 14, 15, 0.98) !important; border-color: var(--color-border) !important; }
+.editorial-nav.is-scrolled #nav-mobile-drawer a,
+.editorial-nav.is-scrolled #nav-mobile-drawer button { color: var(--color-text-primary) !important; border-color: var(--color-border) !important; }
+.editorial-nav.is-scrolled #nav-resume-btn {
+  color: var(--color-button-primary-text) !important;
+  background: var(--color-button-primary) !important;
+  border-color: var(--color-button-primary) !important;
+}
+.editorial-nav.is-scrolled #nav-resume-btn:hover {
+  color: var(--color-button-primary-text) !important;
+  background: #D8D7CE !important;
+}
+
+/* Keep the legacy grid fallback unobtrusive if used by a standalone section. */
+.perspective-grid-fallback { opacity: 0.12; }
+
+@media (max-width: 768px) {
+  .section-container {
+    padding-block: clamp(3.25rem, 11vw, 4.5rem);
+    padding-inline: clamp(1.1rem, 5vw, 1.5rem);
+  }
+  .section-headline-editorial { font-size: clamp(1.75rem, 7vw, 2.25rem) !important; }
+  .section-description { font-size: 0.92rem !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; }
+}

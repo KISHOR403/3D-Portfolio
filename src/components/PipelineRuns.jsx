@@ -458,7 +458,7 @@ function PipelineCard({ project, index, progress, onViewTestSuite }) {
                 fontFamily: 'var(--font-display)',
                 fontSize: 'clamp(1.25rem, 2.4vw, 1.6rem)',
                 fontWeight: 700,
-                color: '#F8FAFC',
+                color: 'var(--color-text-primary)',
                 letterSpacing: '-0.02em',
                 overflowWrap: 'break-word',
                 wordBreak: 'break-word',
@@ -488,8 +488,8 @@ function PipelineCard({ project, index, progress, onViewTestSuite }) {
                   textDecoration: 'none',
                   padding: '4px 10px',
                   borderRadius: '999px',
-                  background: 'rgba(74, 222, 154, 0.08)',
-                  border: '1px solid rgba(74, 222, 154, 0.2)',
+                  background: 'var(--color-surface)',
+                  border: '1px solid var(--color-border)',
                   whiteSpace: 'nowrap',
                 }}
               >
@@ -543,7 +543,7 @@ function PipelineCard({ project, index, progress, onViewTestSuite }) {
                   fontWeight: 500,
                   padding: '3px 9px',
                   borderRadius: '999px',
-                  background: 'rgba(35, 44, 53, 0.8)',
+                  background: 'var(--color-surface-hover)',
                   border: '1px solid var(--color-border-hairline)',
                   color: 'var(--color-text-primary)',
                   letterSpacing: '0.03em',
@@ -612,7 +612,7 @@ function PipelineCard({ project, index, progress, onViewTestSuite }) {
               fontSize: '0.72rem',
               fontWeight: 600,
               color: 'var(--color-text-muted)',
-              background: 'rgba(255, 255, 255, 0.04)',
+              background: 'transparent',
               border: '1px solid var(--color-border-hairline)',
               borderRadius: '8px',
               padding: '8px 14px',
@@ -621,7 +621,7 @@ function PipelineCard({ project, index, progress, onViewTestSuite }) {
               transition: 'all 0.2s ease',
             }}
             onMouseEnter={e => {
-              e.currentTarget.style.borderColor = 'rgba(74, 222, 154, 0.3)'
+              e.currentTarget.style.borderColor = 'rgba(145, 167, 151, 0.3)'
               e.currentTarget.style.color = 'var(--color-accent-pass)'
             }}
             onMouseLeave={e => {

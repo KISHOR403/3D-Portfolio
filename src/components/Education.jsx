@@ -51,7 +51,7 @@ function EducationCard({ title, institution, period, status, details, isMobile }
           const pctX = (x / rect.width) * 100
           const pctY = (y / rect.height) * 100
           // Light-catch surface highlight
-          highlight.style.background = `radial-gradient(circle at ${pctX}% ${pctY}%, rgba(255, 255, 255, 0.06) 0%, transparent 40%)`
+          highlight.style.background = `radial-gradient(circle at ${pctX}% ${pctY}%, rgba(25, 26, 24, 0.035) 0%, transparent 40%)`
         }
       })
     }
@@ -94,7 +94,7 @@ function EducationCard({ title, institution, period, status, details, isMobile }
           position: 'absolute',
           inset: 0,
           transform: isMobile ? 'translate(6px, 6px)' : 'translate(12px, 12px)',
-          background: 'var(--color-bg-base)',
+          background: 'var(--color-surface)',
           border: '1px solid var(--color-border-hairline)',
           borderRadius: '12px',
           borderTop: `2px solid color-mix(in srgb, ${accentColor} 12%, transparent)`,
@@ -109,7 +109,7 @@ function EducationCard({ title, institution, period, status, details, isMobile }
           position: 'absolute',
           inset: 0,
           transform: isMobile ? 'translate(3px, 3px)' : 'translate(6px, 6px)',
-          background: 'var(--color-bg-base)',
+          background: 'var(--color-surface)',
           border: '1px solid var(--color-border-hairline)',
           borderRadius: '12px',
           borderTop: `2px solid color-mix(in srgb, ${accentColor} 25%, transparent)`,
@@ -122,12 +122,12 @@ function EducationCard({ title, institution, period, status, details, isMobile }
       <div
         ref={cardRef}
         style={{
-          background: 'var(--color-bg-base)',
+          background: 'var(--color-surface)',
           border: '1px solid var(--color-border-hairline)',
           borderRadius: '12px',
           padding: 'clamp(1rem, 3.5vw, 1.5rem)',
           borderTop: `2px solid ${accentColor}`,
-          boxShadow: `0 -8px 24px rgba(${accentRGB}, 0.12), 0 4px 20px rgba(0, 0, 0, 0.3)`,
+          boxShadow: '0 5px 18px rgba(32, 30, 22, 0.06)',
           position: 'relative',
           zIndex: 3,
           transformStyle: 'preserve-3d',
@@ -136,11 +136,11 @@ function EducationCard({ title, institution, period, status, details, isMobile }
         }}
         onMouseEnter={e => {
           e.currentTarget.style.borderColor = accentColor
-          e.currentTarget.style.boxShadow = `0 -8px 30px rgba(${accentRGB}, 0.25), 0 8px 32px rgba(0, 0, 0, 0.45)`
+          e.currentTarget.style.boxShadow = '0 8px 22px rgba(32, 30, 22, 0.1)'
         }}
         onMouseLeave={e => {
           e.currentTarget.style.borderColor = 'var(--color-border-hairline)'
-          e.currentTarget.style.boxShadow = `0 -8px 24px rgba(${accentRGB}, 0.12), 0 4px 20px rgba(0, 0, 0, 0.3)`
+          e.currentTarget.style.boxShadow = '0 5px 18px rgba(32, 30, 22, 0.06)'
         }}
       >
         {/* Light-catch surface highlight */}
@@ -198,7 +198,7 @@ function EducationCard({ title, institution, period, status, details, isMobile }
             fontSize: '0.875rem',
             lineHeight: 1.6,
             color: 'var(--color-text-muted)',
-            borderLeft: '2px solid rgba(74, 222, 154, 0.3)',
+            borderLeft: '2px solid rgba(145, 167, 151, 0.3)',
             paddingLeft: '0.75rem',
             marginTop: '0.5rem'
           }}>
@@ -252,34 +252,34 @@ export default function Education() {
   const node1Bg = useTransform(
     activeProgress,
     [0.0, 0.12],
-    ['rgba(35, 44, 53, 0.6)', 'var(--color-accent-pass)']
+    ['rgba(48, 52, 55, 0.8)', 'var(--color-accent-pass)']
   )
   const node1Shadow = useTransform(
     activeProgress,
     [0.0, 0.12],
-    ['0 0 0px rgba(74, 222, 154, 0)', '0 0 10px rgba(74, 222, 154, 0.5)']
+    ['0 0 0px rgba(101, 125, 107, 0)', '0 0 5px rgba(101, 125, 107, 0.2)']
   )
 
   const node2Bg = useTransform(
     activeProgress,
     [0.35, 0.47],
-    ['rgba(35, 44, 53, 0.6)', 'var(--color-accent-pass)']
+    ['rgba(48, 52, 55, 0.8)', 'var(--color-accent-pass)']
   )
   const node2Shadow = useTransform(
     activeProgress,
     [0.35, 0.47],
-    ['0 0 0px rgba(74, 222, 154, 0)', '0 0 10px rgba(74, 222, 154, 0.5)']
+    ['0 0 0px rgba(101, 125, 107, 0)', '0 0 5px rgba(101, 125, 107, 0.2)']
   )
 
   const node3Bg = useTransform(
     activeProgress,
     [0.7, 0.82],
-    ['rgba(35, 44, 53, 0.6)', 'var(--color-accent-pass)']
+    ['rgba(48, 52, 55, 0.8)', 'var(--color-accent-pass)']
   )
   const node3Shadow = useTransform(
     activeProgress,
     [0.7, 0.82],
-    ['0 0 0px rgba(74, 222, 154, 0)', '0 0 10px rgba(74, 222, 154, 0.5)']
+    ['0 0 0px rgba(101, 125, 107, 0)', '0 0 5px rgba(101, 125, 107, 0.2)']
   )
 
   const badgeOpacity = useTransform(activeProgress, [0.88, 0.98], [0, 1])
@@ -482,10 +482,10 @@ export default function Education() {
                   textTransform: 'uppercase',
                   padding: '0.5rem 1rem',
                   borderRadius: '999px',
-                  background: 'rgba(74, 222, 154, 0.12)',
+                  background: 'rgba(101, 125, 107, 0.08)',
                   color: 'var(--color-accent-pass)',
-                  border: '1px solid rgba(74, 222, 154, 0.3)',
-                  boxShadow: '0 0 16px rgba(74, 222, 154, 0.15)',
+                  border: '1px solid rgba(101, 125, 107, 0.2)',
+                  boxShadow: 'none',
                   opacity: prefersReducedMotion ? 1 : badgeOpacity,
                   scale: prefersReducedMotion ? 1 : badgeScale,
                   y: prefersReducedMotion ? 0 : badgeY,

@@ -206,14 +206,13 @@ function SkillChip({ skill, isMobile }) {
         padding: isMobile ? '0.28rem 0.60rem' : '0.45rem 0.95rem',
         borderRadius: '999px',
         background: hovered
-          ? `color-mix(in srgb, ${skill.color} 18%, rgba(18, 24, 32, 0.95))`
-          : 'linear-gradient(135deg, rgba(22, 29, 36, 0.94), rgba(15, 20, 25, 0.90))',
-        backdropFilter: 'blur(12px)',
-        border: `1px solid ${hovered ? skill.color : `${skill.color}45`}`,
+          ? `color-mix(in srgb, ${skill.color} 8%, var(--color-surface-hover))`
+          : 'var(--color-surface)',
+        border: `1px solid ${hovered ? skill.color : 'var(--color-border)'}`,
         boxShadow: hovered
-          ? `0 6px 28px rgba(0,0,0,0.6), 0 0 22px ${skill.color}55, inset 0 1px 0 rgba(255,255,255,0.12)`
-          : `0 4px 16px rgba(0,0,0,0.45), 0 0 10px ${skill.color}15, inset 0 1px 0 rgba(255,255,255,0.06)`,
-        color: hovered ? '#FFFFFF' : '#E8EAED',
+          ? '0 6px 18px rgba(32, 30, 22, 0.1)'
+          : '0 3px 10px rgba(32, 30, 22, 0.05)',
+        color: 'var(--color-text-primary)',
         fontFamily: 'var(--font-mono)',
         fontSize: isMobile ? '0.68rem' : '0.80rem',
         fontWeight: 600,
@@ -332,9 +331,9 @@ function SphereScatterView({ isSectionVisible, activeCategory, hoveredSkillId, s
     <div
       ref={wrapRef}
       style={{
-        height: isMobile ? '260vh' : '350vh',
+        height: isMobile ? '190vh' : '250vh',
         position: 'relative',
-        background: 'var(--color-bg-base, #0F1419)',
+        background: 'var(--color-background)',
       }}
     >
       <div
@@ -383,7 +382,7 @@ function SphereScatterView({ isSectionVisible, activeCategory, hoveredSkillId, s
             position: 'relative',
             zIndex: 10,
             textAlign: 'center',
-            color: 'var(--color-text-primary, #E8EAED)',
+            color: 'var(--color-text-primary)',
             pointerEvents: 'none',
             padding: isMobile ? '0 0.5rem' : '0 1rem',
             maxWidth: isMobile ? '250px' : '520px',
@@ -448,7 +447,7 @@ function SphereScatterView({ isSectionVisible, activeCategory, hoveredSkillId, s
             flexDirection: 'column',
             alignItems: 'center',
             gap: '0.5rem',
-            color: 'var(--color-text-primary, #E8EAED)',
+            color: 'var(--color-text-primary)',
             fontFamily: 'var(--font-mono)',
             fontSize: '0.68rem',
             fontWeight: 500,
@@ -541,20 +540,20 @@ function SkillCard({ category, index, activeCategory, hoveredSkillId, setHovered
 
   return (
     <div style={{ position: 'relative', perspective: '1000px', paddingBottom: '12px', paddingRight: '12px', opacity: isCategoryMatch ? 1 : 0.4, transition: 'opacity 0.3s ease' }}>
-      <div style={{ position: 'absolute', inset: 0, transform: 'translate(12px, 12px)', background: 'var(--color-bg-base)', border: '1px solid var(--color-border-hairline)', borderRadius: '12px', borderTop: `2px solid color-mix(in srgb, ${accentColor} 12%, transparent)`, zIndex: 1, pointerEvents: 'none' }} />
-      <div style={{ position: 'absolute', inset: 0, transform: 'translate(6px, 6px)', background: 'var(--color-bg-base)', border: '1px solid var(--color-border-hairline)', borderRadius: '12px', borderTop: `2px solid color-mix(in srgb, ${accentColor} 25%, transparent)`, zIndex: 2, pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', inset: 0, transform: 'translate(12px, 12px)', background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '8px', zIndex: 1, pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', inset: 0, transform: 'translate(6px, 6px)', background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '8px', zIndex: 2, pointerEvents: 'none' }} />
 
       <motion.div
         ref={cardRef}
         variants={cardVariants}
         style={{
-          background: 'var(--color-bg-base)', border: '1px solid var(--color-border-hairline)', borderRadius: '12px', padding: '1.5rem',
-          borderTop: `2px solid ${accentColor}`, boxShadow: `0 -8px 24px rgba(${accentRGB}, 0.12), 0 4px 20px rgba(0, 0, 0, 0.3)`,
+          background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '8px', padding: '1.5rem',
+          boxShadow: '0 5px 18px rgba(32, 30, 22, 0.06)',
           position: 'relative', zIndex: 3, transformStyle: 'preserve-3d', willChange: 'transform',
           transition: 'transform 0.15s ease-out, border-color 0.3s ease, box-shadow 0.3s ease',
         }}
-        onMouseEnter={e => { e.currentTarget.style.borderColor = accentColor; e.currentTarget.style.boxShadow = `0 -8px 30px rgba(${accentRGB}, 0.25), 0 8px 32px rgba(0, 0, 0, 0.45)` }}
-        onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--color-border-hairline)'; e.currentTarget.style.boxShadow = `0 -8px 24px rgba(${accentRGB}, 0.12), 0 4px 20px rgba(0, 0, 0, 0.3)` }}
+        onMouseEnter={e => { e.currentTarget.style.borderColor = accentColor; e.currentTarget.style.boxShadow = '0 8px 22px rgba(32, 30, 22, 0.1)' }}
+        onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--color-border)'; e.currentTarget.style.boxShadow = '0 5px 18px rgba(32, 30, 22, 0.06)' }}
       >
         <div ref={highlightRef} style={{ position: 'absolute', inset: 0, borderRadius: '12px', pointerEvents: 'none', zIndex: 5, transition: 'background 0.15s ease-out' }} />
 
@@ -570,17 +569,17 @@ function SkillCard({ category, index, activeCategory, hoveredSkillId, setHovered
                 key={j} custom={j} variants={chipVariants}
                 onMouseEnter={() => setHoveredSkillId(skill)}
                 onMouseLeave={() => setHoveredSkillId(null)}
-                whileHover={{ y: -3, scale: 1.03, boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 6px 12px rgba(0,0,0,0.35)', borderColor: accentColor, backgroundColor: `color-mix(in srgb, ${accentColor} 12%, rgba(35, 44, 53, 0.4))` }}
+                whileHover={{ y: -2, scale: 1.02, boxShadow: '0 5px 14px rgba(32, 30, 22, 0.08)', borderColor: accentColor, backgroundColor: `color-mix(in srgb, ${accentColor} 8%, var(--color-surface-hover))` }}
                 whileTap={{ scale: 0.95 }}
                 className="skill-chip"
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: '0.45rem',
                   fontFamily: 'var(--font-mono)', fontSize: '0.72rem', fontWeight: 500,
                   padding: '0.375rem 0.75rem', borderRadius: '999px',
-                  background: isChipHovered ? `color-mix(in srgb, ${accentColor} 16%, rgba(35, 44, 53, 0.6))` : 'rgba(35, 44, 53, 0.4)',
+                  background: isChipHovered ? `color-mix(in srgb, ${accentColor} 8%, var(--color-surface-hover))` : 'var(--color-surface)',
                   border: isChipHovered ? `1px solid ${accentColor}` : '1px solid var(--color-border-hairline)',
                   color: 'var(--color-text-primary)',
-                  boxShadow: isChipHovered ? `0 0 12px rgba(${accentRGB}, 0.3)` : 'inset 0 1px 0 rgba(255,255,255,0.05), 0 2px 4px rgba(0,0,0,0.15)',
+                  boxShadow: isChipHovered ? '0 5px 14px rgba(32, 30, 22, 0.08)' : '0 2px 6px rgba(32, 30, 22, 0.04)',
                   cursor: 'pointer', transition: 'all 0.2s ease',
                 }}
               >
@@ -639,7 +638,7 @@ export default function CoverageReport() {
         />
       ) : (
         /* ── GRID VIEW: standard layout with category cards ── */
-        <div style={{ background: 'rgba(22, 29, 36, 0.75)', backdropFilter: 'blur(10px)', padding: '5rem 0' }}>
+        <div style={{ background: 'var(--color-bg-base)', padding: 0 }}>
           <div className="section-container">
             <SectionHeader
               number="03"
@@ -669,11 +668,11 @@ export default function CoverageReport() {
                     onClick={() => setActiveCategory(cat)}
                     style={{
                       fontFamily: 'var(--font-mono)', fontSize: '0.72rem', fontWeight: 500, padding: '0.35rem 0.85rem', borderRadius: '999px',
-                      background: isActive ? 'rgba(74, 222, 154, 0.15)' : 'rgba(255, 255, 255, 0.04)',
+                      background: isActive ? 'var(--color-surface-hover)' : 'transparent',
                       border: isActive ? '1px solid var(--color-accent-pass)' : '1px solid var(--color-border-hairline)',
                       color: isActive ? 'var(--color-accent-pass)' : 'var(--color-text-muted)',
                       cursor: 'pointer', transition: 'all 0.2s ease',
-                      boxShadow: isActive ? '0 0 12px rgba(74, 222, 154, 0.25)' : 'none',
+                      boxShadow: isActive ? '0 0 12px rgba(145, 167, 151, 0.25)' : 'none',
                       whiteSpace: 'nowrap', flexShrink: 0,
                     }}
                   >
@@ -732,7 +731,7 @@ function ViewToggle({ viewStyle, setViewStyle }) {
     <div
       style={{
         display: 'inline-flex',
-        background: 'rgba(13, 20, 30, 0.9)',
+        background: 'var(--color-surface)',
         border: '1px solid var(--color-border-hairline)',
         borderRadius: '999px',
         padding: '4px',
@@ -746,8 +745,8 @@ function ViewToggle({ viewStyle, setViewStyle }) {
           display: 'inline-flex', alignItems: 'center', gap: '6px',
           fontFamily: 'var(--font-mono)', fontSize: '0.72rem', fontWeight: 600,
           padding: '6px 14px', borderRadius: '999px', border: 'none',
-          background: viewStyle === 'sphere' ? 'var(--color-accent-pass)' : 'transparent',
-          color: viewStyle === 'sphere' ? 'var(--color-bg-base)' : 'var(--color-text-muted)',
+          background: viewStyle === 'sphere' ? 'var(--color-button-primary)' : 'transparent',
+          color: viewStyle === 'sphere' ? 'var(--color-button-primary-text)' : 'var(--color-text-secondary)',
           cursor: 'pointer', transition: 'all 0.25s ease',
         }}
       >
@@ -760,8 +759,8 @@ function ViewToggle({ viewStyle, setViewStyle }) {
           display: 'inline-flex', alignItems: 'center', gap: '6px',
           fontFamily: 'var(--font-mono)', fontSize: '0.72rem', fontWeight: 600,
           padding: '6px 14px', borderRadius: '999px', border: 'none',
-          background: viewStyle === 'grid' ? 'var(--color-accent-pass)' : 'transparent',
-          color: viewStyle === 'grid' ? 'var(--color-bg-base)' : 'var(--color-text-muted)',
+          background: viewStyle === 'grid' ? 'var(--color-button-primary)' : 'transparent',
+          color: viewStyle === 'grid' ? 'var(--color-button-primary-text)' : 'var(--color-text-secondary)',
           cursor: 'pointer', transition: 'all 0.25s ease',
         }}
       >

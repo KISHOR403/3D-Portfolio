@@ -7,15 +7,15 @@ const SCENARIOS = [
     cmd: 'npm test -- --coverage',
     output: [
       { text: '→ Running Selenium & API test suites...', color: 'var(--color-text-muted)' },
-      { text: '✔ PASS src/e2e/logiconnect.spec.ts (2.8s)', color: '#4ADE9A' },
-      { text: '✔ PASS src/api/testnexa-auth.spec.ts (1.1s)', color: '#4ADE9A' },
+      { text: '✔ PASS src/e2e/logiconnect.spec.ts (2.8s)', color: '#91A797' },
+      { text: '✔ PASS src/api/testnexa-auth.spec.ts (1.1s)', color: '#91A797' },
       { text: 'Tests: 18 passed, 18 total · 95.8% coverage', color: 'var(--color-text-primary)' },
     ],
   },
   {
     cmd: 'curl -s https://api.testnexa.ai/health',
     output: [
-      { text: 'HTTP/2 200 OK · latency: 24ms', color: '#4ADE9A' },
+      { text: 'HTTP/2 200 OK · latency: 24ms', color: '#91A797' },
       { text: '{"status":"operational", "database":"connected"}', color: 'var(--color-text-muted)' },
       { text: '✔ All CI/CD quality gates verified green', color: 'var(--color-text-primary)' },
     ],
@@ -23,7 +23,7 @@ const SCENARIOS = [
   {
     cmd: 'git log -1 --oneline',
     output: [
-      { text: '480203b feat(qa): automated regression suite complete', color: '#4ADE9A' },
+      { text: '480203b feat(qa): automated regression suite complete', color: '#91A797' },
       { text: 'Branch: main · Ready for continuous deployment', color: 'var(--color-text-muted)' },
     ],
   },
@@ -122,15 +122,15 @@ export default function ConsoleFallback() {
               width: '5px',
               height: '5px',
               borderRadius: '50%',
-              background: '#4ADE9A',
-              boxShadow: '0 0 6px #4ADE9A',
+              background: '#91A797',
+              boxShadow: '0 0 6px #91A797',
             }}
           />
           <span
             style={{
               fontFamily: 'var(--font-mono)',
               fontSize: '0.65rem',
-              color: '#4ADE9A',
+              color: '#91A797',
               fontWeight: 600,
               letterSpacing: '0.06em',
             }}
@@ -162,7 +162,7 @@ export default function ConsoleFallback() {
 
         {/* Command line */}
         <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '10px' }}>
-          <span style={{ color: '#4ADE9A', fontWeight: 600 }}>$</span>
+          <span style={{ color: '#91A797', fontWeight: 600 }}>$</span>
           <span style={{ color: 'var(--color-text-primary)' }}>{displayedCmd}</span>
           {isTyping && (
             <motion.span
@@ -172,7 +172,7 @@ export default function ConsoleFallback() {
                 display: 'inline-block',
                 width: '7px',
                 height: '14px',
-                background: '#4ADE9A',
+                background: '#91A797',
                 verticalAlign: 'middle',
                 marginLeft: '2px',
               }}

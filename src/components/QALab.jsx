@@ -59,7 +59,7 @@ const TEST_CASES = [
 ]
 
 const TYPE_COLORS = {
-  Positive: '#4ADE9A',
+  Positive: '#91A797',
   Negative: '#E8615C',
   Boundary: '#F2A93B',
   Security: '#C084FC',
@@ -84,7 +84,7 @@ function TestRunner({ testCase, index, isRunning, result, onRun }) {
           fontFamily: 'var(--font-mono)',
           fontSize: '0.65rem',
           fontWeight: 600,
-          color: '#6C7A89',
+          color: 'var(--color-text-secondary)',
           width: '40px',
           flexShrink: 0,
         }}>
@@ -122,11 +122,11 @@ function TestRunner({ testCase, index, isRunning, result, onRun }) {
             fontFamily: 'var(--font-mono)',
             fontSize: '0.65rem',
             fontWeight: 600,
-            color: result.pass ? '#4ADE9A' : '#E8615C',
+            color: result.pass ? '#91A797' : '#E8615C',
           }}>
             {result.pass ? <Check size={12} /> : <X size={12} />}
             {result.pass ? 'PASS' : 'FAIL'}
-            <span style={{ color: '#6C7A89', fontWeight: 400 }}>
+            <span style={{ color: 'var(--color-text-secondary)', fontWeight: 400 }}>
               {result.latency}ms
             </span>
           </span>
@@ -138,12 +138,12 @@ function TestRunner({ testCase, index, isRunning, result, onRun }) {
             display: 'flex',
             alignItems: 'center',
             gap: '4px',
-            background: 'rgba(74, 222, 154, 0.08)',
-            border: '1px solid rgba(74, 222, 154, 0.2)',
+            background: 'rgba(145, 167, 151, 0.08)',
+            border: '1px solid rgba(145, 167, 151, 0.2)',
             borderRadius: '6px',
             padding: '4px 10px',
             cursor: isRunning ? 'not-allowed' : 'pointer',
-            color: '#4ADE9A',
+            color: '#91A797',
             fontFamily: 'var(--font-mono)',
             fontSize: '0.65rem',
             fontWeight: 600,
@@ -295,7 +295,7 @@ export default function QALab() {
                   fontFamily: 'var(--font-mono)',
                   fontSize: '0.68rem',
                   fontWeight: 500,
-                  color: '#6C7A89',
+                  color: 'var(--color-text-secondary)',
                   display: 'block',
                   marginBottom: '4px',
                 }}>
@@ -318,7 +318,7 @@ export default function QALab() {
                     outline: 'none',
                     transition: 'border-color 0.2s ease',
                   }}
-                  onFocus={e => e.target.style.borderColor = 'rgba(74, 222, 154, 0.4)'}
+                  onFocus={e => e.target.style.borderColor = 'rgba(145, 167, 151, 0.4)'}
                   onBlur={e => e.target.style.borderColor = 'var(--color-border-hairline)'}
                 />
               </div>
@@ -327,7 +327,7 @@ export default function QALab() {
                   fontFamily: 'var(--font-mono)',
                   fontSize: '0.68rem',
                   fontWeight: 500,
-                  color: '#6C7A89',
+                  color: 'var(--color-text-secondary)',
                   display: 'block',
                   marginBottom: '4px',
                 }}>
@@ -350,7 +350,7 @@ export default function QALab() {
                     outline: 'none',
                     transition: 'border-color 0.2s ease',
                   }}
-                  onFocus={e => e.target.style.borderColor = 'rgba(74, 222, 154, 0.4)'}
+                  onFocus={e => e.target.style.borderColor = 'rgba(145, 167, 151, 0.4)'}
                   onBlur={e => e.target.style.borderColor = 'var(--color-border-hairline)'}
                 />
               </div>
@@ -369,7 +369,7 @@ export default function QALab() {
                 type="checkbox"
                 checked={remember}
                 onChange={e => setRemember(e.target.checked)}
-                style={{ accentColor: '#4ADE9A' }}
+                style={{ accentColor: '#91A797' }}
               />
               Remember session
             </label>
@@ -397,7 +397,7 @@ export default function QALab() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '4px',
-                  background: 'rgba(255, 255, 255, 0.05)',
+                  background: 'var(--color-surface)',
                   border: '1px solid var(--color-border-hairline)',
                   borderRadius: '8px',
                   padding: '6px 14px',
@@ -414,17 +414,18 @@ export default function QALab() {
               </button>
               <button
                 onClick={runAllTests}
+                className="qa-run-all-button"
                 disabled={isRunningAll}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px',
-                  background: isRunningAll ? 'rgba(74, 222, 154, 0.08)' : 'rgba(74, 222, 154, 0.15)',
-                  border: '1px solid rgba(74, 222, 154, 0.3)',
+                  background: isRunningAll ? 'rgba(145, 167, 151, 0.08)' : 'rgba(145, 167, 151, 0.15)',
+                  border: '1px solid rgba(145, 167, 151, 0.3)',
                   borderRadius: '8px',
                   padding: '6px 16px',
                   cursor: isRunningAll ? 'not-allowed' : 'pointer',
-                  color: '#4ADE9A',
+                  color: '#91A797',
                   fontFamily: 'var(--font-mono)',
                   fontSize: '0.72rem',
                   fontWeight: 600,
@@ -479,7 +480,7 @@ export default function QALab() {
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.68rem',
                 fontWeight: 600,
-                color: '#6C7A89',
+                color: 'var(--color-text-secondary)',
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
                 marginBottom: '0.5rem',
@@ -494,7 +495,7 @@ export default function QALab() {
               }}>
                 {executionLog.map((line, i) => (
                   <div key={i} style={{
-                    color: line.includes('PASS') ? '#4ADE9A' : line.includes('FAIL') ? '#E8615C' : '#9EABB8',
+                    color: line.includes('PASS') ? '#91A797' : line.includes('FAIL') ? '#E8615C' : '#9EABB8',
                   }}>
                     {line}
                   </div>
