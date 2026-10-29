@@ -277,7 +277,12 @@ function BookModel({
   }
 
   return (
-    <group rotation={[0.1, 0, 0]} onClick={handleClick} style={{ cursor: 'pointer' }}>
+    <group
+      rotation={[0.1, 0, 0]}
+      scale={isMobile ? 0.82 : 1}
+      onClick={handleClick}
+      style={{ cursor: 'pointer' }}
+    >
       {/* ─── 1. HARDCOVER LEATHER BOARD (ROUNDED CORNERS) ─── */}
       <RoundedBox
         args={[PAGE_W * 2 + 0.44, PAGE_H + 0.4, 0.14]}

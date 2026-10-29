@@ -1238,65 +1238,6 @@
   gap: 1.75rem;
 }
 
-.swiss-portrait-card {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.swiss-portrait-frame {
-  width: clamp(84px, 8vw, 108px);
-  height: clamp(84px, 8vw, 108px);
-  border-radius: 4px;
-  overflow: hidden;
-  border: 1px solid var(--color-border);
-  flex-shrink: 0;
-  background: var(--color-surface);
-}
-
-.swiss-portrait-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 25%;
-  filter: contrast(105%);
-  transition: filter 0.3s ease;
-}
-
-.swiss-portrait-card:hover .swiss-portrait-img {
-  filter: grayscale(0%) contrast(100%);
-}
-
-.swiss-portrait-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.swiss-figure-label {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-text-secondary);
-}
-
-.swiss-portrait-name {
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--color-text-primary);
-  letter-spacing: -0.01em;
-}
-
-.swiss-portrait-role {
-  font-size: 0.82rem;
-  color: var(--color-text-secondary);
-  line-height: 1.4;
-}
-
 /* Supporting Copy */
 .swiss-supporting-copy {
   font-family: var(--font-sans);
@@ -1497,25 +1438,212 @@
   color: var(--color-text-primary);
 }
 
-/* Responsive row adjustments */
+.contact-anchor {
+  position: relative;
+  top: -70px;
+  visibility: hidden;
+}
+
+.swiss-headline-group {
+  gap: clamp(1.75rem, 3vw, 2.75rem);
+}
+
+.swiss-heading {
+  max-width: 10ch;
+  font-size: clamp(3.2rem, 7.3vw, 7.25rem);
+  line-height: 0.88;
+  letter-spacing: -0.055em;
+}
+
+.swiss-headline-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.65rem;
+  max-width: 34rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: clamp(0.64rem, 0.75vw, 0.73rem);
+  letter-spacing: 0.12em;
+  line-height: 1.5;
+}
+
+.swiss-right-column {
+  gap: clamp(2rem, 4vw, 3.5rem);
+  padding-top: clamp(1rem, 4vw, 4rem);
+}
+
+.swiss-supporting-copy {
+  max-width: 34rem;
+  font-size: clamp(1rem, 1.35vw, 1.25rem);
+  line-height: 1.65;
+}
+
+.swiss-talk-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1rem;
+  width: fit-content;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--color-text-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-mono);
+  font-size: clamp(0.85rem, 1vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+  transition: gap 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+.swiss-talk-link:hover,
+.swiss-talk-link:focus-visible {
+  gap: 1.45rem;
+  color: var(--color-text-secondary);
+  border-color: var(--color-text-secondary);
+}
+
+.swiss-talk-link span:last-child {
+  font-size: 1.35em;
+  line-height: 0.8;
+}
+
+.swiss-specs-table {
+  max-width: 34rem;
+  margin-top: 0;
+}
+
+.swiss-spec-row {
+  min-height: 3.1rem;
+  padding: 0.85rem 0;
+}
+
+.swiss-spec-val {
+  max-width: 65%;
+  font-size: 0.86rem;
+}
+
+.swiss-channels-header {
+  margin-top: clamp(1rem, 3vw, 2rem);
+}
+
+.swiss-row-link {
+  grid-template-columns: minmax(140px, 0.3fr) minmax(0, 1fr) auto;
+  padding: 1.35rem 0;
+}
+
+.swiss-row-meta {
+  gap: 1rem;
+}
+
+.swiss-row-detail {
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 1.25vw, 1.2rem);
+  color: var(--color-text-primary);
+  white-space: normal;
+}
+
+.swiss-row-right {
+  gap: 1.25rem;
+}
+
+.swiss-copy-btn {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 0.65rem;
+}
+
+.swiss-copy-btn:hover,
+.swiss-copy-btn.is-copied {
+  background: transparent;
+  color: var(--color-text-primary);
+  border-color: transparent;
+}
+
+.swiss-row-arrow {
+  font-family: var(--font-sans);
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
+.swiss-footer-primary {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.swiss-colophon-footer {
+  align-items: flex-start;
+}
+
 @media (max-width: 768px) {
+  .swiss-contact-inner {
+    padding-block: 4.5rem 3rem;
+  }
+
+  .swiss-colophon-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.45rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .swiss-editorial-grid {
+    gap: 3.5rem;
+  }
+
+  .swiss-heading {
+    max-width: 9ch;
+    font-size: clamp(3rem, 14vw, 5rem);
+  }
+
+  .swiss-right-column {
+    padding-top: 0;
+  }
+
+  .swiss-channels-header span:last-child {
+    display: none;
+  }
+
   .swiss-row-link {
-    grid-template-columns: 1fr auto;
-    row-gap: 0.75rem;
-    padding: 1.4rem 0.5rem;
+    grid-template-columns: minmax(96px, 0.38fr) minmax(0, 1fr) auto;
+    gap: 0.7rem;
+    padding: 1.15rem 0;
   }
+
   .swiss-row-meta {
-    grid-column: 1 / 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
   }
-  .swiss-row-right {
-    grid-column: 2 / 3;
-    grid-row: 1 / 3;
+
+  .swiss-row-index {
+    font-size: 0.7rem;
   }
-  .swiss-row-center {
-    grid-column: 1 / 2;
+
+  .swiss-row-category {
+    font-size: 0.62rem;
   }
-  .swiss-row-link:hover {
-    padding-left: 0.5rem;
+
+  .swiss-row-detail {
+    overflow-wrap: anywhere;
+    font-size: 0.88rem;
+  }
+
+  .swiss-copy-btn {
+    min-height: 40px;
+    padding: 0.5rem 0;
+  }
+
+  .swiss-colophon-footer {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .swiss-back-top-btn {
+    align-self: flex-start;
   }
 }
 
@@ -1798,12 +1926,14 @@
 
 @media (max-width: 768px) {
   .cert-book-stage {
-    padding: 0 0.5rem;
+    min-height: 100svh;
+    padding: 0 0.75rem;
   }
   .cert-book-webgl-wrapper {
-    height: 62vh;
-    min-height: 380px;
-    max-height: 520px;
+    height: min(60svh, 500px);
+    min-height: 320px;
+    max-height: 500px;
+    touch-action: pan-y;
   }
   .cert-book-current-title {
     display: none;
@@ -1819,8 +1949,40 @@
     width: 32px;
     height: 32px;
   }
+  .cert-book-status-badge {
+    min-width: 0;
+  }
+  .cert-book-issuer-pill {
+    max-width: 7.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   .cert-book-scroll-cue {
     display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .cert-book-stage {
+    padding-inline: 0.35rem;
+  }
+  .cert-book-webgl-wrapper {
+    height: min(57svh, 430px);
+    min-height: 285px;
+  }
+  .cert-book-controls-bar {
+    gap: 6px;
+    padding-inline: 8px;
+  }
+  .cert-book-issuer-pill {
+    max-width: 6.25rem;
+    font-size: 0.6rem;
+  }
+  .cert-book-view-doc-btn {
+    max-width: calc(100vw - 2rem);
+    padding-inline: 12px;
+    font-size: 0.68rem;
   }
 }
 

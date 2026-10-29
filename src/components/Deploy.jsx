@@ -1,29 +1,21 @@
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { ArrowUpRight, Copy, Check, ChevronUp } from 'lucide-react'
-import profileImg from '../assets/profile.jpg'
+import { useEffect, useState } from 'react'
+import { Check, Copy, ChevronUp } from 'lucide-react'
 
 const CONTACT_ROWS = [
   {
-    index: '01',
     category: 'EMAIL',
-    title: 'Start a conversation',
     detail: 'kishorgogoi403@gmail.com',
     href: 'mailto:kishorgogoi403@gmail.com',
     isEmail: true,
   },
   {
-    index: '02',
     category: 'LINKEDIN',
-    title: 'Professional network',
     detail: 'linkedin.com/in/kishorgogoi',
     href: 'https://linkedin.com/in/kishorgogoi/',
     isEmail: false,
   },
   {
-    index: '03',
     category: 'GITHUB',
-    title: 'Explore my work',
     detail: 'github.com/KISHOR403',
     href: 'https://github.com/KISHOR403',
     isEmail: false,
@@ -32,9 +24,9 @@ const CONTACT_ROWS = [
 
 export default function Deploy() {
   const [copied, setCopied] = useState(false)
+  const [copyError, setCopyError] = useState(false)
   const [currentTime, setCurrentTime] = useState('')
 
-  // Real-time IST Digital Clock in crisp Swiss editorial format
   useEffect(() => {
     const updateTime = () => {
       const now = new Date()
@@ -47,17 +39,25 @@ export default function Deploy() {
       }
       setCurrentTime(new Intl.DateTimeFormat('en-US', options).format(now))
     }
+
     updateTime()
     const timer = setInterval(updateTime, 1000)
     return () => clearInterval(timer)
   }, [])
 
-  const handleCopyEmail = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-    navigator.clipboard.writeText('kishorgogoi403@gmail.com')
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2400)
+  const handleCopyEmail = async (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    try {
+      await navigator.clipboard.writeText('kishorgogoi403@gmail.com')
+      setCopied(true)
+      setCopyError(false)
+      setTimeout(() => setCopied(false), 2400)
+    } catch {
+      setCopyError(true)
+      setTimeout(() => setCopyError(false), 2400)
+    }
   }
 
   const scrollToTop = () => {
@@ -65,29 +65,20 @@ export default function Deploy() {
   }
 
   return (
-    <section
-      id="deploy"
-      className="swiss-contact-root"
-      aria-labelledby="contact-heading"
-    >
-      {/* Anchor target for #contact links */}
-      <div id="contact" style={{ position: 'relative', top: '-70px', visibility: 'hidden' }} />
+    <section id="deploy" className="swiss-contact-root" aria-labelledby="contact-heading">
+      <div id="contact" className="contact-anchor" />
 
       <div className="swiss-contact-inner">
-        <div className="swiss-contact-main">
-          {/* ─── Architectural Top Colophon Header ─── */}
-          <div className="swiss-colophon-header" aria-hidden="true">
-            <div>SWISS EDITORIAL ARCHIVE / QA ENGINEERING PORTFOLIO</div>
-            <div>COLOPHON &amp; DIRECT INQUIRY — EDITION 2026</div>
-          </div>
+        <div className="swiss-colophon-header" aria-hidden="true">
+          <span>QA ENGINEERING PORTFOLIO</span>
+          <span>COLOPHON &amp; DIRECT INQUIRY — EDITION 2026</span>
+        </div>
 
-        {/* ─── Asymmetrical Editorial Grid ─── */}
         <div className="swiss-editorial-grid">
-          {/* Left Column: Dominant Editorial Headline */}
           <div className="swiss-headline-group">
             <div className="swiss-eyebrow">
               <span className="swiss-eyebrow-index">CONTACT / 07</span>
-              <span className="swiss-eyebrow-dash" aria-hidden="true">/</span>
+              <span aria-hidden="true">/</span>
               <span>DIRECT INQUIRY</span>
             </div>
 
@@ -97,162 +88,96 @@ export default function Deploy() {
               <span className="swiss-heading-secondary">WORK BETTER.</span>
             </h2>
 
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.72rem',
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: 'var(--color-text-secondary)',
-                paddingTop: '1.25rem',
-                borderTop: '1px solid var(--color-border)',
-                maxWidth: '420px',
-              }}
-              aria-hidden="true"
-            >
-              <span>12.97°N 77.59°E</span>
-              <span>—</span>
-              <span>RELIABILITY &amp; AUTOMATION</span>
+            <div className="swiss-headline-meta">
+              <span>QA ENGINEERING</span>
+              <span aria-hidden="true">·</span>
+              <span>TEST AUTOMATION</span>
+              <span aria-hidden="true">·</span>
+              <span>SOFTWARE QUALITY</span>
             </div>
           </div>
 
-          {/* Right Column: Understated Portrait, Supporting Copy & Metadata */}
           <div className="swiss-right-column">
-            {/* Carefully Cropped Understated Portrait */}
-            <div className="swiss-portrait-card">
-              <div className="swiss-portrait-frame">
-                <img
-                  src={profileImg}
-                  alt="Kishor Gogoi, QA Automation Engineer"
-                  className="swiss-portrait-img"
-                  loading="lazy"
-                  width="108"
-                  height="108"
-                />
-              </div>
-              <div className="swiss-portrait-meta">
-                <span className="swiss-figure-label">[ FIG. 01 — KISHOR GOGOI ]</span>
-                <span className="swiss-portrait-name">Kishor Gogoi</span>
-                <span className="swiss-portrait-role">QA Engineer &amp; SDET · Automation Lead</span>
-              </div>
-            </div>
-
-            {/* Verbatim Supporting Copy */}
             <p className="swiss-supporting-copy">
-              I'm interested in building reliable products, improving software quality, and creating better digital experiences through thoughtful testing and automation. If you're hiring for QA engineering or exploring a collaboration, let's connect.
+              I&apos;m open to QA engineering opportunities and thoughtful collaborations focused on building reliable products, improving software quality, and making digital experiences work better.
             </p>
 
-            {/* Editorial Metadata Specification Table */}
-            <div className="swiss-specs-table" role="list" aria-label="Professional specifications">
+            <a className="swiss-talk-link" href="mailto:kishorgogoi403@gmail.com">
+              <span>LET&apos;S TALK</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <div className="swiss-specs-table" role="list" aria-label="Availability and location">
               <div className="swiss-spec-row" role="listitem">
                 <span className="swiss-spec-label">AVAILABILITY</span>
-                <span className="swiss-spec-val">Open for Full-Time Roles &amp; Consulting</span>
+                <span className="swiss-spec-val">Open to suitable full-time QA roles</span>
               </div>
               <div className="swiss-spec-row" role="listitem">
                 <span className="swiss-spec-label">LOCATION</span>
-                <span className="swiss-spec-val">Bangalore, India · Remote &amp; Relocation</span>
-              </div>
-              <div className="swiss-spec-row" role="listitem">
-                <span className="swiss-spec-label">TIMEZONE</span>
-                <span className="swiss-spec-val">IST (UTC +5:30) · Flexible Worldwide</span>
+                <span className="swiss-spec-val">Bangalore, India</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* ─── Thin Divider & Channels Bar ─── */}
-        <div className="swiss-channels-header" aria-hidden="true">
-          <span>INDEX / 03 DIRECT ENTRY POINTS</span>
-          <span>SELECT A CHANNEL BELOW</span>
+        <div className="swiss-channels-header">
+          <span>DIRECT ENTRY POINTS / 03</span>
+          <span>SELECT A CHANNEL</span>
         </div>
 
-        {/* ─── Contact Information as Editorial Rows ─── */}
         <nav className="swiss-rows-list" aria-label="Contact channels">
-          {CONTACT_ROWS.map((row) => (
+          {CONTACT_ROWS.map((row, index) => (
             <a
-              key={row.index}
+              key={row.category}
               href={row.href}
               target={row.isEmail ? undefined : '_blank'}
               rel={row.isEmail ? undefined : 'noopener noreferrer'}
               className="swiss-row-link"
-              aria-label={`${row.category}: ${row.title}. Address: ${row.detail}`}
+              aria-label={`${row.category}: ${row.detail}`}
             >
-              <div className="swiss-row-meta">
-                <span className="swiss-row-index">{row.index}</span>
-                <span className="swiss-row-dash" aria-hidden="true">—</span>
+              <span className="swiss-row-meta">
+                <span className="swiss-row-index">0{index + 1}</span>
                 <span className="swiss-row-category">{row.category}</span>
-              </div>
-
-              <div className="swiss-row-center">
-                <span className="swiss-row-title">{row.title}</span>
-                <span className="swiss-row-detail">{row.detail}</span>
-              </div>
-
-              <div className="swiss-row-right">
+              </span>
+              <span className="swiss-row-detail">{row.detail}</span>
+              <span className="swiss-row-right">
                 {row.isEmail && (
                   <button
                     type="button"
                     onClick={handleCopyEmail}
                     className={`swiss-copy-btn${copied ? ' is-copied' : ''}`}
                     aria-label="Copy email address to clipboard"
-                    title="Copy kishorgogoi403@gmail.com"
                   >
-                    {copied ? (
-                      <>
-                        <Check size={12} strokeWidth={2.5} />
-                        <span>COPIED</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy size={12} strokeWidth={2} />
-                        <span>COPY</span>
-                      </>
-                    )}
+                    {copied ? <><Check size={12} /> COPIED</> : <><Copy size={12} /> COPY</>}
                   </button>
                 )}
-
-                <div className="swiss-row-arrow" aria-hidden="true">
-                  <ArrowUpRight size={22} strokeWidth={1.75} />
-                </div>
-              </div>
+                <span className="swiss-row-arrow" aria-hidden="true">↗</span>
+              </span>
             </a>
           ))}
         </nav>
-      </div>
 
-        {/* Screen Reader Status Announcement for Copy Action */}
-        <div role="status" aria-live="polite" className="sr-only" style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', border: 0 }}>
-          {copied ? 'Email address kishorgogoi403@gmail.com copied to clipboard.' : ''}
+        <div role="status" aria-live="polite" className="sr-only">
+          {copied
+            ? 'Email address kishorgogoi403@gmail.com copied to clipboard.'
+            : copyError
+              ? 'Unable to copy the email address. Please use the email link.'
+              : ''}
         </div>
 
-        {/* ─── Minimalist Editorial Footer Colophon ─── */}
         <footer className="swiss-colophon-footer">
           <div className="swiss-colophon-col">
-            <span style={{ color: 'var(--color-text-primary)', fontWeight: 600 }}>© {new Date().getFullYear()} KISHOR GOGOI</span>
+            <span className="swiss-footer-primary">© {new Date().getFullYear()} KISHOR GOGOI</span>
             <span>ENGINEERED WITH RIGOROUS AUTOMATION &amp; PRECISION</span>
-            <span>TYPESET IN SPACE GROTESK &amp; INTER</span>
           </div>
-
           <div className="swiss-colophon-col">
             <span>LOCAL TIME — {currentTime ? `${currentTime} IST` : 'IST (UTC+5:30)'}</span>
-            <span>BANGALORE, KARNATAKA, INDIA (12.97°N 77.59°E)</span>
             <span>ALL QUALITY GATES OPERATIONAL</span>
           </div>
-
-          <div className="swiss-colophon-col" style={{ alignItems: 'flex-end' }}>
-            <button
-              type="button"
-              onClick={scrollToTop}
-              className="swiss-back-top-btn"
-              aria-label="Scroll back to top of page"
-            >
-              <span>Back to top</span>
-              <ChevronUp size={13} strokeWidth={2} />
-            </button>
-          </div>
+          <button type="button" onClick={scrollToTop} className="swiss-back-top-btn" aria-label="Scroll back to top of page">
+            <span>Back to top</span>
+            <ChevronUp size={13} />
+          </button>
         </footer>
       </div>
     </section>
